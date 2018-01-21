@@ -5,6 +5,12 @@ import { Footer, Container, List, ListItem } from 'native-base';
 
 export class FavoritesScreen extends React.Component {
 
+    static navigationOptions = ({ navigation }) => ({
+        title: "Favorites",
+        headerStyle:  { backgroundColor: "#2196F3", },
+        headerTitleStyle: { color: "#FFFFFF" },
+        headerTintColor: "blue"
+    });
 
     constructor() {
         super();
@@ -13,10 +19,10 @@ export class FavoritesScreen extends React.Component {
     render() {
         return (
             <Container>
-            <View>
+            <View style={{flex: 1}}>
                 {this.renderContent()}
             </View>
-            <Footer>
+            <Footer style={{width: '100%'}}>
                 {this.props.renderTabs()}
             </Footer>
             </Container>
@@ -26,19 +32,22 @@ export class FavoritesScreen extends React.Component {
     renderContent() {
         return (
             <List style={styles.listStyle}>
-                {this.renderFavoritesList()}
+                <List>
+                    {this.renderFavoritesList()}
+                </List>
             </List>
         );
     }
 
     renderFavoritesList() {
         favorites = ["Brewery 1", "Brewery 2", "Brewery 3", "Brewery 4", "Brewery 5"];
-        return (
-            <View>
-            <ListItem><Text style={{width: '100%'}}>Brewery 1</Text></ListItem>
-            <ListItem><Text style={{width: '100%'}}>Brewery 2</Text></ListItem>
-            </View>
-        )
+        return _.map(favorites, (fav) => {
+                return (
+                    <ListItem>
+                        <Text style={{width: '100%'}}>{fav}</Text>
+                    </ListItem>
+                )
+            })
         /*return _.forEach(favorites, (value) => {
             return (
                 <ListItem>

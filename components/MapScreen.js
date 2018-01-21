@@ -2,10 +2,16 @@ import React from 'react';
 import { MapView } from 'expo';
 import { StyleSheet, View, Text } from 'react-native';
 import { Footer, Container } from 'native-base';
+import Brewery from '../models/Brewery';
+import firebaseApp from '../firebase';
 
 export class MapScreen extends React.Component {
+    brewery;
+    brewery1;
+
     constructor() {
         super();
+        console.log(firebaseApp.auth().currentUser);
     }
 
     render() {

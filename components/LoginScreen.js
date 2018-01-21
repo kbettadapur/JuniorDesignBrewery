@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Button, Text, TextInput, View } from 'react-native';
+import firebaseApp from '../firebase';
 
 export class LoginScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
@@ -12,7 +13,7 @@ export class LoginScreen extends React.Component {
 
   constructor(props) {
     super();
-    this.state = {username: "USERNAME"};
+    this.state = {email: "EMAIL", password: "PASSWORD"};
   }
 
   render() {
@@ -26,12 +27,38 @@ export class LoginScreen extends React.Component {
   renderComponent() {
     return (
       <View style={styles.container}>
-        <Button title="main" onPress={() => this.props.navigation.navigate("Main")}></Button>
+        <TextInput
+          style={{height: 40, width: 100,borderColor: 'gray', borderWidth: 0}}
+          onChangeText={(email) => this.setState({email})}
+          value={this.state.email} />
+
+        <TextInput
+          style={{height: 40, width: 100, marginTop: 10,borderColor: 'gray', borderWidth: 0}}
+          onChangeText={(password) => this.setState({password})}
+          value={this.state.password} />
+
+        <Button title="Login" onPress={this.login.bind(this)}></Button>
+        <Button title="Register" onPress={() => this.props.navigation.navigate("Register", {navigation: this.props.navigation})}></Button>
       </View>
     );
   }
-}
 
+  login() {
+    var s = firebaseApp.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
+      .then(() => {
+        this.props.navigation.navigate("Main", {navigation: this.props.navigation});
+      })
+      .catch((error) => {
+        console.log("LOGIN FAILED");
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        console.log(errorMessage);
+    });
+      //this.props.navigation.navigate("Main", {navigation: this.props.navigation});
+    
+    
+  }
+}
 const styles = StyleSheet.create({
   container: {
     flex: 1,

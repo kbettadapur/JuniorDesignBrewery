@@ -8,17 +8,25 @@ import { YourReviewsScreen } from './YourReviewsScreen';
 import { ProfileScreen } from './ProfileScreen';
 
 
-const MAP_TAB = "MAP";
-const FAVORITES_TAB = "FAVORITES";
-const YOUR_REVIEWS_TAB = "YOUR REVIEWS";
-const PROFILE_TAB = "PROFILE";
+const MAP_TAB = "Map";
+const FAVORITES_TAB = "Favorites";
+const YOUR_REVIEWS_TAB = "Your Reviews";
+const PROFILE_TAB = "Profile";
 
 export class MainScreen extends React.Component {
+
+    static navigationOptions = ({ navigation }) => ({
+        title: "Brewery Trackr",
+        headerStyle:  { backgroundColor: "#2196F3", },
+        headerTitleStyle: { color: "#FFFFFF" },
+        headerTintColor: "blue"
+    });
 
   constructor(props) {
     super();
     this.state = {
-        selectedTab: MAP_TAB
+        selectedTab: MAP_TAB,
+        title: "Map"
     };
   }
 
@@ -109,7 +117,7 @@ export class MainScreen extends React.Component {
   }
 
   changeTab(tabName) {
-        this.setState({selectedTab: tabName});
+        this.setState({selectedTab: tabName, title: tabName});
     }
 }
 
