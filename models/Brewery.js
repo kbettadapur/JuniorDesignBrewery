@@ -1,9 +1,15 @@
 export default class Brewery {
     name;
-    description;
+    latitude;
+    longitude;
+    placeId;
+    genRating;
 
-    constructor(n, d) {
-        this.name = n;
-        this.description = d;
+    merge(res) {
+        this.name = res.name;
+        this.latitude = res.geometry.location.lat;
+        this.longitude = res.geometry.location.lng;
+        this.placeId = res.place_id;
+        this.genRating = res.rating;
     }
 }

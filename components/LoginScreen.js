@@ -13,7 +13,7 @@ export class LoginScreen extends React.Component {
 
   constructor(props) {
     super();
-    this.state = {email: "EMAIL", password: "PASSWORD"};
+    this.state = {email: "", password: ""};
   }
 
   render() {
@@ -30,12 +30,14 @@ export class LoginScreen extends React.Component {
         <TextInput
           style={{height: 40, width: 100,borderColor: 'gray', borderWidth: 0}}
           onChangeText={(email) => this.setState({email})}
-          value={this.state.email} />
+          value={this.state.email}
+          placeholder="Email" />
 
         <TextInput
           style={{height: 40, width: 100, marginTop: 10,borderColor: 'gray', borderWidth: 0}}
           onChangeText={(password) => this.setState({password})}
-          value={this.state.password} />
+          value={this.state.password}
+          placeholder="Password" />
 
         <Button title="Login" onPress={this.login.bind(this)}></Button>
         <Button title="Register" onPress={() => this.props.navigation.navigate("Register", {navigation: this.props.navigation})}></Button>
@@ -44,7 +46,7 @@ export class LoginScreen extends React.Component {
   }
 
   login() {
-    var s = firebaseApp.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
+    var s = firebaseApp.auth().signInWithEmailAndPassword(this.state.email == "" ? "ricky@gmail.com" : this.state.email, this.state.password == "" ? "ricky123" : this.state.password)
       .then(() => {
         this.props.navigation.navigate("Main", {navigation: this.props.navigation});
       })

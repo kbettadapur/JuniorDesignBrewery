@@ -1,5 +1,12 @@
 import React from 'react';
-import { StyleSheet, Button, Text, TextInput, View } from 'react-native';
+import { 
+  StyleSheet, 
+  Button, 
+  Text, 
+  TextInput, 
+  View,
+  ActivityIndicator,
+ } from 'react-native';
 import firebaseApp from '../firebase';
 
 export class RegisterScreen extends React.Component {
@@ -13,7 +20,13 @@ export class RegisterScreen extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {email: "EMAIL", password: "PASSWORD", username: "USERNAME"};
+    this.state = {
+      email: "EMAIL", 
+      password: "PASSWORD", 
+      username: "USERNAME",
+      registerClicked: false,
+      registerFailed: false
+    };
   }
 
   render() {
@@ -37,12 +50,29 @@ export class RegisterScreen extends React.Component {
             title="Register"
             onPress={this.register.bind(this)}
         ></Button>
+        { this.state.registerClicked && <ActivityIndicator size="large" style={{marginTop: 10}} color="#00ff00"/>}
+        { this.state.registerFailed && <Text style={{color: "#ff0000"}}>Registration Failed</Text>}
       </View>
     );
   }
 
+  renderLoadingDialog(){
+        return (
+            <LoadingDialog
+                dialogProps={{
+                    isOpen: this.requestId != null && this.requestStore.getRequestStatus(this.requestId) === RequestStatus.Pending,
+                    title: "Creating...",
+                    animationType: "fade"
+                }}
+                subtitle="Creating client..."
+
+            />
+        );
+    }
+
   register() {
       console.log("REGISTER PRESSED");
+      this.setState({registerClicked: true, registerFailed: false});
       var s = firebaseApp.auth().createUserWithEmailAndPassword(this.state.email, this.state.password).then(() => {
         currentUser = firebaseApp.auth().currentUser;
         firebaseApp.database().ref("Users/" + currentUser.uid).set({
@@ -50,10 +80,14 @@ export class RegisterScreen extends React.Component {
           email: this.state.email,
           description: "asdf",
           profile_picture: "profile picture",
-        })
+        });
+
+        this.setState({registerClicked: false});
         this.props.navigation.navigate("Main", {navigation: this.props.navigation});
       }).catch((error) => {
           console.log("REGISTRATION FAILED");
+          this.setState({registerClicked: false});
+          this.setState({registerFailed: true});
       });
   }
 }

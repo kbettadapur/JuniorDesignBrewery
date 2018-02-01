@@ -43,19 +43,20 @@ export class FavoritesScreen extends React.Component {
         favorites = ["Brewery 1", "Brewery 2", "Brewery 3", "Brewery 4", "Brewery 5"];
         return _.map(favorites, (fav) => {
                 return (
-                    <ListItem>
+                    <ListItem key={this.hashCode(fav)}>
                         <Text style={{width: '100%'}}>{fav}</Text>
                     </ListItem>
                 )
             })
-        /*return _.forEach(favorites, (value) => {
-            return (
-                <ListItem>
-                    <Text>{value}</Text>
-                </ListItem>
-            )
-        });*/
     }
+
+    hashCode(s) {
+        var h = 0, l = s.length, i = 0;
+        if ( l > 0 )
+            while (i < l)
+            h = (h << 5) - h + s.charCodeAt(i++) | 0;
+        return h;
+    };
 }
 
 const styles = StyleSheet.create({

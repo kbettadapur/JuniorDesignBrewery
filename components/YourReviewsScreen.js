@@ -1,6 +1,7 @@
 import React from 'react';
+import _ from 'lodash';
 import { StyleSheet, View, Text } from 'react-native';
-import { Footer, Container } from 'native-base';
+import { Footer, Container, List, ListItem } from 'native-base';
 
 export class YourReviewsScreen extends React.Component {
     constructor() {
@@ -11,7 +12,7 @@ export class YourReviewsScreen extends React.Component {
         return (
             <Container>
             <View style={{flex: 1}}>
-                <Text>Your Reviews Screen</Text>
+                {this.renderContent()}
             </View>
             <Footer style={{width: '100%'}}>
                 {this.props.renderTabs()}
@@ -19,6 +20,35 @@ export class YourReviewsScreen extends React.Component {
             </Container>
         )
     }
+
+    renderContent() {
+        return (
+            <List style={styles.listStyle}>
+                <List>
+                    {this.renderFavoritesList()}
+                </List>
+            </List>
+        );
+    }
+
+    renderFavoritesList() {
+        favorites = ["Brewery 1", "Brewery 2", "Brewery 3", "Brewery 4", "Brewery 5"];
+        return _.map(favorites, (fav) => {
+            return (
+                <ListItem key={this.hashCode(fav)}>
+                    <Text style={{width: '100%'}}>{fav}</Text>
+                </ListItem>
+            );
+        });
+    }
+
+    hashCode(s) {
+        var h = 0, l = s.length, i = 0;
+        if ( l > 0 )
+            while (i < l)
+            h = (h << 5) - h + s.charCodeAt(i++) | 0;
+        return h;
+    };
 }
 
 const styles = StyleSheet.create({
