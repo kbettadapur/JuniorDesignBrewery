@@ -38,7 +38,6 @@ export class LoginScreen extends React.Component {
           onChangeText={(password) => this.setState({password})}
           value={this.state.password}
           placeholder="Password" />
-
         <Button title="Login" onPress={this.login.bind(this)}></Button>
         <Button title="Register" onPress={() => this.props.navigation.navigate("Register", {navigation: this.props.navigation})}></Button>
       </View>

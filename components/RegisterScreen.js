@@ -21,9 +21,9 @@ export class RegisterScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: "EMAIL", 
-      password: "PASSWORD", 
-      username: "USERNAME",
+      email: "", 
+      password: "", 
+      username: "",
       registerClicked: false,
       registerFailed: false
     };
@@ -35,16 +35,19 @@ export class RegisterScreen extends React.Component {
         <TextInput
           style={{height: 40, width: 100,borderColor: 'gray', borderWidth: 0}}
           onChangeText={(email) => this.setState({email})}
-          value={this.state.email} />
+          value={this.state.email} 
+          placeholder="Email" />
         <TextInput
           style={{height: 40, width: 100,borderColor: 'gray', borderWidth: 0}}
           onChangeText={(password) => this.setState({password})}
-          value={this.state.password} />
+          value={this.state.password} 
+          placeholder="password" />
 
         <TextInput
           style={{height: 40, width: 100,borderColor: 'gray', borderWidth: 0}}
           onChangeText={(username) => this.setState({username})}
-          value={this.state.username} />
+          value={this.state.username} 
+          placeholder="Username" />
 
         <Button
             title="Register"
