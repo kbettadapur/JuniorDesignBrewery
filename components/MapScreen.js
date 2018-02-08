@@ -1,11 +1,11 @@
 import React from 'react';
-import { MapView } from 'expo';
-import { StyleSheet, View, Text, TextInput, Button } from 'react-native';
+import { MapView, Constants, Location, Permissions } from 'expo';
+import { StyleSheet, View, Text, TextInput, Button, Image } from 'react-native';
 import { Footer, Container } from 'native-base';
 import _ from 'lodash';
 import Brewery from '../models/Brewery';
 import firebaseApp from '../firebase';
-//import FetchHelper from "../httpnet/FetchHelper";
+
 
 export class MapScreen extends React.Component {
     breweries;
@@ -14,11 +14,28 @@ export class MapScreen extends React.Component {
         super();
         this.state = {
             query: "",
-            breweries: []
-        }
-        
-        
+            breweries: [],
+            location: {
+                lat: 0,
+                lng: 0,
+            }
+        }   
     }
+
+    componentWillMount() {
+        this._getLocationAsync();
+    }
+    
+    _getLocationAsync = async () => {
+        let { status } = await Permissions.askAsync(Permissions.LOCATION);
+        if (status !== 'granted') {
+            console.log("Denied");
+        }
+
+        let location = await Location.getCurrentPositionAsync({});
+        this.setState({location});
+    }
+    
 
     render() {
         return (
@@ -32,9 +49,6 @@ export class MapScreen extends React.Component {
                     latitudeDelta: 0.0922,
                     longitudeDelta: 0.0421,}}>
                 
-                    {/*<MapView.Marker
-                        coordinate={{latitude: 33.753746, longitude: -84.386330}}
-                     />*/}
                     {this.renderMapViewMarkers()}
                 
                 </MapView>
@@ -65,9 +79,12 @@ export class MapScreen extends React.Component {
                             coordinate={{latitude: val.latitude, longitude: val.longitude}}
                             key={val.latitude + val.longitude}
                             name={val.name}
+                            onCalloutPress={() => this.props.navigation.navigate("Brewery", {navigation: this.props.navigation})}
                         >
                             <MapView.Callout>
-                                <Text>{val.name}</Text>
+                                <Text style={{fontSize: 15, fontWeight: 'bold'}}>{val.name}</Text>
+                                <Text>{'Gen Rating: ' + val.genRating}</Text>
+                                <Text>{'Price Level: ' + '$'.repeat(val.price)}</Text>
                             </MapView.Callout>
                         </MapView.Marker>
                     )
@@ -78,18 +95,30 @@ export class MapScreen extends React.Component {
 
     search() {
         console.log(this.state.query);
-        fetch('https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=AIzaSyDiooLoAXwvs42CPdgVKhqRwjqiUHok8gs&location=33.753746,-84.386330&radius=10000&name=brewery&keyword=' + this.state.query)
-            .then((response) => response.json().then(data => {
-                res = []
-                var results = JSON.parse(JSON.stringify(data)).results;
-                results.forEach((val) => {
-                    var b = new Brewery();
-                    b.merge(val);
-                    res.push(b);
-                });
-                this.setState({breweries: res});
-                console.log(this.state.breweries);
-            }));
+        fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + this.state.query + '&key=AIzaSyDiooLoAXwvs42CPdgVKhqRwjqiUHok8gs')
+            .then((r) => r.json().then((d) => {
+                location = {};
+                location.lat = d.results[0].geometry.location.lat;
+                location.lng = d.results[0].geometry.location.lng;
+                this.setState({location});
+            })).then(() => {
+                fetch('https://maps.googleapis.com/maps/api/place/nearbysearch/'
+                    + 'json?key=AIzaSyDiooLoAXwvs42CPdgVKhqRwjqiUHok8gs'
+                    + '&location=' + `${this.state.location.lat}` + ',' + `${this.state.location.lng}`
+                    + '&radius=50000&name=brewery&keyword=brewery')
+                .then((response) => response.json().then(data => {
+                    res = []
+                    var results = JSON.parse(JSON.stringify(data)).results;
+                    results.forEach((val) => {
+                        var b = new Brewery();
+                        b.merge(val);
+                        res.push(b);
+                    });
+                    this.setState({breweries: res});
+                    console.log(this.state.breweries);
+                }));
+            })
+            
         /*FetchHelper.fetchBreweries(this.state.query).then((ret) => {
             console.log(ret);
         });*/
