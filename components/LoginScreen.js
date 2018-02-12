@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Button, Text, TextInput, View } from 'react-native';
+import { StyleSheet, Button, Text, TextInput, View, Image } from 'react-native';
 import firebaseApp from '../firebase';
 
 export class LoginScreen extends React.Component {
@@ -38,7 +38,7 @@ export class LoginScreen extends React.Component {
           onChangeText={(password) => this.setState({password})}
           value={this.state.password}
           placeholder="Password" />
-        <Button title="Login" onPress={this.login.bind(this)}></Button>
+        <Button title="Login" style={{flex: 1}} onPress={this.login.bind(this)}></Button>
         <Button title="Register" onPress={() => this.props.navigation.navigate("Register", {navigation: this.props.navigation})}></Button>
       </View>
     );

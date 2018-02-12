@@ -1,11 +1,12 @@
 import React from 'react';
-import { MapView } from 'expo';
-import { StyleSheet, View, Text, TextInput, Button } from 'react-native';
-import { Footer, Container } from 'native-base';
+import { MapView, Constants, Location, Permissions } from 'expo';
+import { StyleSheet, View, Text, TextInput, Button, Image, ScrollView } from 'react-native';
+import { Footer, Container, Icon, List, ListItem } from 'native-base';
 import _ from 'lodash';
 import Brewery from '../models/Brewery';
 import firebaseApp from '../firebase';
-//import FetchHelper from "../httpnet/FetchHelper";
+import FAB from 'react-native-fab';
+
 
 export class MapScreen extends React.Component {
     breweries;
@@ -14,17 +15,37 @@ export class MapScreen extends React.Component {
         super();
         this.state = {
             query: "",
-            breweries: []
-        }
-        
-        
+            breweries: [],
+            location: {
+                lat: 0,
+                lng: 0,
+            },
+            mapVisible: true,
+        }   
     }
+
+    componentWillMount() {
+        this._getLocationAsync().then(() => {
+            this.searchLocalBreweries();
+        })
+    }
+    
+    _getLocationAsync = async () => {
+        let { status } = await Permissions.askAsync(Permissions.LOCATION);
+        if (status !== 'granted') {
+            console.log("Denied");
+        }
+
+        let location = await Location.getCurrentPositionAsync({});
+        this.setState({location});
+    }
+    
 
     render() {
         return (
             <Container>
             <View style={{flex: 1}}>
-                <MapView 
+                {this.state.mapVisible && <MapView 
                     style={styles.map}
                     initialRegion={{
                     latitude: 33.753746,
@@ -32,12 +53,47 @@ export class MapScreen extends React.Component {
                     latitudeDelta: 0.0922,
                     longitudeDelta: 0.0421,}}>
                 
-                    {/*<MapView.Marker
-                        coordinate={{latitude: 33.753746, longitude: -84.386330}}
-                     />*/}
                     {this.renderMapViewMarkers()}
                 
-                </MapView>
+                </MapView>}
+                {!this.state.mapVisible && 
+                    <ScrollView style={{marginTop: 60}}>
+                    <List style={styles.listStyle}>
+                        <List>
+                            {this.renderListView()}
+                        </List>
+                    </List> 
+                    </ScrollView> 
+                }
+
+                {!this.state.mapVisible && 
+                <FAB 
+                    buttonColor="red"
+                    iconTextColor="#FFFFFF"
+                    onClickAction={this.mapToggle.bind(this)}
+                    visible={true}
+                    iconTextComponent={<Icon name="map"/>} />}
+
+                {this.state.mapVisible && 
+                <FAB 
+                    buttonColor="red"
+                    iconTextColor="#FFFFFF"
+                    onClickAction={this.mapToggle.bind(this)}
+                    visible={true}
+                    iconTextComponent={<Icon name="list"/>} />}
+                
+                <View style={{top: 140, right: 0, position: 'absolute'}}>
+                    <FAB 
+                        buttonColor="blue"
+                        iconTextColor="#FFFFFF"
+                        onClickAction={this.searchLocalBreweries.bind(this)}
+                        visible={true}
+                        style={{ position: 'absolute', marginRight: 100}}
+                        iconTextComponent={<Icon name="md-pin"/>} />
+                </View>
+
+                
+
                 <View style={styles.searchWrapper}>
                     <TextInput style={styles.search}
                             placeholder="Search..."
@@ -65,9 +121,12 @@ export class MapScreen extends React.Component {
                             coordinate={{latitude: val.latitude, longitude: val.longitude}}
                             key={val.latitude + val.longitude}
                             name={val.name}
+                            onCalloutPress={() => this.props.navigation.navigate("Brewery", {navigation: this.props.navigation})}
                         >
                             <MapView.Callout>
-                                <Text>{val.name}</Text>
+                                <Text style={{fontSize: 15, fontWeight: 'bold'}}>{val.name}</Text>
+                                <Text>{'Gen Rating: ' + val.genRating}</Text>
+                                <Text>{'Price Level: ' + '$'.repeat(val.price)}</Text>
                             </MapView.Callout>
                         </MapView.Marker>
                     )
@@ -78,7 +137,33 @@ export class MapScreen extends React.Component {
 
     search() {
         console.log(this.state.query);
-        fetch('https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=AIzaSyDiooLoAXwvs42CPdgVKhqRwjqiUHok8gs&location=33.753746,-84.386330&radius=10000&name=brewery&keyword=' + this.state.query)
+        
+        fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + this.state.query + '&key=AIzaSyDiooLoAXwvs42CPdgVKhqRwjqiUHok8gs')
+            .then((r) => r.json().then((d) => {
+                location = {};
+                location.lat = d.results[0].geometry.location.lat;
+                location.lng = d.results[0].geometry.location.lng;
+                //this.setState({location});
+            })).then(() => {
+                this.searchBreweries(location.lat, location.lng)
+            })
+            
+        /*FetchHelper.fetchBreweries(this.state.query).then((ret) => {
+            console.log(ret);
+        });*/
+    }
+
+    searchLocalBreweries() {
+        this.searchBreweries(this.state.location.coords.latitude, this.state.location.coords.longitude);
+    }
+
+    searchBreweries(lat, lng) {
+        console.log("LAT: " + lat);
+        console.log("LNG: " + lng);
+        fetch('https://maps.googleapis.com/maps/api/place/nearbysearch/'
+                    + 'json?key=AIzaSyDiooLoAXwvs42CPdgVKhqRwjqiUHok8gs'
+                    + '&location=' + `${lat}` + ',' + `${lng}`
+                    + '&radius=50000&name=brewery&keyword=brewery')
             .then((response) => response.json().then(data => {
                 res = []
                 var results = JSON.parse(JSON.stringify(data)).results;
@@ -90,13 +175,32 @@ export class MapScreen extends React.Component {
                 this.setState({breweries: res});
                 console.log(this.state.breweries);
             }));
-        /*FetchHelper.fetchBreweries(this.state.query).then((ret) => {
-            console.log(ret);
-        });*/
+    }
+
+    renderListView() {
+        counter = 0;
+        return _.map(this.state.breweries, (b) => {
+            counter = counter + 1;
+            return (
+                <ListItem key={counter}>
+                    <Text style={{width: '100%'}}>{b.name}</Text>
+                </ListItem>
+            );
+        });
+    }
+
+    mapToggle() {
+        this.setState({mapVisible: !this.state.mapVisible});
+        console.log("Map Toggled");
     }
 }
 
 const styles = StyleSheet.create({
+  listStyle: {
+    flex: 1,
+    backgroundColor: "#fff",
+    width: '100%'
+  },
   container: {
     position: 'absolute',
     top: 0,

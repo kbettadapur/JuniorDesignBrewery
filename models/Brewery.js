@@ -4,6 +4,8 @@ export default class Brewery {
     longitude;
     placeId;
     genRating;
+    price;
+    photo;
 
     merge(res) {
         this.name = res.name;
@@ -11,5 +13,7 @@ export default class Brewery {
         this.longitude = res.geometry.location.lng;
         this.placeId = res.place_id;
         this.genRating = res.rating;
+        this.price = res.price_level;
+        //this.photo = res.photo_reference;
     }
 }

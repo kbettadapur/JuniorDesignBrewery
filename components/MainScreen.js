@@ -88,14 +88,14 @@ export class MainScreen extends React.Component {
               active={this.state.selectedTab === MAP_TAB}
               onPress={() => this.changeTab(MAP_TAB)}
           >
-              <Icon name="cart" />
+              <Icon name="md-beer" />
               <Text>{"Breweries"}</Text>
           </Button>
           <Button
               active={this.state.selectedTab === FAVORITES_TAB}
               onPress={() => this.changeTab(FAVORITES_TAB)}
           >
-              <Icon name="people" />
+              <Icon name="star" />
               <Text>{"Favorites"}</Text>
           </Button>
           <Button
