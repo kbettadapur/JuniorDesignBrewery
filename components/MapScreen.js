@@ -25,7 +25,9 @@ export class MapScreen extends React.Component {
     }
 
     componentWillMount() {
-        this._getLocationAsync();
+        this._getLocationAsync().then(() => {
+            this.searchLocalBreweries();
+        })
     }
     
     _getLocationAsync = async () => {
@@ -79,6 +81,18 @@ export class MapScreen extends React.Component {
                     onClickAction={this.mapToggle.bind(this)}
                     visible={true}
                     iconTextComponent={<Icon name="list"/>} />}
+                
+                <View style={{top: 140, right: 0, position: 'absolute'}}>
+                    <FAB 
+                        buttonColor="blue"
+                        iconTextColor="#FFFFFF"
+                        onClickAction={this.searchLocalBreweries.bind(this)}
+                        visible={true}
+                        style={{ position: 'absolute', marginRight: 100}}
+                        iconTextComponent={<Icon name="md-pin"/>} />
+                </View>
+
+                
 
                 <View style={styles.searchWrapper}>
                     <TextInput style={styles.search}
@@ -123,33 +137,44 @@ export class MapScreen extends React.Component {
 
     search() {
         console.log(this.state.query);
+        
         fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + this.state.query + '&key=AIzaSyDiooLoAXwvs42CPdgVKhqRwjqiUHok8gs')
             .then((r) => r.json().then((d) => {
                 location = {};
                 location.lat = d.results[0].geometry.location.lat;
                 location.lng = d.results[0].geometry.location.lng;
-                this.setState({location});
+                //this.setState({location});
             })).then(() => {
-                fetch('https://maps.googleapis.com/maps/api/place/nearbysearch/'
-                    + 'json?key=AIzaSyDiooLoAXwvs42CPdgVKhqRwjqiUHok8gs'
-                    + '&location=' + `${this.state.location.lat}` + ',' + `${this.state.location.lng}`
-                    + '&radius=50000&name=brewery&keyword=brewery')
-                .then((response) => response.json().then(data => {
-                    res = []
-                    var results = JSON.parse(JSON.stringify(data)).results;
-                    results.forEach((val) => {
-                        var b = new Brewery();
-                        b.merge(val);
-                        res.push(b);
-                    });
-                    this.setState({breweries: res});
-                    console.log(this.state.breweries);
-                }));
+                this.searchBreweries(location.lat, location.lng)
             })
             
         /*FetchHelper.fetchBreweries(this.state.query).then((ret) => {
             console.log(ret);
         });*/
+    }
+
+    searchLocalBreweries() {
+        this.searchBreweries(this.state.location.coords.latitude, this.state.location.coords.longitude);
+    }
+
+    searchBreweries(lat, lng) {
+        console.log("LAT: " + lat);
+        console.log("LNG: " + lng);
+        fetch('https://maps.googleapis.com/maps/api/place/nearbysearch/'
+                    + 'json?key=AIzaSyDiooLoAXwvs42CPdgVKhqRwjqiUHok8gs'
+                    + '&location=' + `${lat}` + ',' + `${lng}`
+                    + '&radius=50000&name=brewery&keyword=brewery')
+            .then((response) => response.json().then(data => {
+                res = []
+                var results = JSON.parse(JSON.stringify(data)).results;
+                results.forEach((val) => {
+                    var b = new Brewery();
+                    b.merge(val);
+                    res.push(b);
+                });
+                this.setState({breweries: res});
+                console.log(this.state.breweries);
+            }));
     }
 
     renderListView() {
