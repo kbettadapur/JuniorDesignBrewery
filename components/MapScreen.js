@@ -1,10 +1,11 @@
 import React from 'react';
 import { MapView, Constants, Location, Permissions } from 'expo';
-import { StyleSheet, View, Text, TextInput, Button, Image } from 'react-native';
-import { Footer, Container } from 'native-base';
+import { StyleSheet, View, Text, TextInput, Button, Image, ScrollView } from 'react-native';
+import { Footer, Container, Icon, List, ListItem } from 'native-base';
 import _ from 'lodash';
 import Brewery from '../models/Brewery';
 import firebaseApp from '../firebase';
+import FAB from 'react-native-fab';
 
 
 export class MapScreen extends React.Component {
@@ -18,7 +19,8 @@ export class MapScreen extends React.Component {
             location: {
                 lat: 0,
                 lng: 0,
-            }
+            },
+            mapVisible: true,
         }   
     }
 
@@ -41,7 +43,7 @@ export class MapScreen extends React.Component {
         return (
             <Container>
             <View style={{flex: 1}}>
-                <MapView 
+                {this.state.mapVisible && <MapView 
                     style={styles.map}
                     initialRegion={{
                     latitude: 33.753746,
@@ -51,7 +53,33 @@ export class MapScreen extends React.Component {
                 
                     {this.renderMapViewMarkers()}
                 
-                </MapView>
+                </MapView>}
+                {!this.state.mapVisible && 
+                    <ScrollView style={{marginTop: 60}}>
+                    <List style={styles.listStyle}>
+                        <List>
+                            {this.renderListView()}
+                        </List>
+                    </List> 
+                    </ScrollView> 
+                }
+
+                {!this.state.mapVisible && 
+                <FAB 
+                    buttonColor="red"
+                    iconTextColor="#FFFFFF"
+                    onClickAction={this.mapToggle.bind(this)}
+                    visible={true}
+                    iconTextComponent={<Icon name="map"/>} />}
+
+                {this.state.mapVisible && 
+                <FAB 
+                    buttonColor="red"
+                    iconTextColor="#FFFFFF"
+                    onClickAction={this.mapToggle.bind(this)}
+                    visible={true}
+                    iconTextComponent={<Icon name="list"/>} />}
+
                 <View style={styles.searchWrapper}>
                     <TextInput style={styles.search}
                             placeholder="Search..."
@@ -123,9 +151,31 @@ export class MapScreen extends React.Component {
             console.log(ret);
         });*/
     }
+
+    renderListView() {
+        counter = 0;
+        return _.map(this.state.breweries, (b) => {
+            counter = counter + 1;
+            return (
+                <ListItem key={counter}>
+                    <Text style={{width: '100%'}}>{b.name}</Text>
+                </ListItem>
+            );
+        });
+    }
+
+    mapToggle() {
+        this.setState({mapVisible: !this.state.mapVisible});
+        console.log("Map Toggled");
+    }
 }
 
 const styles = StyleSheet.create({
+  listStyle: {
+    flex: 1,
+    backgroundColor: "#fff",
+    width: '100%'
+  },
   container: {
     position: 'absolute',
     top: 0,
