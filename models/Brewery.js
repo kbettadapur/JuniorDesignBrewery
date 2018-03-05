@@ -16,4 +16,8 @@ export default class Brewery {
         this.price = res.price_level;
         //this.photo = res.photo_reference;
     }
+
+    hashCode() {
+        return (2 *this.latitude) + (2 * this.longitude);
+    }
 }

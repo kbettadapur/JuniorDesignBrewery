@@ -32,8 +32,8 @@ import FAB from 'react-native-fab';
 export class MapScreen extends React.Component {
     breweries;
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             query: "",
             breweries: [],
@@ -59,6 +59,7 @@ export class MapScreen extends React.Component {
 
         let location = await Location.getCurrentPositionAsync({});
         this.setState({location});
+        console.log(this.state.location);
     }
     
 
@@ -142,7 +143,7 @@ export class MapScreen extends React.Component {
                             coordinate={{latitude: val.latitude, longitude: val.longitude}}
                             key={val.latitude + val.longitude}
                             name={val.name}
-                            onCalloutPress={() => this.props.navigation.navigate("Brewery", {navigation: this.props.navigation})}
+                            onCalloutPress={() => this.props.navigation.navigate("Brewery", {navigation: this.props.navigation, brewery: val})}
                         >
                             <MapView.Callout>
                                 <Text style={{fontSize: 15, fontWeight: 'bold'}}>{val.name}</Text>
@@ -168,10 +169,6 @@ export class MapScreen extends React.Component {
             })).then(() => {
                 this.searchBreweries(location.lat, location.lng)
             })
-            
-        /*FetchHelper.fetchBreweries(this.state.query).then((ret) => {
-            console.log(ret);
-        });*/
     }
 
     searchLocalBreweries() {
