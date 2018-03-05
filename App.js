@@ -7,6 +7,7 @@ import { LoginScreen } from './components/LoginScreen';
 import { MainScreen } from './components/MainScreen';
 import { RegisterScreen } from './components/RegisterScreen';
 import { BreweryScreen } from './components/BreweryScreen';
+import { AddReviewScreen } from './components/AddReviewScreen';
 
 class App extends React.Component {
 
@@ -24,6 +25,7 @@ const AppNavigator = StackNavigator({
     Main: { screen: MainScreen },
     Register: { screen: RegisterScreen },
     Brewery: { screen: BreweryScreen },
+    AddReview: { screen: AddReviewScreen },
 })
 
 const styles = StyleSheet.create({

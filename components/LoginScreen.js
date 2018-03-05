@@ -33,7 +33,7 @@ export class LoginScreen extends React.Component {
 
 
   constructor(props) {
-    super();
+    super(props);
     this.state = {email: "", password: ""};
   }
 
