@@ -64,7 +64,6 @@ export class MapScreen extends React.Component {
     
 
     render() {
-        console.log(this.props.sort + " hello!")        
         return (
             <Container>
             <View style={{flex: 1}}>
@@ -192,13 +191,20 @@ export class MapScreen extends React.Component {
                     res.push(b);
                 });
                 this.setState({breweries: res});
-                //console.log(this.state.breweries);
+                console.log(this.state.breweries);
             }));
     }
 
     renderListView() {
         counter = 0;
+        if(this.props.sort === "Alphabetical")
+            this.state.breweries.sort(function(a, b){
+                var textA = a.name.toUpperCase();
+                var textB = b.name.toUpperCase();
+                return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+            })
         return _.map(this.state.breweries, (b) => {
+            console.log(b.name)
             counter = counter + 1;
             return (
                 <ListItem key={counter} onPress={() => this.props.navigation.navigate("Brewery", {navigation: this.props.navigation, brewery: b})}>
@@ -210,6 +216,10 @@ export class MapScreen extends React.Component {
 
     mapToggle() {
         this.setState({mapVisible: !this.state.mapVisible});
+    }
+
+    sortList() {
+        
     }
 }
 
