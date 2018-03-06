@@ -176,8 +176,6 @@ export class MapScreen extends React.Component {
     }
 
     searchBreweries(lat, lng) {
-        console.log("LAT: " + lat);
-        console.log("LNG: " + lng);
         fetch('https://maps.googleapis.com/maps/api/place/nearbysearch/'
                     + 'json?key=AIzaSyDiooLoAXwvs42CPdgVKhqRwjqiUHok8gs'
                     + '&location=' + `${lat}` + ',' + `${lng}`
@@ -191,7 +189,6 @@ export class MapScreen extends React.Component {
                     res.push(b);
                 });
                 this.setState({breweries: res});
-                console.log(this.state.breweries);
             }));
     }
 
@@ -200,7 +197,7 @@ export class MapScreen extends React.Component {
         return _.map(this.state.breweries, (b) => {
             counter = counter + 1;
             return (
-                <ListItem key={counter}>
+                <ListItem key={counter} onPress={() => this.props.navigation.navigate("Brewery", {navigation: this.props.navigation, brewery: b})}>
                     <Text style={{width: '100%'}}>{b.name}</Text>
                 </ListItem>
             );
@@ -209,7 +206,6 @@ export class MapScreen extends React.Component {
 
     mapToggle() {
         this.setState({mapVisible: !this.state.mapVisible});
-        console.log("Map Toggled");
     }
 }
 

@@ -4,6 +4,9 @@ import { Footer, Container } from 'native-base';
 import _ from 'lodash';
 import Brewery from '../models/Brewery';
 import firebaseApp from '../firebase';
+import { RadioGroup, RadioButton } from 'react-native-flexi-radio-button';
+import Guid from 'guid';
+import StarRating from 'react-native-star-rating';
 
 
 export class AddReviewScreen extends React.Component {
@@ -15,17 +18,17 @@ export class AddReviewScreen extends React.Component {
             hasChangingTables: null,
             hasFamilyRestroom: null,
             isWheelchairAccessible: null,
-            seatingArrangements: null,
-            kidFriendly: null,
-            safety: null,
-            petFriendly: null,
-            foodOptionDiversity: null,
-            nonAlcoholicOptions: null,
-            soundLevel: null,
-            isSmokingPermitted: null,
-            strollerKids: null,
-            kThroughSix: null,
-            teenagers: null,
+            seatingArrangements: 0,
+            kidFriendly: 0,
+            safety: 0,
+            petFriendly: 0,
+            foodOptionDiversity: 0,
+            nonAlcoholicOptions: 0,
+            soundLevel: 0,
+            isSmokingPermitted: 0,
+            strollerKids: 0,
+            kThroughSix: 0,
+            teenagers: 0,
             comments: null,
         }
     }
@@ -34,78 +37,131 @@ export class AddReviewScreen extends React.Component {
         return (
             <ScrollView>
             <View>
-                <Text>Add Review Screen</Text>
-                <Text>{this.state.brewery.name}</Text>
-                <TextInput
-                    style={styles.textinput}
-                    onChangeText={(hasChangingTables) => this.setState({hasChangingTables})}
-                    value={this.state.hasChangingTables}
-                    placeholder="Changing Tables?" />
-                <TextInput
-                    style={styles.textinput}
-                    onChangeText={(hasFamilyRestroom) => this.setState({hasFamilyRestroom})}
-                    value={this.state.hasFamilyRestroom}
-                    placeholder="Family Restroom?" />
-                <TextInput
-                    style={styles.textinput}
-                    onChangeText={(isWheelchairAccessible) => this.setState({isWheelchairAccessible})}
-                    value={this.state.isWheelchairAccessible}
-                    placeholder="Wheelchair Accessible?" />
-                <TextInput
-                    style={styles.textinput}
-                    onChangeText={(seatingArrangements) => this.setState({seatingArrangements})}
-                    value={this.state.seatingArrangements}
-                    placeholder="Seating Arrangements?" />
-                <TextInput
-                    style={styles.textinput}
-                    onChangeText={(kidFriendly) => this.setState({kidFriendly})}
-                    value={this.state.kidFriendly}
-                    placeholder="Kid Friendly?" />
-                <TextInput
-                    style={styles.textinput}
-                    onChangeText={(safety) => this.setState({safety})}
-                    value={this.state.safety}
-                    placeholder="Safety?" />
-                <TextInput
-                    style={styles.textinput}
-                    onChangeText={(petFriendly) => this.setState({petFriendly})}
-                    value={this.state.petFriendly}
-                    placeholder="Pet Friendly?" />
-                <TextInput
-                    style={styles.textinput}
-                    onChangeText={(foodOptionDiversity) => this.setState({foodOptionDiversity})}
-                    value={this.state.foodOptionDiversity}
-                    placeholder="Food Option Diversity?" />
-                <TextInput
-                    style={styles.textinput}
-                    onChangeText={(nonAlcoholicOptions) => this.setState({nonAlcoholicOptions})}
-                    value={this.state.nonAlcoholicOptions}
-                    placeholder="Non Alcoholic Options?" />
-                <TextInput
-                    style={styles.textinput}
-                    onChangeText={(soundLevel) => this.setState({soundLevel})}
-                    value={this.state.soundLevel}
-                    placeholder="Sound Level?" />
-                <TextInput
-                    style={styles.textinput}
-                    onChangeText={(isSmokingPermitted) => this.setState({isSmokingPermitted})}
-                    value={this.state.isSmokingPermitted}
-                    placeholder="Smoking Permitted?" />
-                <TextInput
-                    style={styles.textinput}
-                    onChangeText={(strollerKids) => this.setState({strollerKids})}
-                    value={this.state.strollerKids}
-                    placeholder="Stroller Kids?" />
-                <TextInput
-                    style={styles.textinput}
-                    onChangeText={(kThroughSix) => this.setState({kThroughSix})}
-                    value={this.state.kThroughSix}
-                    placeholder="K Through Six?" />
-                <TextInput
-                    style={styles.textinput}
-                    onChangeText={(teenagers) => this.setState({teenagers})}
-                    value={this.state.teenagers}
-                    placeholder="Teenagers?" />
+                <Text style={styles.title}>{this.state.brewery.name}</Text>
+                
+                <Text style={styles.radio_title}>Enough Changing Tables?</Text>
+                <RadioGroup
+                    onSelect = {(index, value) => this.setState({hasChangingTables: value})}>
+                    <RadioButton value={'Yes'} >
+                    <Text>Yes</Text>
+                    </RadioButton>
+            
+                    <RadioButton value={'No'}>
+                    <Text>No</Text>
+                    </RadioButton>
+                </RadioGroup>
+
+                <Text style={styles.radio_title}>Family Restroom Available?</Text>
+                <RadioGroup
+                    onSelect = {(index, value) => this.setState({hasFamilyRestroom: value})}>
+                    <RadioButton value={'Yes'} >
+                    <Text>Yes</Text>
+                    </RadioButton>
+            
+                    <RadioButton value={'No'}>
+                    <Text>No</Text>
+                    </RadioButton>
+                </RadioGroup>
+
+                <Text style={styles.radio_title}>Wheelchair Accessible?</Text>
+                <RadioGroup
+                    onSelect = {(index, value) => this.setState({isWheelchairAccessible: value})}>
+                    <RadioButton value={'Yes'} >
+                    <Text>Yes</Text>
+                    </RadioButton>
+            
+                    <RadioButton value={'No'}>
+                    <Text>No</Text>
+                    </RadioButton>
+                </RadioGroup>
+                <Text style={styles.radio_title}>Wheelchair Accessible?</Text>
+                <StarRating
+                    maxStars={5}
+                    rating={this.state.seatingArrangements}
+                    selectedStar={(rating) => this.setState({seatingArrangements: rating})}
+                    fullStarColor={'#eaaa00'}
+                />
+
+                <Text style={styles.radio_title}>Kid Friendly?</Text>
+                <StarRating
+                    maxStars={5}
+                    rating={this.state.kidFriendly}
+                    selectedStar={(rating) => this.setState({kidFriendly: rating})}
+                    fullStarColor={'#eaaa00'}
+                />
+                
+                <Text style={styles.radio_title}>Safety?</Text>
+                <StarRating
+                    maxStars={5}
+                    rating={this.state.safety}
+                    selectedStar={(rating) => this.setState({safety: rating})}
+                    fullStarColor={'#eaaa00'}
+                />
+                
+                <Text style={styles.radio_title}>Pet Friendly?</Text>
+                <StarRating
+                    maxStars={5}
+                    rating={this.state.petFriendly}
+                    selectedStar={(rating) => this.setState({petFriendly: rating})}
+                    fullStarColor={'#eaaa00'}
+                />
+                
+                <Text style={styles.radio_title}>Food Option Diversity?</Text>
+                <StarRating
+                    maxStars={5}
+                    rating={this.state.foodOptionDiversity}
+                    selectedStar={(rating) => this.setState({foodOptionDiversity: rating})}
+                    fullStarColor={'#eaaa00'}
+                />
+                
+                <Text style={styles.radio_title}>Non Alcoholic Options?</Text>
+                <StarRating
+                    maxStars={5}
+                    rating={this.state.nonAlcoholicOptions}
+                    selectedStar={(rating) => this.setState({nonAlcoholicOptions: rating})}
+                    fullStarColor={'#eaaa00'}
+                />
+
+                <Text style={styles.radio_title}>Sound Level?</Text>
+                <StarRating
+                    maxStars={5}
+                    rating={this.state.soundLevel}
+                    selectedStar={(rating) => this.setState({soundLevel: rating})}
+                    fullStarColor={'#eaaa00'}
+                />
+                
+                <Text style={styles.radio_title}>Smoking (1) restricted (5) prevalent</Text>
+                <StarRating
+                    maxStars={5}
+                    rating={this.state.isSmokingPermitted}
+                    selectedStar={(rating) => this.setState({isSmokingPermitted: rating})}
+                    fullStarColor={'#eaaa00'}
+                />
+                
+                <Text style={styles.radio_title}>How good is it for stroller kids?</Text>
+                <StarRating
+                    maxStars={5}
+                    rating={this.state.strollerKids}
+                    selectedStar={(rating) => this.setState({strollerKids: rating})}
+                    fullStarColor={'#eaaa00'}
+                />
+                
+                <Text style={styles.radio_title}>How good is it for K-6 kids?</Text>
+                <StarRating
+                    maxStars={5}
+                    rating={this.state.kThroughSix}
+                    selectedStar={(rating) => this.setState({kThroughSix: rating})}
+                    fullStarColor={'#eaaa00'}
+                />
+                
+                <Text style={styles.radio_title}>How good is it for teenagers?</Text>
+                <StarRating
+                    maxStars={5}
+                    rating={this.state.teenagers}
+                    selectedStar={(rating) => this.setState({teenagers: rating})}
+                    fullStarColor={'#eaaa00'}
+                />
+                
                 <TextInput
                     style={styles.textinput}
                     onChangeText={(comments) => this.setState({comments})}
@@ -120,7 +176,8 @@ export class AddReviewScreen extends React.Component {
 
     submitReview() {
         console.log("Submitting Review");
-        firebaseApp.database().ref("Reviews").set({
+        firebaseApp.database().ref("Reviews/" + this.newGuid()).set({
+        
           username: firebaseApp.auth().currentUser.uid,
           brewery: this.state.brewery.hashCode(),
           hasChangingTables: this.state.hasChangingTables,
@@ -140,6 +197,15 @@ export class AddReviewScreen extends React.Component {
           comments: this.state.comments,
         }).then(() => console.log("DONE"));
     }
+
+    newGuid() { // Public Domain/MIT
+        var d = new Date().getTime();
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            var r = (d + Math.random() * 16) % 16 | 0;
+            d = Math.floor(d / 16);
+            return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+        });
+    }
 }
 
 const styles = StyleSheet.create({
@@ -149,9 +215,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  radio_title: {
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
+    textAlign: 'center'
   },
   textinput: {
     height: 58,
