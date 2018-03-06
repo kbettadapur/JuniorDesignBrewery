@@ -201,7 +201,7 @@ export class MapScreen extends React.Component {
         return _.map(this.state.breweries, (b) => {
             counter = counter + 1;
             return (
-                <ListItem key={counter}>
+                <ListItem key={counter} onPress={() => this.props.navigation.navigate("Brewery", {navigation: this.props.navigation, brewery: b})}>
                     <Text style={{width: '100%'}}>{b.name}</Text>
                 </ListItem>
             );
@@ -210,7 +210,6 @@ export class MapScreen extends React.Component {
 
     mapToggle() {
         this.setState({mapVisible: !this.state.mapVisible});
-        console.log("Map Toggled");
     }
 }
 
