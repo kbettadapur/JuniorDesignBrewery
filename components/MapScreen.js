@@ -27,6 +27,7 @@ import _ from 'lodash';
 import Brewery from '../models/Brewery';
 import firebaseApp from '../firebase';
 import FAB from 'react-native-fab';
+import StarRating from 'react-native-star-rating';
 
 
 export class MapScreen extends React.Component {
@@ -138,6 +139,7 @@ export class MapScreen extends React.Component {
         if (this.state.breweries) {
             return (
                 _.map(this.state.breweries, (val) => {
+                    console.log(val);
                     return (
                         <MapView.Marker
                             coordinate={{latitude: val.latitude, longitude: val.longitude}}
@@ -147,8 +149,16 @@ export class MapScreen extends React.Component {
                         >
                             <MapView.Callout>
                                 <Text style={{fontSize: 15, fontWeight: 'bold'}}>{val.name}</Text>
-                                <Text>{'Gen Rating: ' + val.genRating}</Text>
-                                <Text>{'Price Level: ' + '$'.repeat(val.price)}</Text>
+                                {val.price && <Text>{'$'.repeat(val.price)}</Text>}
+                                <View style={{width: '50%'}}>
+                                <StarRating
+                                    maxStars={5}
+                                    rating={parseInt(val.genRating)}
+                                    fullStarColor={'#eaaa00'}
+                                    starSize={20}
+                                    
+                                />
+                                </View>
                             </MapView.Callout>
                         </MapView.Marker>
                     )

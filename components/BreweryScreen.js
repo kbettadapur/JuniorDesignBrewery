@@ -5,6 +5,7 @@ import _ from 'lodash';
 import Brewery from '../models/Brewery';
 import firebaseApp from '../firebase';
 import FAB from 'react-native-fab';
+import StarRating from 'react-native-star-rating';
 
 
 export class BreweryScreen extends React.Component {
@@ -36,6 +37,7 @@ export class BreweryScreen extends React.Component {
 
     render() {
         return (
+            <View style={{height: '100%'}}>
             <ScrollView style={{backgroundColor: '#fff'}}>
             <View style={styles.container}>
                 <Image
@@ -48,9 +50,19 @@ export class BreweryScreen extends React.Component {
                 <Text style={styles.subtitle}>Reviews</Text>
                 {this.renderContent()}
                 
-                <Button title="Add Review" onPress={() => this.props.navigation.navigate("AddReview", {navigation: this.props.navigation, brewery: this.state.brewery})}></Button>
             </View>
             </ScrollView>
+            {/*<Button title="Add Review" onPress={() => this.props.navigation.navigate("AddReview", {navigation: this.props.navigation, brewery: this.state.brewery})}></Button>
+            */}
+            <View>
+            <FAB 
+                buttonColor="green"
+                iconTextColor="#FFFFFF"
+                onClickAction={() => this.props.navigation.navigate("AddReview", {navigation: this.props.navigation, brewery: this.state.brewery})}
+                visible={true}
+                iconTextComponent={<Icon name="md-add"/>} />
+            </View>
+            </View>
             
         )
     }
@@ -67,16 +79,29 @@ export class BreweryScreen extends React.Component {
 
     renderReviewsList() {
         console.log(this.state.reviews);
+        if (this.state.reviews.length > 0) {
         return _.map(this.state.reviews, (rev) => {
                 return (
                     <ListItem key={new Date().getTime()}>
                         <View style={{width: '100%'}}>
-                        <Text style={styles.list_item_title}>{rev.username}</Text>
-                        <Text style={{width: '100%'}}>{rev.comments}</Text>
+                            <Text style={styles.list_item_title}>{rev.username}</Text>
+                            <Text style={{width: '100%'}}>{rev.comments}</Text>
+                            <StarRating
+                                maxStars={5}
+                                rating={rev.overallRating}
+                                fullStarColor={'#eaaa00'}
+                                starSize={20}
+                                containerStyle={{width: '25%'}}
+                            />
                         </View>
                     </ListItem>
                 )
             })
+        } else {
+            return (
+                <Text>No Reviews Yet!</Text>
+            )
+        }
     }
 
 }
