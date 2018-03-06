@@ -11,6 +11,13 @@ import StarRating from 'react-native-star-rating';
 
 export class AddReviewScreen extends React.Component {
 
+    static navigationOptions = ({ navigation }) => ({
+        title: "Leave a review",
+        headerStyle:  { backgroundColor: "#2196F3", },
+        headerTitleStyle: { color: "#FFFFFF" },
+        headerTintColor: "blue"
+    });
+
     constructor(props) {
         super(props);
         this.state = {
@@ -74,7 +81,7 @@ export class AddReviewScreen extends React.Component {
                     <Text>No</Text>
                     </RadioButton>
                 </RadioGroup>
-                <Text style={styles.radio_title}>Wheelchair Accessible?</Text>
+                <Text style={styles.radio_title}>Seating Arrangements?</Text>
                 <StarRating
                     maxStars={5}
                     rating={this.state.seatingArrangements}
@@ -176,26 +183,29 @@ export class AddReviewScreen extends React.Component {
 
     submitReview() {
         console.log("Submitting Review");
-        firebaseApp.database().ref("Reviews/" + this.newGuid()).set({
-        
-          username: firebaseApp.auth().currentUser.uid,
-          brewery: this.state.brewery.hashCode(),
-          hasChangingTables: this.state.hasChangingTables,
-          hasFamilyRestroom: this.state.hasFamilyRestroom,
-          isWheelchairAccessible: this.state.isWheelchairAccessible,
-          seatingArrangements: this.state.seatingArrangements,
-          kidFriendly: this.state.kidFriendly,
-          safety: this.state.safety,
-          petFriendly: this.state.petFriendly,
-          foodOptionDiversity: this.state.foodOptionDiversity,
-          nonAlcoholicOptions: this.state.nonAlcoholicOptions,
-          soundLevel: this.state.soundLevel,
-          isSmokingPermitted: this.state.isSmokingPermitted,
-          strollerKids: this.state.strollerKids,
-          kThroughSix: this.state.kThroughSix,
-          teenagers: this.state.teenagers,
-          comments: this.state.comments,
-        }).then(() => console.log("DONE"));
+        firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid).on("value", (snapshot) => {
+            firebaseApp.database().ref("Reviews/" + this.newGuid()).set({
+            userId: firebaseApp.auth().currentUser.uid,
+            username: snapshot.val().username,
+            brewery: this.state.brewery.placeId,
+            hasChangingTables: this.state.hasChangingTables,
+            hasFamilyRestroom: this.state.hasFamilyRestroom,
+            isWheelchairAccessible: this.state.isWheelchairAccessible,
+            seatingArrangements: this.state.seatingArrangements,
+            kidFriendly: this.state.kidFriendly,
+            safety: this.state.safety,
+            petFriendly: this.state.petFriendly,
+            foodOptionDiversity: this.state.foodOptionDiversity,
+            nonAlcoholicOptions: this.state.nonAlcoholicOptions,
+            soundLevel: this.state.soundLevel,
+            isSmokingPermitted: this.state.isSmokingPermitted,
+            strollerKids: this.state.strollerKids,
+            kThroughSix: this.state.kThroughSix,
+            teenagers: this.state.teenagers,
+            comments: this.state.comments,
+            }).then(() => console.log("DONE"));
+        });
+        /**/
     }
 
     newGuid() { // Public Domain/MIT

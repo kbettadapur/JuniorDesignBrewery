@@ -14,10 +14,6 @@ export default class Brewery {
         this.placeId = res.place_id;
         this.genRating = res.rating;
         this.price = res.price_level;
-        this.photo = res.photo_reference;
-    }
-
-    hashCode() {
-        return (2 *this.latitude) + (2 * this.longitude);
+        this.photo = res.photos[0].photo_reference;
     }
 }
