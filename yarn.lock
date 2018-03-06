@@ -5049,6 +5049,16 @@ react-native-maps@0.17.1:
   version "0.17.1"
   resolved "https://registry.yarnpkg.com/react-native-maps/-/react-native-maps-0.17.1.tgz#ab2236341fd984dac8864202ae55331bc262f60c"
 
+react-native-modal-dropdown@^0.6.1:
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/react-native-modal-dropdown/-/react-native-modal-dropdown-0.6.1.tgz#a5e4255ad26f3837a7a23fcf2b851187c24850ed"
+  dependencies:
+    prop-types "^15.6.0"
+
+react-native-popup-menu@^0.12.2:
+  version "0.12.2"
+  resolved "https://registry.yarnpkg.com/react-native-popup-menu/-/react-native-popup-menu-0.12.2.tgz#6568b52cf645663f060a550f23241fa1552bfa0e"
+
 react-native-safe-module@^1.1.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/react-native-safe-module/-/react-native-safe-module-1.2.0.tgz#a23824ca24edc2901913694a76646475113d570d"

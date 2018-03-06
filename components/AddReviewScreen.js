@@ -36,6 +36,7 @@ export class AddReviewScreen extends React.Component {
             strollerKids: 0,
             kThroughSix: 0,
             teenagers: 0,
+            overallRating: 0,
             comments: null,
         }
     }
@@ -174,7 +175,15 @@ export class AddReviewScreen extends React.Component {
                     onChangeText={(comments) => this.setState({comments})}
                     value={this.state.comments}
                     placeholder="Comments?" />
+                
 
+                <Text style={styles.radio_final_title}>Overall Rating?</Text>
+                <StarRating
+                    maxStars={5}
+                    rating={this.state.overallRating}
+                    selectedStar={(rating) => this.setState({overallRating: rating})}
+                    fullStarColor={'#eaaa00'}
+                />
                 <Button title="Submit" onPress={this.submitReview.bind(this)}></Button>
             </View>
             </ScrollView>
@@ -202,6 +211,7 @@ export class AddReviewScreen extends React.Component {
             strollerKids: this.state.strollerKids,
             kThroughSix: this.state.kThroughSix,
             teenagers: this.state.teenagers,
+            overallRating: this.state.overallRating,
             comments: this.state.comments,
             }).then(() => console.log("DONE"));
         });
@@ -228,6 +238,10 @@ const styles = StyleSheet.create({
   radio_title: {
     fontSize: 14,
     fontWeight: 'bold',
+  },
+  radio_final_title: {
+      fontSize: 16,
+      fontWeight: 'bold'
   },
   title: {
     fontSize: 24,
