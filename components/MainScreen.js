@@ -21,7 +21,8 @@ export class MainScreen extends React.Component {
         headerTitleStyle: { color: "#FFFFFF" },
         headerTintColor: "blue",
         headerLeft: null,
-        headerRight: (<View style={{paddingRight:15}}><TouchableOpacity onPress={() => a.sortClick()}>
+        headerRight: (<View style={{paddingRight:15}}>
+                    <TouchableOpacity onPress={() => a.sortClick()} hitSlop={{top:40, bottom:40, right:40, left:40}}>
                         <Icon style={{color:"#FFFFFF"}}name="md-more"/>
                     </TouchableOpacity></View>),    
     });
