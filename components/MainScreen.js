@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { TouchableOpacity, StyleSheet, Text, TextInput, View } from 'react-native';
 import { MapView } from 'expo';
 import { FooterTab, Icon, Button, Footer } from 'native-base';
 import { MapScreen } from './MapScreen';
@@ -19,15 +19,26 @@ export class MainScreen extends React.Component {
         title: "Brewery Trackr",
         headerStyle:  { backgroundColor: "#2196F3", },
         headerTitleStyle: { color: "#FFFFFF" },
-        headerTintColor: "blue"
+        headerTintColor: "blue",
+        headerLeft: null,
+        headerRight: (<View style={{paddingRight:15}}><TouchableOpacity onPress={() => a.sortClick()}>
+                        <Icon style={{color:"#FFFFFF"}}name="md-more"/>
+                    </TouchableOpacity></View>),    
     });
 
   constructor(props) {
     super();
+    a = this;
     this.state = {
         selectedTab: MAP_TAB,
-        title: "Map"
+        title: "Map",
+        sort:"",
     };
+  }
+
+  sortClick() {
+      this.setState({sort:"Alphabetical"})
+      this.forceUpdate()
   }
 
   render() {
@@ -53,6 +64,7 @@ export class MainScreen extends React.Component {
                 <MapScreen
                     renderTabs={() => this.renderTabs()}
                     navigation={this.props.navigation}
+                    sort={this.state.sort}
                 />
             );
         case FAVORITES_TAB:
@@ -115,7 +127,7 @@ export class MainScreen extends React.Component {
       </FooterTab>
     );
   }
-
+  
   changeTab(tabName) {
         this.setState({selectedTab: tabName, title: tabName});
     }

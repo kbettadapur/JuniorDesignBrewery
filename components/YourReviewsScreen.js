@@ -2,6 +2,7 @@ import React from 'react';
 import _ from 'lodash';
 import { StyleSheet, View, Text } from 'react-native';
 import { Footer, Container, List, ListItem } from 'native-base';
+import firebaseApp from '../firebase';
 
 export class YourReviewsScreen extends React.Component {
     constructor() {
@@ -32,8 +33,9 @@ export class YourReviewsScreen extends React.Component {
     }
 
     renderFavoritesList() {
-        favorites = ["Brewery 1", "Brewery 2", "Brewery 3", "Brewery 4", "Brewery 5"];
-        return _.map(favorites, (fav) => {
+        reviews = [];
+        
+        return _.map(reviews, (fav) => {
             return (
                 <ListItem key={this.hashCode(fav)}>
                     <Text style={{width: '100%'}}>{fav}</Text>
