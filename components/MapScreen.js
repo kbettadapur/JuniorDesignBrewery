@@ -64,6 +64,7 @@ export class MapScreen extends React.Component {
     
 
     render() {
+        console.log(this.props.sort + " hello!")        
         return (
             <Container>
             <View style={{flex: 1}}>
@@ -158,7 +159,7 @@ export class MapScreen extends React.Component {
     }
 
     search() {
-        console.log(this.state.query);
+        //console.log(this.state.query);
         
         fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + this.state.query + '&key=AIzaSyDiooLoAXwvs42CPdgVKhqRwjqiUHok8gs')
             .then((r) => r.json().then((d) => {
@@ -176,8 +177,8 @@ export class MapScreen extends React.Component {
     }
 
     searchBreweries(lat, lng) {
-        console.log("LAT: " + lat);
-        console.log("LNG: " + lng);
+        //console.log("LAT: " + lat);
+        //console.log("LNG: " + lng);
         fetch('https://maps.googleapis.com/maps/api/place/nearbysearch/'
                     + 'json?key=AIzaSyDiooLoAXwvs42CPdgVKhqRwjqiUHok8gs'
                     + '&location=' + `${lat}` + ',' + `${lng}`
@@ -191,7 +192,7 @@ export class MapScreen extends React.Component {
                     res.push(b);
                 });
                 this.setState({breweries: res});
-                console.log(this.state.breweries);
+                //console.log(this.state.breweries);
             }));
     }
 
