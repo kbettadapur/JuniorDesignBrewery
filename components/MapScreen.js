@@ -82,30 +82,33 @@ export class MapScreen extends React.Component {
                 {!this.state.mapVisible && 
                     <ScrollView style={{marginTop: 60}}>
                     <List style={styles.listStyle}>
-                        <List>
                             {this.renderListView()}
+                        <List>
                         </List>
                     </List> 
                     </ScrollView> 
                 }
 
                 {!this.state.mapVisible && 
+                <View style={{position:'absolute', right:0, top:140}}>
                 <FAB 
                     buttonColor="red"
                     iconTextColor="#FFFFFF"
                     onClickAction={this.mapToggle.bind(this)}
                     visible={true}
-                    iconTextComponent={<Icon name="map"/>} />}
+                    iconTextComponent={<Icon name="map"/>} />
+                </View>}
 
                 {this.state.mapVisible && 
-                <FAB 
-                    buttonColor="red"
-                    iconTextColor="#FFFFFF"
-                    onClickAction={this.mapToggle.bind(this)}
-                    visible={true}
-                    iconTextComponent={<Icon name="list"/>} />}
-                
-                <View style={{top: 140, right: 0, position: 'absolute'}}>
+                <View style={{position:'absolute', left:90, top:135}}>
+                    <FAB 
+                        buttonColor="red"
+                        iconTextColor="#FFFFFF"
+                        onClickAction={this.mapToggle.bind(this)}
+                        visible={true}
+                        iconTextComponent={<Icon name="list"/>} />
+                </View>}
+                <View style={{bottom: 0, right: 0, position: 'absolute'}}>
                     <FAB 
                         buttonColor="blue"
                         iconTextColor="#FFFFFF"
@@ -119,7 +122,7 @@ export class MapScreen extends React.Component {
 
                 <View style={styles.searchWrapper}>
                     <TextInput style={styles.search}
-                            placeholder="Search..."
+                            placeholder="Search by city..."
                             onChangeText={(query) => this.setState({query})}
                             value={this.state.query}
                     ></TextInput>
@@ -156,7 +159,6 @@ export class MapScreen extends React.Component {
                                     rating={parseInt(val.genRating)}
                                     fullStarColor={'#eaaa00'}
                                     starSize={20}
-                                    
                                 />
                                 </View>
                             </MapView.Callout>
