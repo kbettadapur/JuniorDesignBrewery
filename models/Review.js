@@ -1,22 +1,24 @@
-export default class Brewery {
+export default class Review {
     username;
+    overallRating = 0;
     hasChangingTables;
     hasFamilyRestroom;
     isWheelchairAccessible;
-    seatingArrangements;
-    kidFriendly;
-    safety;
-    petFriendly;
-    foodOptionDiversity;
-    nonAlcoholicOptions;
-    soundLevel;
-    isSmokingPermitted;
-    strollerKids;
-    kThroughSix;
-    teenagers;
+    seatingArrangements = 0;
+    kidFriendly = 0;
+    safety = 0;
+    petFriendly = 0;
+    foodOptionDiversity = 0;
+    nonAlcoholicOptions = 0;
+    soundLevel = 0 ;
+    isSmokingPermitted = 0;
+    strollerKids = 0;
+    kThroughSix = 0;
+    teenagers = 0;
     comments;
 
     merge(res) {
+        this.overallRating = res.overallRating;
         this.username = res.username;
         this.hasChangingTables = res.hasChangingTables;
         this.hasFamilyRestroom = res.hasFamilyRestroom;

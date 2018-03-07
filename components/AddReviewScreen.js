@@ -7,6 +7,7 @@ import firebaseApp from '../firebase';
 import { RadioGroup, RadioButton } from 'react-native-flexi-radio-button';
 import Guid from 'guid';
 import StarRating from 'react-native-star-rating';
+import { NavigationActions } from 'react-navigation';
 
 
 export class AddReviewScreen extends React.Component {
@@ -213,7 +214,12 @@ export class AddReviewScreen extends React.Component {
             teenagers: this.state.teenagers,
             overallRating: this.state.overallRating,
             comments: this.state.comments,
-            }).then(() => console.log("DONE"));
+            }).then(() => {
+                const backAction = NavigationActions.back({
+                    key: null
+                  }) 
+                  this.props.navigation.dispatch(backAction);                  
+            });
         });
         /**/
     }

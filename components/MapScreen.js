@@ -142,7 +142,7 @@ export class MapScreen extends React.Component {
         if (this.state.breweries) {
             return (
                 _.map(this.state.breweries, (val) => {
-                    console.log(val);
+                   // console.log(val);
                     return (
                         <MapView.Marker
                             coordinate={{latitude: val.latitude, longitude: val.longitude}}
