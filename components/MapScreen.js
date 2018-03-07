@@ -191,20 +191,36 @@ export class MapScreen extends React.Component {
                     res.push(b);
                 });
                 this.setState({breweries: res});
-                console.log(this.state.breweries);
+               // console.log(this.state.breweries);
             }));
     }
 
     renderListView() {
         counter = 0;
-        if(this.props.sort === "Alphabetical")
+        var t = this;
+        if(this.props.sort === "Alphabetical") {
             this.state.breweries.sort(function(a, b){
                 var textA = a.name.toUpperCase();
                 var textB = b.name.toUpperCase();
                 return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
             })
+        }
+        else if(this.props.sort === "Distance") {
+            this.state.breweries.sort(function(a,b) {
+                var x = t.state.location.coords.latitude;
+                var y = t.state.location.coords.longitude;
+                var dist1 = Math.sqrt((x - a.latitude) * (x - a.latitude) + (y - a.longitude) * (y - a.longitude))
+                var dist2 = Math.sqrt((x - b.latitude) * (x - b.latitude) + (y - b.longitude) * (y - b.longitude))
+                return (dist1 < dist2) ? -1 : (dist1 > dist2) ? 1 : 0;               
+            })
+        } else if(this.props.sort === "Rating") {
+            this.state.breweries.sort(function(a, b){
+                var textA = a.genRating;
+                var textB = b.genRating;
+                return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+            })
+        }
         return _.map(this.state.breweries, (b) => {
-            console.log(b.name)
             counter = counter + 1;
             return (
                 <ListItem key={counter} onPress={() => this.props.navigation.navigate("Brewery", {navigation: this.props.navigation, brewery: b})}>
@@ -216,10 +232,6 @@ export class MapScreen extends React.Component {
 
     mapToggle() {
         this.setState({mapVisible: !this.state.mapVisible});
-    }
-
-    sortList() {
-        
     }
 }
 

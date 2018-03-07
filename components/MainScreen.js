@@ -6,6 +6,8 @@ import { MapScreen } from './MapScreen';
 import { FavoritesScreen } from './FavoritesScreen';
 import { YourReviewsScreen } from './YourReviewsScreen';
 import { ProfileScreen } from './ProfileScreen';
+import ModalDropdown from 'react-native-modal-dropdown';
+
 
 
 const MAP_TAB = "Map";
@@ -21,10 +23,14 @@ export class MainScreen extends React.Component {
         headerTitleStyle: { color: "#FFFFFF" },
         headerTintColor: "blue",
         headerLeft: null,
-        headerRight: (<View style={{paddingRight:15}}>
-                    <TouchableOpacity onPress={() => a.sortClick()} hitSlop={{top:40, bottom:40, right:40, left:40}}>
-                        <Icon style={{color:"#FFFFFF"}}name="md-more"/>
-                    </TouchableOpacity></View>),    
+        headerRight: (<View style={{width:40}}>
+                        {/*<TouchableOpacity onPress={() => a.sortClick()} hitSlop={{top:40, bottom:40, right:40, left:40}}> */}
+                            <ModalDropdown dropdownStyle = {{flexDirection:'row', height:127}} dropdownTextStyle={{fontWeight:'bold', fontSize:16, color:'black'}}
+                                options={['Distance', 'Alphabetical', 'Rating']}>                        
+                                <Icon style={{paddingLeft: 20, color:"#FFFFFF"}}name="md-more"/>
+                            </ModalDropdown>
+                        {/*</TouchableOpacity>*/}
+                    </View>), 
     });
 
   constructor(props) {
@@ -38,8 +44,13 @@ export class MainScreen extends React.Component {
   }
 
   sortClick() {
-      this.setState({sort:"Alphabetical"})
-      this.forceUpdate()
+    if(this.state.sort === "" || this.state.sort === "Rating")
+        this.setState({sort:"Alphabetical"})
+    else if(this.state.sort === "Alphabetical")
+        this.setState({sort:"Distance"})
+    else if(this.state.sort === "Distance")
+        this.setState({sort:"Rating"})    
+    this.forceUpdate()
   }
 
   render() {

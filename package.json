@@ -28,6 +28,7 @@
     "react-native": "0.50.3",
     "react-native-fab": "^1.0.6",
     "react-native-flexi-radio-button": "^0.2.2",
+    "react-native-modal-dropdown": "^0.6.1",
     "react-native-popup-menu": "^0.12.2",
     "react-native-star-rating": "^1.0.9",
     "react-navigation": "^1.0.0-beta.23"
