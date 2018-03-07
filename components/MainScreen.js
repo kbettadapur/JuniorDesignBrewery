@@ -23,16 +23,23 @@ export class MainScreen extends React.Component {
         headerTitleStyle: { color: "#FFFFFF" },
         headerTintColor: "blue",
         headerLeft: null,
-        headerRight: (<View style={{width:40}}>
-                        {/*<TouchableOpacity onPress={() => a.sortClick()} hitSlop={{top:40, bottom:40, right:40, left:40}}> */}
-                            <ModalDropdown dropdownStyle = {{flexDirection:'row', height:127}} dropdownTextStyle={{fontWeight:'bold', fontSize:16, color:'black'}}
-                                options={['Distance', 'Alphabetical', 'Rating']}>                        
-                                <Icon style={{paddingLeft: 20, color:"#FFFFFF"}}name="md-more"/>
-                            </ModalDropdown>
-                        {/*</TouchableOpacity>*/}
-                    </View>), 
+        headerRight: 
+            (<View style={{width:40}}>
+                    {(navigation.state.params.tab === MAP_TAB) && <ModalDropdown dropdownStyle = {{flexDirection:'row', height:127}} 
+                        dropdownTextStyle={{fontWeight:'bold', fontSize:16, color:'black'}}
+                        options={['Distance', 'Alphabetical', 'Rating']}
+                        onSelect = {(index, value) => {console.log(navigation.state.params.tab); navigation.state.params.sortClick(index)}}>                        
+                        <Icon style={{paddingLeft: 20, color:"#FFFFFF"}}name="md-more"/>
+                    </ModalDropdown>}
+            </View>), 
     });
-
+    componentDidMount() {
+        // set handler method with setParams
+        this.props.navigation.setParams({ 
+          sortClick: this._sortClick.bind(this),
+          tab: this.state.selectedTab  
+        });
+    }
   constructor(props) {
     super();
     a = this;
@@ -43,12 +50,13 @@ export class MainScreen extends React.Component {
     };
   }
 
-  sortClick() {
-    if(this.state.sort === "" || this.state.sort === "Rating")
-        this.setState({sort:"Alphabetical"})
-    else if(this.state.sort === "Alphabetical")
+  _sortClick(index) {
+    console.log(index)
+    if(index == 0)
         this.setState({sort:"Distance"})
-    else if(this.state.sort === "Distance")
+    else if(index == 1)
+        this.setState({sort:"Alphabetical"})
+    else if(index == 2)
         this.setState({sort:"Rating"})    
     this.forceUpdate()
   }
@@ -70,6 +78,9 @@ export class MainScreen extends React.Component {
   }
 
   renderPageContent() {
+    // this.props.navigation.setParams({ 
+    //     tab: this.state.selectedTab          
+    // });
     switch (this.state.selectedTab) {
         case MAP_TAB:
             return (
