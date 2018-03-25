@@ -1,9 +1,9 @@
 export default class Review {
     username;
     overallRating = 0;
-    hasChangingTables;
-    hasFamilyRestroom;
-    isWheelchairAccessible;
+    hasChangingTables = 0;
+    hasFamilyRestroom = 0;
+    isWheelchairAccessible = 0;
     seatingArrangements = 0;
     kidFriendly = 0;
     safety = 0;
