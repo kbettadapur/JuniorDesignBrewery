@@ -5,8 +5,23 @@ import { Footer, Container, List, ListItem } from 'native-base';
 import firebaseApp from '../firebase';
 
 export class YourReviewsScreen extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
+        this.state = {
+            reviews: [],
+        }
+        firebaseApp.database().ref("Reviews").on('value', (snapshot) => {
+            this.state.reviews = [];
+            console.log(snapshot.val());
+            var keys = Object.keys(snapshot.val());
+            keys.forEach((key) => {
+                if(snapshot.val()[key].userID === firebaseApp.auth().currentUser.userID) {
+                    console.log(snapshot.val()[key])
+                    this.state.reviews.push(snapshot.val()[key]);
+                }
+            });
+            this.setState({reviews: this.state.reviews});
+        });
     }
 
     render() {
@@ -33,12 +48,13 @@ export class YourReviewsScreen extends React.Component {
     }
 
     renderFavoritesList() {
-        reviews = [];
-        
-        return _.map(reviews, (fav) => {
+        return _.map(this.state.reviews, (fav) => {
             return (
                 <ListItem key={this.hashCode(fav)}>
-                    <Text style={{width: '100%'}}>{fav}</Text>
+                    <Text style={{width: '100%'}} 
+                    onPress={() => this.props.navigation.navigate("ReviewView", {navigation: this.props.navigation, review: fav})}>
+                    {fav.breweryName}
+                    </Text>
                 </ListItem>
             );
         });

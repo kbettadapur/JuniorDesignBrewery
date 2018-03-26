@@ -188,8 +188,6 @@ export class MapScreen extends React.Component {
     }
 
     searchBreweries(lat, lng) {
-        //console.log("LAT: " + lat);
-        //console.log("LNG: " + lng);
         fetch('https://maps.googleapis.com/maps/api/place/nearbysearch/'
                     + 'json?key=AIzaSyDiooLoAXwvs42CPdgVKhqRwjqiUHok8gs'
                     + '&location=' + `${lat}` + ',' + `${lng}`
@@ -203,7 +201,6 @@ export class MapScreen extends React.Component {
                     res.push(b);
                 });
                 this.setState({breweries: res});
-               // console.log(this.state.breweries);
             }));
     }
 

@@ -267,7 +267,6 @@ export class BreweryScreen extends React.Component {
        this.state.revsAvg.strollerKids  /= revs.length;
        this.state.revsAvg.kThroughSix  /= revs.length;
        this.state.revsAvg.teenagers  /= revs.length;
-       console.log(this.state.revsAvg);
     }
 }
 

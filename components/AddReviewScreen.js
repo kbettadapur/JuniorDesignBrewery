@@ -24,9 +24,10 @@ export class AddReviewScreen extends React.Component {
         this.state = {
             brewery: this.props.navigation.state.params.brewery,
             review: this.props.navigation.state.params.review,
-            hasChangingTables: null,
-            hasFamilyRestroom: null,
-            isWheelchairAccessible: null,
+            breweryId: this.props.navigation.state.params.brewery.placdeId,
+            hasChangingTables: 1,
+            hasFamilyRestroom: 1,
+            isWheelchairAccessible: 1,
             seatingArrangements: 0,
             kidFriendly: 0,
             safety: 0,
@@ -41,6 +42,7 @@ export class AddReviewScreen extends React.Component {
             overallRating: 0,
             comments: null,
             revId: 0,
+            breweryName: this.props.navigation.state.params.brewery.name,
         }
         if(this.state.review != null) {
             this.state.hasChangingTables = this.state.review.hasChangingTables;
@@ -60,6 +62,8 @@ export class AddReviewScreen extends React.Component {
             this.state.overallRating = this.state.review.overallRating;
             this.state.comments = this.state.review.comments;
             this.state.revId = this.state.review.revId;
+            this.state.breweryName = this.state.review.breweryName;
+            this.state.breweryId = this.state.review.breweryId;
         }
     }
 
@@ -67,7 +71,7 @@ export class AddReviewScreen extends React.Component {
         return (
             <ScrollView>
             <View>
-                <Text style={styles.title}>{this.state.brewery.name}</Text>
+                <Text style={styles.title}>{this.state.breweryName}</Text>
                 
                 <Text style={styles.radio_title}>Enough Changing Tables?</Text>
                 <RadioGroup
@@ -223,7 +227,7 @@ export class AddReviewScreen extends React.Component {
             firebaseApp.database().ref("Reviews/" + this.state.revId).set({
             userId: firebaseApp.auth().currentUser.uid,
             username: snapshot.val().username,
-            brewery: this.state.brewery.placeId,
+            brewery: this.state.breweryId,
             hasChangingTables: this.state.hasChangingTables,
             hasFamilyRestroom: this.state.hasFamilyRestroom,
             isWheelchairAccessible: this.state.isWheelchairAccessible,
@@ -241,6 +245,7 @@ export class AddReviewScreen extends React.Component {
             overallRating: this.state.overallRating,
             comments: this.state.comments,
             revId: this.state.revId,
+            breweryName: this.state.breweryName,
             }).then(() => {
                 const backAction = NavigationActions.back({
                     key: null
