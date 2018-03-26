@@ -42,7 +42,6 @@ export class BreweryScreen extends React.Component {
     }
 
     render() {
-        console.log("HERE!");
         if(this.state.reviews.length > 0) {
             this.state.revsAvg = new Review();
             this.calcAvg(this.state.reviews)
@@ -68,6 +67,9 @@ export class BreweryScreen extends React.Component {
                     starSize={20}
                     containerStyle={{width: '25%'}}
                 />
+                <Text>Enough changing tables? {(this.state.revsAvg.hasChangingTables >= .5) ? 'Yes' : 'No'}</Text>
+                <Text>Family restroom available? {(this.state.revsAvg.hasFamilyRestroom >= .5) ? 'Yes' : 'No'}</Text>
+                <Text>Wheelchair accessible? {(this.state.revsAvg.isWheelchairAccessible >= .5) ? 'Yes' : 'No'}</Text>                
                 <Text style={styles.radio_title}>Seating Arrangements?</Text>
                 <StarRating
                     maxStars={5}
@@ -234,9 +236,9 @@ export class BreweryScreen extends React.Component {
 
         revs.forEach((rev) => {
             
-           this.state.revsAvg.hasChangingTables += rev.hasChangingTables;
-           this.state.revsAvg.hasFamilyRestroom += rev.hasFamilyRestroom;
-           this.state.revsAvg.isWheelchairAccessible += rev.isWheelchairAccessible;
+           this.state.revsAvg.hasChangingTables += parseInt(rev.hasChangingTables);
+           this.state.revsAvg.hasFamilyRestroom += parseInt(rev.hasFamilyRestroom);
+           this.state.revsAvg.isWheelchairAccessible += parseInt(rev.isWheelchairAccessible);
            this.state.revsAvg.overallRating += parseInt(rev.overallRating);
            this.state.revsAvg.seatingArrangements += rev.seatingArrangements;
            this.state.revsAvg.kidFriendly += rev.seatingArrangements;
@@ -265,6 +267,7 @@ export class BreweryScreen extends React.Component {
        this.state.revsAvg.strollerKids  /= revs.length;
        this.state.revsAvg.kThroughSix  /= revs.length;
        this.state.revsAvg.teenagers  /= revs.length;
+       console.log(this.state.revsAvg);
     }
 }
 
