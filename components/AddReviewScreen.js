@@ -24,7 +24,7 @@ export class AddReviewScreen extends React.Component {
         this.state = {
             brewery: this.props.navigation.state.params.brewery,
             review: this.props.navigation.state.params.review,
-            breweryId: this.props.navigation.state.params.brewery.placdeId,
+            breweryId: this.props.navigation.state.params.brewery.placeId,
             hasChangingTables: 1,
             hasFamilyRestroom: 1,
             isWheelchairAccessible: 1,
@@ -227,7 +227,7 @@ export class AddReviewScreen extends React.Component {
             firebaseApp.database().ref("Reviews/" + this.state.revId).set({
             userId: firebaseApp.auth().currentUser.uid,
             username: snapshot.val().username,
-            brewery: this.state.breweryId,
+            breweryId: this.state.breweryId,
             hasChangingTables: this.state.hasChangingTables,
             hasFamilyRestroom: this.state.hasFamilyRestroom,
             isWheelchairAccessible: this.state.isWheelchairAccessible,

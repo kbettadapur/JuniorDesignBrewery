@@ -30,9 +30,11 @@ export class BreweryScreen extends React.Component {
             console.log(snapshot.val());
             var keys = Object.keys(snapshot.val());
             keys.forEach((key) => {
-                if (snapshot.val()[key].brewery == this.state.brewery.placeId) {
+                if (snapshot.val()[key].breweryId == this.state.brewery.placeId) {
                     this.state.reviews.push(snapshot.val()[key]);
-                    if(snapshot.val()[key].userID === firebaseApp.auth().currentUser.userID) {
+                    console.log( firebaseApp.auth().currentUser.uid)
+                    console.log(snapshot.val()[key].userId)
+                    if(snapshot.val()[key].userId === firebaseApp.auth().currentUser.uid) {
                        this.state.rev = snapshot.val()[key];
                     }
                 }
