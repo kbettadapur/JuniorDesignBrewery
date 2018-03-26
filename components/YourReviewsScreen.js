@@ -15,7 +15,7 @@ export class YourReviewsScreen extends React.Component {
             console.log(snapshot.val());
             var keys = Object.keys(snapshot.val());
             keys.forEach((key) => {
-                if(snapshot.val()[key].userID === firebaseApp.auth().currentUser.userID) {
+                if(snapshot.val()[key].userId === firebaseApp.auth().currentUser.uid) {
                     console.log(snapshot.val()[key])
                     this.state.reviews.push(snapshot.val()[key]);
                 }

@@ -1,11 +1,11 @@
 export default class Brewery {
-    name;
-    latitude;
-    longitude;
-    placeId;
-    genRating;
-    price;
-    photo;
+    name = "";
+    latitude = 0;
+    longitude = 0;
+    placeId = "";
+    genRating = 0;
+    price = 0;
+    photo = null;
 
     merge(res) {
         this.name = res.name;
