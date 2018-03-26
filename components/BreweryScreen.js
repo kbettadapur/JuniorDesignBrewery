@@ -23,13 +23,18 @@ export class BreweryScreen extends React.Component {
             brewery: this.props.navigation.state.params.brewery,
             reviews: [],
             revsAvg: new Review(),
+            rev: null,
         }
         firebaseApp.database().ref("Reviews").on('value', (snapshot) => {
             this.state.reviews = [];
+            console.log(snapshot.val());
             var keys = Object.keys(snapshot.val());
             keys.forEach((key) => {
                 if (snapshot.val()[key].brewery == this.state.brewery.placeId) {
                     this.state.reviews.push(snapshot.val()[key]);
+                    if(snapshot.val()[key].userID === firebaseApp.auth().currentUser.userID) {
+                       this.state.rev = snapshot.val()[key];
+                    }
                 }
             });
             this.setState({reviews: this.state.reviews});
@@ -37,10 +42,11 @@ export class BreweryScreen extends React.Component {
     }
 
     render() {
-              
-       // console.log(this.state.revsAvg)
-        if(this.state.reviews.length > 0)
-            this.calcAvg(this.state.reviews)  
+        console.log("HERE!");
+        if(this.state.reviews.length > 0) {
+            this.state.revsAvg = new Review();
+            this.calcAvg(this.state.reviews)
+        }  
         return (
             <View style={{height: '100%'}}>
             <ScrollView style={{backgroundColor: '#fff'}}>
@@ -168,18 +174,25 @@ export class BreweryScreen extends React.Component {
             </ScrollView>
             {/*<Button title="Add Review" onPress={() => this.props.navigation.navigate("AddReview", {navigation: this.props.navigation, brewery: this.state.brewery})}></Button>
             */}
-            <View>
+            {this.state.rev == null && <View>
             <FAB 
                 buttonColor="green"
                 iconTextColor="#FFFFFF"
-                onClickAction={() => this.props.navigation.navigate("AddReview", {navigation: this.props.navigation, brewery: this.state.brewery})}
+                onClickAction={() => this.props.navigation.navigate("AddReview", {navigation: this.props.navigation, brewery: this.state.brewery, review: this.state.rev})}
                 visible={true}
                 iconTextComponent={<Icon name="md-add"/>} />
-            </View>
+            </View>}
+            {this.state.rev != null && <View>
+            <FAB 
+                buttonColor="green"
+                iconTextColor="#FFFFFF"
+                onClickAction={() => this.props.navigation.navigate("AddReview", {navigation: this.props.navigation, brewery: this.state.brewery, review: this.state.rev})}
+                visible={true}
+                iconTextComponent={<Icon name="md-create"/>} />
+            </View>}
             </View>  
         )
     }
-
     renderContent() {
         return (
             <List style={styles.listStyle}>
@@ -221,9 +234,9 @@ export class BreweryScreen extends React.Component {
 
         revs.forEach((rev) => {
             
-            // revAvghasChangingTables;
-            // hasFamilyRestroom;
-            // isWheelchairAccessible;
+           this.state.revsAvg.hasChangingTables += rev.hasChangingTables;
+           this.state.revsAvg.hasFamilyRestroom += rev.hasFamilyRestroom;
+           this.state.revsAvg.isWheelchairAccessible += rev.isWheelchairAccessible;
            this.state.revsAvg.overallRating += parseInt(rev.overallRating);
            this.state.revsAvg.seatingArrangements += rev.seatingArrangements;
            this.state.revsAvg.kidFriendly += rev.seatingArrangements;
@@ -237,7 +250,9 @@ export class BreweryScreen extends React.Component {
            this.state.revsAvg.kThroughSix += rev.kThroughSix;
            this.state.revsAvg.teenagers += rev.teenagers;
         }) 
-       console.log(this.state.revsAvg)
+       this.state.revsAvg.hasChangingTables /= revs.length;
+       this.state.revsAvg.hasFamilyRestroom /= revs.length;
+       this.state.revsAvg.isWheelchairAccessible /= revs.length;
        this.state.revsAvg.overallRating  /= revs.length;
        this.state.revsAvg.seatingArrangements /= revs.length;
        this.state.revsAvg.kidFriendly  /= revs.length;

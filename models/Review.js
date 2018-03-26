@@ -16,6 +16,7 @@ export default class Review {
     kThroughSix = 0;
     teenagers = 0;
     comments;
+    id;
 
     merge(res) {
         this.overallRating = res.overallRating;
@@ -35,5 +36,6 @@ export default class Review {
         this.kThroughSix = res.kThroughSix;
         this.teenagers = res.teenagers;
         this.comments = res.comments;
+        id = res.id;
     }
 }

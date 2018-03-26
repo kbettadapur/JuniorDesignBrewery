@@ -23,6 +23,7 @@ export class AddReviewScreen extends React.Component {
         super(props);
         this.state = {
             brewery: this.props.navigation.state.params.brewery,
+            review: this.props.navigation.state.params.review,
             hasChangingTables: null,
             hasFamilyRestroom: null,
             isWheelchairAccessible: null,
@@ -39,6 +40,26 @@ export class AddReviewScreen extends React.Component {
             teenagers: 0,
             overallRating: 0,
             comments: null,
+            revId: 0,
+        }
+        if(this.state.review != null) {
+            this.state.hasChangingTables = this.state.review.hasChangingTables;
+            this.state.hasFamilyRestroom = this.state.review.hasFamilyRestroom;
+            this.state.isWheelchairAccessible = this.state.review.isWheelchairAccessible;
+            this.state.seatingArrangements = this.state.review.seatingArrangements;
+            this.state.kidFriendly = this.state.review.kidFriendly;
+            this.state.safety = this.state.review.safety;
+            this.state.petFriendly = this.state.review.petFriendly;
+            this.state.foodOptionDiversity = this.state.review.foodOptionDiversity;
+            this.state.nonAlcoholicOptions = this.state.review.nonAlcoholicOptions;
+            this.state.soundLevel = this.state.review.soundLevel;
+            this.state.isSmokingPermitted = this.state.review.isSmokingPermitted;
+            this.state.strollerKids = this.state.review.strollerKids;
+            this.state.kThroughSix = this.state.review.kThroughSix;
+            this.state.teenagers = this.state.review.teenagers;
+            this.state.overallRating = this.state.review.overallRating;
+            this.state.comments = this.state.review.comments;
+            this.state.revId = this.state.review.revId;
         }
     }
 
@@ -50,36 +71,39 @@ export class AddReviewScreen extends React.Component {
                 
                 <Text style={styles.radio_title}>Enough Changing Tables?</Text>
                 <RadioGroup
+                    selectedIndex = {(this.state.hasChangingTables == 0) ? 1 : 0}
                     onSelect = {(index, value) => this.setState({hasChangingTables: value})}>
-                    <RadioButton value={'Yes'} >
+                    <RadioButton value={1} >
                     <Text>Yes</Text>
                     </RadioButton>
             
-                    <RadioButton value={'No'}>
+                    <RadioButton value={0}>
                     <Text>No</Text>
                     </RadioButton>
                 </RadioGroup>
 
                 <Text style={styles.radio_title}>Family Restroom Available?</Text>
                 <RadioGroup
+                    selectedIndex = {(this.state.hasFamilyRestroom == 0) ? 1 : 0}
                     onSelect = {(index, value) => this.setState({hasFamilyRestroom: value})}>
-                    <RadioButton value={'Yes'} >
+                    <RadioButton value={1} >
                     <Text>Yes</Text>
                     </RadioButton>
             
-                    <RadioButton value={'No'}>
+                    <RadioButton value={0}>
                     <Text>No</Text>
                     </RadioButton>
                 </RadioGroup>
 
                 <Text style={styles.radio_title}>Wheelchair Accessible?</Text>
                 <RadioGroup
+                    selectedIndex = {(this.state.isWheelchairAccessible == 0) ? 1 : 0}
                     onSelect = {(index, value) => this.setState({isWheelchairAccessible: value})}>
-                    <RadioButton value={'Yes'} >
+                    <RadioButton value={1} >
                     <Text>Yes</Text>
                     </RadioButton>
             
-                    <RadioButton value={'No'}>
+                    <RadioButton value={0}>
                     <Text>No</Text>
                     </RadioButton>
                 </RadioGroup>
@@ -193,8 +217,10 @@ export class AddReviewScreen extends React.Component {
 
     submitReview() {
         console.log("Submitting Review");
+        if(this.state.revId == 0)
+            this.state.revId = this.newGuid();
         firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid).on("value", (snapshot) => {
-            firebaseApp.database().ref("Reviews/" + this.newGuid()).set({
+            firebaseApp.database().ref("Reviews/" + this.state.revId).set({
             userId: firebaseApp.auth().currentUser.uid,
             username: snapshot.val().username,
             brewery: this.state.brewery.placeId,
@@ -214,11 +240,12 @@ export class AddReviewScreen extends React.Component {
             teenagers: this.state.teenagers,
             overallRating: this.state.overallRating,
             comments: this.state.comments,
+            revId: this.state.revId,
             }).then(() => {
                 const backAction = NavigationActions.back({
                     key: null
                   }) 
-                  this.props.navigation.dispatch(backAction);                  
+                  this.props.navigation.dispatch(backAction);                
             });
         });
         /**/
