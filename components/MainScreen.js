@@ -49,7 +49,7 @@ export class MainScreen extends React.Component {
                     {(navigation.state.params.tab === MAP_TAB) && <ModalDropdown dropdownStyle = {{flexDirection:'row', height:127}} 
                         dropdownTextStyle={{fontWeight:'bold', fontSize:16, color:'black'}}
                         options={['Distance', 'Alphabetical', 'Rating']}
-                        onSelect = {(index, value) => {console.log(navigation.state.params.tab); navigation.state.params.sortClick(index)}}>                        
+                        onSelect = {(index, value) => {navigation.state.params.sortClick(index)}}>                        
                         <Icon style={{paddingLeft: 20, color:"#FFFFFF"}}name="md-more"/>
                     </ModalDropdown>}
             </View>), 

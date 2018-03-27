@@ -61,7 +61,7 @@ export class YourReviewsScreen extends React.Component {
     renderContent() {
         return (
             <List style={styles.listStyle}>
-                <List>
+                <List style={styles.listStyle}>
                     {this.renderFavoritesList()}
                 </List>
             </List>
@@ -132,5 +132,10 @@ const styles = StyleSheet.create({
     bottom: 0,
     justifyContent: 'flex-end',
     alignItems: 'center',
+  },
+  listStyle: {
+    flex: 1,
+    backgroundColor: "#fff",
+    width: '100%'
   },
 })
