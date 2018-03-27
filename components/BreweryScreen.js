@@ -72,6 +72,9 @@ export class BreweryScreen extends React.Component {
             firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid + "/Favorites/" + this.state.brewery.name).set({
                 name: this.state.brewery.name,
                 id: this.state.brewery.placeId,
+                latitude: this.state.brewery.latitude,
+                longitude: this.state.brewery.longitude,
+                photo: this.state.brewery.photo,
             })
         } else {
             firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid + "/Favorites/" + this.state.brewery.name).remove();        

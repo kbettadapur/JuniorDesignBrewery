@@ -21,8 +21,9 @@
 
 import React from 'react';
 import _ from 'lodash';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { Footer, Container, List, ListItem } from 'native-base';
+import firebaseApp from '../firebase';
 
 export class FavoritesScreen extends React.Component {
 
@@ -35,9 +36,17 @@ export class FavoritesScreen extends React.Component {
 
     constructor() {
         super();
-        state = {
+        this.state = {
             favorites: [],
         }
+        firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid + "/Favorites/").on('value', (snapshot) => {
+            if(snapshot.val() != null) {
+                var keys = Object.keys(snapshot.val());
+                keys.forEach((key) => {
+                    this.state.favorites.push(snapshot.val()[key])
+                });
+            }
+        });
     }
 
     render() {
@@ -56,7 +65,7 @@ export class FavoritesScreen extends React.Component {
     renderContent() {
         return (
             <List style={styles.listStyle}>
-                <List>
+                <List style={styles.listStyle}>
                     {this.renderFavoritesList()}
                 </List>
             </List>
@@ -64,11 +73,25 @@ export class FavoritesScreen extends React.Component {
     }
 
     renderFavoritesList() {
-        favorites = []
-        return _.map(favorites, (fav) => {
+        var t = this;
+        this.state.favorites.sort(function(a, b){
+            var textA = a.name.toUpperCase();
+            var textB = b.name.toUpperCase();
+            return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+        })
+        if(this.state.favorites.length == 0) {
+            return(                
+                <Text>No Favorites Yet!</Text>
+            )
+        }
+        return _.map(this.state.favorites, (fav) => {
                 return (
                     <ListItem key={this.hashCode(fav)}>
-                        <Text style={{width: '100%'}}>{fav}</Text>
+                        <TouchableOpacity 
+                            onPress={() => this.props.navigation.navigate("Brewery", {navigation: this.props.navigation, 
+                                                                            brewery: {name: fav.name, placeId: fav.id, photo: fav.photo}})}>
+                            <Text style={{width: '100%'}}>{fav.name}</Text>
+                        </TouchableOpacity>
                     </ListItem>
                 )
             })
