@@ -35,6 +35,9 @@ export class FavoritesScreen extends React.Component {
 
     constructor() {
         super();
+        state = {
+            favorites: [],
+        }
     }
 
     render() {
@@ -61,7 +64,7 @@ export class FavoritesScreen extends React.Component {
     }
 
     renderFavoritesList() {
-        favorites = ["Brewery 1", "Brewery 2", "Brewery 3", "Brewery 4", "Brewery 5"];
+        favorites = []
         return _.map(favorites, (fav) => {
                 return (
                     <ListItem key={this.hashCode(fav)}>

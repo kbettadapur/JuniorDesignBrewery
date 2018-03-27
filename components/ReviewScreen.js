@@ -22,12 +22,18 @@ export class ReviewScreen extends React.Component {
         this.state = {
             review: this.props.navigation.state.params.review,
         }
+        console.log(this.state.review.userId)
+        console.log(firebaseApp.auth().currentUser.uid)
     }
 
     render() {
         return (
             <View style={{height: '100%'}}>
             <ScrollView style={{backgroundColor: '#fff'}}>
+            <Image
+                    style={{width: '100%', height: 200}}
+                    source={{uri: 'https://maps.googleapis.com/maps/api/place/photo?maxwidth=1000&key=AIzaSyDiooLoAXwvs42CPdgVKhqRwjqiUHok8gs&photoreference=' + this.state.review.photo}}
+                />
             <View style={styles.container}>
 
                 <Text style={styles.title}>{this.state.review.breweryName}</Text>
@@ -36,6 +42,7 @@ export class ReviewScreen extends React.Component {
                 <Text style={styles.radio_final_title}>Overall Rating?</Text>
                 <StarRating
                     maxStars={5}
+                    disabled={true}
                     rating={this.state.review.overallRating}
                     fullStarColor={'#eaaa00'}
                     disabled={true}
@@ -47,6 +54,7 @@ export class ReviewScreen extends React.Component {
                 <Text>Wheelchair accessible? {(this.state.review.isWheelchairAccessible >= .5) ? 'Yes' : 'No'}</Text>                
                 <Text style={styles.radio_title}>Seating Arrangements?</Text>
                 <StarRating
+                    disabled={true}
                     maxStars={5}
                     rating={this.state.review.seatingArrangements}
                     fullStarColor={'#eaaa00'}
@@ -56,6 +64,7 @@ export class ReviewScreen extends React.Component {
 
                 <Text style={styles.radio_title}>Kid Friendly?</Text>
                 <StarRating
+                    disabled={true}
                     maxStars={5}
                     rating={this.state.review.kidFriendly}
                     fullStarColor={'#eaaa00'}
@@ -65,6 +74,7 @@ export class ReviewScreen extends React.Component {
                 
                 <Text style={styles.radio_title}>Safety?</Text>
                 <StarRating
+                    disabled={true}
                     maxStars={5}
                     rating={this.state.review.safety}
                     fullStarColor={'#eaaa00'}
@@ -74,6 +84,7 @@ export class ReviewScreen extends React.Component {
                 
                 <Text style={styles.radio_title}>Pet Friendly?</Text>
                 <StarRating
+                    disabled={true}
                     maxStars={5}
                     rating={this.state.review.petFriendly}
                     fullStarColor={'#eaaa00'}
@@ -83,6 +94,7 @@ export class ReviewScreen extends React.Component {
                 
                 <Text style={styles.radio_title}>Food Option Diversity?</Text>
                 <StarRating
+                    disabled={true}
                     maxStars={5}
                     rating={this.state.review.foodOptionDiversity}
                     fullStarColor={'#eaaa00'}
@@ -92,6 +104,7 @@ export class ReviewScreen extends React.Component {
                 
                 <Text style={styles.radio_title}>Non Alcoholic Options?</Text>
                 <StarRating
+                    disabled={true}
                     maxStars={5}
                     rating={this.state.review.nonAlcoholicOptions}
                     fullStarColor={'#eaaa00'}
@@ -101,6 +114,7 @@ export class ReviewScreen extends React.Component {
 
                 <Text style={styles.radio_title}>Sound Level?</Text>
                 <StarRating
+                    disabled={true}
                     maxStars={5}
                     rating={this.state.review.soundLevel}
                     fullStarColor={'#eaaa00'}
@@ -110,6 +124,7 @@ export class ReviewScreen extends React.Component {
                 
                 <Text style={styles.radio_title}>Smoking (1) restricted (5) prevalent</Text>
                 <StarRating
+                    disabled={true}
                     maxStars={5}
                     rating={this.state.review.isSmokingPermitted}
                     fullStarColor={'#eaaa00'}
@@ -119,6 +134,7 @@ export class ReviewScreen extends React.Component {
                 
                 <Text style={styles.radio_title}>How good is it for stroller kids?</Text>
                 <StarRating
+                    disabled={true}
                     maxStars={5}
                     rating={this.state.review.strollerKids}
                     fullStarColor={'#eaaa00'}
@@ -128,6 +144,7 @@ export class ReviewScreen extends React.Component {
                 
                 <Text style={styles.radio_title}>How good is it for K-6 kids?</Text>
                 <StarRating
+                    disabled={true}
                     maxStars={5}
                     rating={this.state.review.kThroughSix}
                     fullStarColor={'#eaaa00'}
@@ -137,6 +154,7 @@ export class ReviewScreen extends React.Component {
                 
                 <Text style={styles.radio_title}>How good is it for teenagers?</Text>
                 <StarRating
+                    disabled={true}
                     maxStars={5}
                     rating={this.state.review.teenagers}
                     fullStarColor={'#eaaa00'}
@@ -145,18 +163,11 @@ export class ReviewScreen extends React.Component {
                 />
                 </View>}
                 <Text style={{width: '100%'}}>Comments:</Text>
-                <Text style={{width: '100%'}}>\"{this.state.review.comments}\"</Text>
+                <Text style={{width: '100%'}}>"{this.state.review.comments}"</Text>
             </View>
             </ScrollView>
-            {this.state.review.userID != firebaseApp.auth().currentUser.userID && <View>
-            <FAB 
-                buttonColor="green"
-                iconTextColor="#FFFFFF"
-                onClickAction={() => this.props.navigation.navigate("AddReview", {navigation: this.props.navigation, brewery: new Brewery(), review: this.state.review})}
-                visible={true}
-                iconTextComponent={<Icon name="md-add"/>} />
-            </View>}
-            {this.state.review.userID == firebaseApp.auth().currentUser.userID && <View>
+
+            {this.state.review.userId === firebaseApp.auth().currentUser.uid && <View>
             <FAB 
                 buttonColor="green"
                 iconTextColor="#FFFFFF"
