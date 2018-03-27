@@ -11,10 +11,17 @@ import Review from '../models/Review';
 export class BreweryScreen extends React.Component {
 
     static navigationOptions = ({ navigation }) => ({
-        title: "Brewery Details",
+        title: "Brewery",
         headerStyle:  { backgroundColor: "#2196F3", },
         headerTitleStyle: { color: "#FFFFFF" },
-        headerTintColor: "blue"
+        headerTintColor: "white",
+        headerRight: 
+            (<View style={{width:40}}>
+                    {<Icon style={{paddingRight: 15, color:"#FFFFFF"}}
+                    name={(navigation.state.params.fave) ? "md-star" : "md-star-outline"}
+                    onPress={() => {navigation.state.params.setFavorite() }}/>
+                    }
+            </View>), 
     });
 
     constructor(props) {
@@ -24,6 +31,7 @@ export class BreweryScreen extends React.Component {
             reviews: [],
             revsAvg: new Review(),
             rev: null,
+            favorited: false,
         }
         firebaseApp.database().ref("Reviews").on('value', (snapshot) => {
             this.state.reviews = [];
@@ -42,7 +50,17 @@ export class BreweryScreen extends React.Component {
             this.setState({reviews: this.state.reviews});
         });
     }
-
+    componentDidMount() {
+        // set handler method with setParams
+        this.props.navigation.setParams({ 
+          setFavorite: this._setFavorite.bind(this),
+          fave: this.state.favorited,  
+        });
+    }
+    _setFavorite() {
+        this.state.favorited = !this.state.favorited;
+        this.props.navigation.setParams({fave: this.state.favorited})
+    }
     render() {
         if(this.state.reviews.length > 0) {
             this.state.revsAvg = new Review();
