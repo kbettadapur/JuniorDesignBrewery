@@ -69,7 +69,6 @@ export class YourReviewsScreen extends React.Component {
     }
 
     renderFavoritesList() {
-        console.log(this.props.sort)
         var t = this;
         if(this.props.sort === "Alphabetical") {
             this.state.reviews.sort(function(a, b){
