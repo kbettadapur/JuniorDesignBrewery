@@ -35,19 +35,27 @@ export class BreweryScreen extends React.Component {
         }
         firebaseApp.database().ref("Reviews").on('value', (snapshot) => {
             this.state.reviews = [];
-            console.log(snapshot.val());
             var keys = Object.keys(snapshot.val());
             keys.forEach((key) => {
                 if (snapshot.val()[key].breweryId == this.state.brewery.placeId) {
                     this.state.reviews.push(snapshot.val()[key]);
-                    console.log( firebaseApp.auth().currentUser.uid)
-                    console.log(snapshot.val()[key].userId)
                     if(snapshot.val()[key].userId === firebaseApp.auth().currentUser.uid) {
                        this.state.rev = snapshot.val()[key];
                     }
                 }
             });
             this.setState({reviews: this.state.reviews});
+        });
+        firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid + "/Favorites/").on('value', (snapshot) => {
+            if(snapshot.val() != null) {
+                var keys = Object.keys(snapshot.val());
+                keys.forEach((key) => {
+                    if (snapshot.val()[key].id === this.state.brewery.placeId) {
+                        this.props.navigation.setParams({fave: true});
+                        this.state.favorited = true;
+                    }
+                });
+            }
         });
     }
     componentDidMount() {
@@ -60,6 +68,14 @@ export class BreweryScreen extends React.Component {
     _setFavorite() {
         this.state.favorited = !this.state.favorited;
         this.props.navigation.setParams({fave: this.state.favorited})
+        if(this.state.favorited) {
+            firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid + "/Favorites/" + this.state.brewery.name).set({
+                name: this.state.brewery.name,
+                id: this.state.brewery.placeId,
+            })
+        } else {
+            firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid + "/Favorites/" + this.state.brewery.name).remove();        
+        }
     }
     render() {
         if(this.state.reviews.length > 0) {
