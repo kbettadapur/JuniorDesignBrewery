@@ -46,7 +46,7 @@ export class MainScreen extends React.Component {
         headerLeft: null,
         headerRight: 
             (<View style={{width:40}}>
-                    {(navigation.state.params.tab === MAP_TAB) && <ModalDropdown dropdownStyle = {{flexDirection:'row', height:127}} 
+                    {(navigation.state.params.tab !== PROFILE_TAB) && <ModalDropdown dropdownStyle = {{flexDirection:'row', height:127}} 
                         dropdownTextStyle={{fontWeight:'bold', fontSize:16, color:'black'}}
                         options={['Distance', 'Alphabetical', 'Rating']}
                         onSelect = {(index, value) => {navigation.state.params.sortClick(index)}}>                        
@@ -175,6 +175,7 @@ export class MainScreen extends React.Component {
   }
   
   changeTab(tabName) {
+    this.props.navigation.setParams({tab: tabName})
         this.setState({selectedTab: tabName, title: tabName});
     }
 }
