@@ -22,7 +22,7 @@
 import React from 'react';
 import { TouchableOpacity, StyleSheet, Text, TextInput, View } from 'react-native';
 import { MapView } from 'expo';
-import { FooterTab, Icon, Button, Footer } from 'native-base';
+import { FooterTab, Icon, Button, Footer, Container } from 'native-base';
 import { MapScreen } from './MapScreen';
 import { FavoritesScreen } from './FavoritesScreen';
 import { YourReviewsScreen } from './YourReviewsScreen';
@@ -142,36 +142,40 @@ export class MainScreen extends React.Component {
 
   renderTabs() {
     return (
-      <FooterTab>
-          <Button
-              active={this.state.selectedTab === MAP_TAB}
-              onPress={() => this.changeTab(MAP_TAB)}
-          >
-              <Icon name="md-beer" />
-              <Text>{"Breweries"}</Text>
-          </Button>
-          <Button
-              active={this.state.selectedTab === FAVORITES_TAB}
-              onPress={() => this.changeTab(FAVORITES_TAB)}
-          >
-              <Icon name="star" />
-              <Text>{"Favorites"}</Text>
-          </Button>
-          <Button
-              active={this.state.selectedTab === YOUR_REVIEWS_TAB}
-              onPress={() => this.changeTab(YOUR_REVIEWS_TAB)}
-          >
-              <Icon name="list" />
-              <Text>{"Your Reviews"}</Text>
-          </Button>
-          <Button
-              active={this.state.selectedTab === PROFILE_TAB}
-              onPress={() => this.changeTab(PROFILE_TAB)}
-          >
-              <Icon name="more" />
-              <Text>{"Profile"}</Text>
-          </Button>
-      </FooterTab>
+      <Container>
+        <Footer>
+            <FooterTab tabActiveBgColor="#FFFFF">
+                <Button
+                    active={this.state.selectedTab === MAP_TAB}
+                    onPress={() => this.changeTab(MAP_TAB)}
+                >
+                    <Icon name="md-beer" />
+                    <Text>{"Breweries"}</Text>
+                </Button>
+                <Button
+                    active={this.state.selectedTab === FAVORITES_TAB}
+                    onPress={() => this.changeTab(FAVORITES_TAB)}
+                >
+                    <Icon name="star" />
+                    <Text>{"Favorites"}</Text>
+                </Button>
+                <Button
+                    active={this.state.selectedTab === YOUR_REVIEWS_TAB}
+                    onPress={() => this.changeTab(YOUR_REVIEWS_TAB)}
+                >
+                    <Icon name="list" />
+                    <Text>{"Your Reviews"}</Text>
+                </Button>
+                <Button
+                    active={this.state.selectedTab === PROFILE_TAB}
+                    onPress={() => this.changeTab(PROFILE_TAB)}
+                >
+                    <Icon name="more" />
+                    <Text>{"Profile"}</Text>
+                </Button>
+            </FooterTab>
+        </Footer>
+      </Container>
     );
   }
   
