@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, TextInput, Button, Image, ScrollView } from 'react-native';
+import { StyleSheet, View, Text, TextInput, Button, Image, ScrollView, TouchableOpacity } from 'react-native';
 import { Footer, Container, Icon, List, ListItem } from 'native-base';
 import _ from 'lodash';
 import Brewery from '../models/Brewery';
@@ -62,6 +62,7 @@ export class BreweryScreen extends React.Component {
                 { this.state.reviews.length > 0 && <View>
                 <Text style={styles.radio_final_title}>Overall Rating?</Text>
                 <StarRating
+                    disabled={true}
                     maxStars={5}
                     rating={this.state.revsAvg.overallRating}
                     fullStarColor={'#eaaa00'}
@@ -74,6 +75,7 @@ export class BreweryScreen extends React.Component {
                 <Text>Wheelchair accessible? {(this.state.revsAvg.isWheelchairAccessible >= .5) ? 'Yes' : 'No'}</Text>                
                 <Text style={styles.radio_title}>Seating Arrangements?</Text>
                 <StarRating
+                    disabled={true}
                     maxStars={5}
                     rating={this.state.revsAvg.seatingArrangements}
                     fullStarColor={'#eaaa00'}
@@ -83,6 +85,7 @@ export class BreweryScreen extends React.Component {
 
                 <Text style={styles.radio_title}>Kid Friendly?</Text>
                 <StarRating
+                    disabled={true}
                     maxStars={5}
                     rating={this.state.revsAvg.kidFriendly}
                     fullStarColor={'#eaaa00'}
@@ -92,6 +95,7 @@ export class BreweryScreen extends React.Component {
                 
                 <Text style={styles.radio_title}>Safety?</Text>
                 <StarRating
+                    disabled={true}
                     maxStars={5}
                     rating={this.state.revsAvg.safety}
                     fullStarColor={'#eaaa00'}
@@ -101,6 +105,7 @@ export class BreweryScreen extends React.Component {
                 
                 <Text style={styles.radio_title}>Pet Friendly?</Text>
                 <StarRating
+                    disabled={true}
                     maxStars={5}
                     rating={this.state.revsAvg.petFriendly}
                     fullStarColor={'#eaaa00'}
@@ -110,6 +115,7 @@ export class BreweryScreen extends React.Component {
                 
                 <Text style={styles.radio_title}>Food Option Diversity?</Text>
                 <StarRating
+                    disabled={true}
                     maxStars={5}
                     rating={this.state.revsAvg.foodOptionDiversity}
                     fullStarColor={'#eaaa00'}
@@ -119,6 +125,7 @@ export class BreweryScreen extends React.Component {
                 
                 <Text style={styles.radio_title}>Non Alcoholic Options?</Text>
                 <StarRating
+                    disabled={true}
                     maxStars={5}
                     rating={this.state.revsAvg.nonAlcoholicOptions}
                     fullStarColor={'#eaaa00'}
@@ -128,6 +135,7 @@ export class BreweryScreen extends React.Component {
 
                 <Text style={styles.radio_title}>Sound Level?</Text>
                 <StarRating
+                    disabled={true}
                     maxStars={5}
                     rating={this.state.revsAvg.soundLevel}
                     fullStarColor={'#eaaa00'}
@@ -137,6 +145,7 @@ export class BreweryScreen extends React.Component {
                 
                 <Text style={styles.radio_title}>Smoking (1) restricted (5) prevalent</Text>
                 <StarRating
+                    disabled={true}
                     maxStars={5}
                     rating={this.state.revsAvg.isSmokingPermitted}
                     fullStarColor={'#eaaa00'}
@@ -146,6 +155,7 @@ export class BreweryScreen extends React.Component {
                 
                 <Text style={styles.radio_title}>How good is it for stroller kids?</Text>
                 <StarRating
+                    disabled={true}
                     maxStars={5}
                     rating={this.state.revsAvg.strollerKids}
                     fullStarColor={'#eaaa00'}
@@ -155,6 +165,7 @@ export class BreweryScreen extends React.Component {
                 
                 <Text style={styles.radio_title}>How good is it for K-6 kids?</Text>
                 <StarRating
+                    disabled={true}
                     maxStars={5}
                     rating={this.state.revsAvg.kThroughSix}
                     fullStarColor={'#eaaa00'}
@@ -164,6 +175,7 @@ export class BreweryScreen extends React.Component {
                 
                 <Text style={styles.radio_title}>How good is it for teenagers?</Text>
                 <StarRating
+                    disabled={true}
                     maxStars={5}
                     rating={this.state.revsAvg.teenagers}
                     fullStarColor={'#eaaa00'}
@@ -208,22 +220,24 @@ export class BreweryScreen extends React.Component {
     }
 
     renderReviewsList() {
-       // console.log(this.state.reviews);
         if (this.state.reviews.length > 0) {
         return _.map(this.state.reviews, (rev) => {
                 return (
                     <ListItem key={new Date().getTime()}>
-                        <View style={{width: '100%'}}>
-                            <Text style={styles.list_item_title}>{rev.username}</Text>
-                            <Text style={{width: '100%'}}>{rev.comments}</Text>
-                            <StarRating
-                                maxStars={5}
-                                rating={rev.overallRating}
-                                fullStarColor={'#eaaa00'}
-                                starSize={20}
-                                containerStyle={{width: '25%'}}
-                            />
-                        </View>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate("ReviewView", {navigation: this.props.navigation, review: rev})}>
+                            <View style={{width: '100%'}}>
+                                <Text style={styles.list_item_title}>{rev.username}</Text>
+                                <Text style={{width: '100%'}}>"{rev.comments}"</Text>
+                                <StarRating
+                                    disabled={true}
+                                    maxStars={5}
+                                    rating={rev.overallRating}
+                                    fullStarColor={'#eaaa00'}
+                                    starSize={20}
+                                    containerStyle={{width: '25%'}}
+                                />
+                            </View>
+                        </TouchableOpacity>
                     </ListItem>
                 )
             })  

@@ -43,6 +43,9 @@ export class AddReviewScreen extends React.Component {
             comments: null,
             revId: 0,
             breweryName: this.props.navigation.state.params.brewery.name,
+            photo: null,
+            lat: 0,
+            long: 0,
         }
         if(this.state.review != null) {
             this.state.hasChangingTables = this.state.review.hasChangingTables;
@@ -64,6 +67,13 @@ export class AddReviewScreen extends React.Component {
             this.state.revId = this.state.review.revId;
             this.state.breweryName = this.state.review.breweryName;
             this.state.breweryId = this.state.review.breweryId;
+            this.state.photo = this.state.review.photo;
+            this.state.lat = this.state.review.latitude;
+            this.state.long = this.state.review.longitude;
+        } else {
+            this.state.photo = this.state.brewery.photo;
+            this.state.lat = this.state.brewery.latitude;
+            this.state.long = this.state.brewery.longitude;
         }
     }
 
@@ -246,6 +256,9 @@ export class AddReviewScreen extends React.Component {
             comments: this.state.comments,
             revId: this.state.revId,
             breweryName: this.state.breweryName,
+            photo: this.state.photo,
+            latitude: this.state.lat,
+            longitude: this.state.long,
             }).then(() => {
                 const backAction = NavigationActions.back({
                     key: null

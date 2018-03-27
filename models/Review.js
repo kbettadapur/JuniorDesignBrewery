@@ -17,7 +17,11 @@ export default class Review {
     teenagers = 0;
     comments;
     breweryId;
-    breweryName;
+    breweryName;    
+    latitude = 0;
+    longitude = 0;
+    photo = null;
+    userId = "";
 
     merge(res) {
         this.overallRating = res.overallRating;
