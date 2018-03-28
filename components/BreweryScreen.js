@@ -27,6 +27,7 @@ import firebaseApp from '../firebase';
 import FAB from 'react-native-fab';
 import StarRating from 'react-native-star-rating';
 import Review from '../models/Review';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export class BreweryScreen extends React.Component {
 
@@ -47,6 +48,7 @@ export class BreweryScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            spinnerVisible: true,
             brewery: this.props.navigation.state.params.brewery,
             reviews: [],
             revsAvg: new Review(),
@@ -65,6 +67,8 @@ export class BreweryScreen extends React.Component {
                 }
             });
             this.setState({reviews: this.state.reviews});
+            this.setState({spinnerVisible: false});
+
         });
         firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid + "/Favorites/").on('value', (snapshot) => {
             if(snapshot.val() != null) {
@@ -107,6 +111,10 @@ export class BreweryScreen extends React.Component {
         }  
         return (
             <View style={{height: '100%'}}>
+            <Spinner overlayColor={"rgba(0, 0, 0, 0.3)"} 
+                        color={"rgba(66,137,244)"}
+                        visible={this.state.spinnerVisible} 
+                        textStyle={{color: '#000000'}} />
             <ScrollView style={{backgroundColor: '#fff'}}>
             <Image
                     style={{width: '100%', height: 200}}

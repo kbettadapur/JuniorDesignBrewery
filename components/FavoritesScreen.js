@@ -24,6 +24,7 @@ import _ from 'lodash';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { Footer, Container, List, ListItem } from 'native-base';
 import firebaseApp from '../firebase';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export class FavoritesScreen extends React.Component {
 
@@ -38,6 +39,7 @@ export class FavoritesScreen extends React.Component {
         super();
         this.state = {
             favorites: [],
+            spinnerVisible: true,
         }
         firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid + "/Favorites/").on('value', (snapshot) => {
             if(snapshot.val() != null) {
@@ -46,6 +48,7 @@ export class FavoritesScreen extends React.Component {
                     this.state.favorites.push(snapshot.val()[key])
                 });
                 this.setState({favorites: this.state.favorites});
+                this.setState({spinnerVisible: false});
             }
         });
     }
@@ -53,6 +56,10 @@ export class FavoritesScreen extends React.Component {
     render() {
         return (
             <Container>
+            <Spinner overlayColor={"rgba(0, 0, 0, 0.3)"} 
+                        color={"rgba(66,137,244)"}
+                        visible={this.state.spinnerVisible} 
+                        textStyle={{color: '#000000'}} />
             <View style={{flex: 1}}>
                 {this.renderContent()}
             </View>
@@ -80,7 +87,7 @@ export class FavoritesScreen extends React.Component {
             var textB = b.name.toUpperCase();
             return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
         })
-        if(this.state.favorites.length == 0) {
+        if(this.state.favorites.length == 0 && !this.state.spinnerVisible) {
             return(                
                 <Text>No Favorites Yet!</Text>
             )

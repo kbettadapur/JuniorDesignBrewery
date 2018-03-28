@@ -28,6 +28,8 @@ import { RadioGroup, RadioButton } from 'react-native-flexi-radio-button';
 import Guid from 'guid';
 import StarRating from 'react-native-star-rating';
 import { NavigationActions } from 'react-navigation';
+import Spinner from 'react-native-loading-spinner-overlay';
+
 
 
 export class AddReviewScreen extends React.Component {
@@ -42,6 +44,7 @@ export class AddReviewScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            spinnerVisible: false,
             brewery: this.props.navigation.state.params.brewery,
             review: this.props.navigation.state.params.review,
             breweryId: this.props.navigation.state.params.brewery.placeId,
@@ -99,10 +102,15 @@ export class AddReviewScreen extends React.Component {
     render() {
         return (
             <View style={{height:'100%', width:'100%', backgroundColor:'#FFFFFF'}}>
+
             <ScrollView>
             <View style={styles.container}>
                 <Text style={styles.title}>{this.state.breweryName}</Text>
-                
+                <Spinner overlayColor={"rgba(0, 0, 0, 0.3)"} 
+                        color={"rgba(66,137,244)"}
+                        visible={this.state.spinnerVisible} 
+                        textContent={"Submitting..."} 
+                        textStyle={{color: '#000000'}} />
                 <Text style={styles.radio_title}>Enough Changing Tables?</Text>
                 <RadioGroup
                     selectedIndex = {(this.state.hasChangingTables == 0) ? 1 : 0}
@@ -263,6 +271,7 @@ export class AddReviewScreen extends React.Component {
     }
 
     submitReview() {
+        this.setState({spinnerVisible: true})
         console.log("Submitting Review");
         if(this.state.revId == 0)
             this.state.revId = this.newGuid();
