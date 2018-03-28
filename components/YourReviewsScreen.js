@@ -25,6 +25,7 @@ import { Footer, Container, List, ListItem } from 'native-base';
 import firebaseApp from '../firebase';
 import StarRating from 'react-native-star-rating';
 import {  Constants, Location, Permissions } from 'expo';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export class YourReviewsScreen extends React.Component {
     constructor(props) {
@@ -35,6 +36,7 @@ export class YourReviewsScreen extends React.Component {
                 lat: 0,
                 lng: 0,
             },
+            spinnerVisible: true,
         }
         firebaseApp.database().ref("Reviews").on('value', (snapshot) => {
             this.state.reviews = [];
@@ -47,6 +49,7 @@ export class YourReviewsScreen extends React.Component {
                 }
             });
             this.setState({reviews: this.state.reviews});
+            this.setState({spinnerVisible: false});
         });
     }
 
@@ -68,6 +71,10 @@ export class YourReviewsScreen extends React.Component {
     render() {
         return (
             <Container>
+            <Spinner overlayColor={"rgba(0, 0, 0, 0.3)"} 
+                        color={"rgba(66,137,244)"}
+                        visible={this.state.spinnerVisible} 
+                        textStyle={{color: '#000000'}} />
             <View style={{flex: 1}}>
                 {this.renderContent()}
             </View>
