@@ -34,7 +34,7 @@ export class ReviewScreen extends React.Component {
         title: "Review",
         headerStyle:  { backgroundColor: "#2196F3", },
         headerTitleStyle: { color: "#FFFFFF" },
-        headerTintColor: "blue"
+        headerTintColor: "white"
     });
 
     constructor(props) {
@@ -69,9 +69,18 @@ export class ReviewScreen extends React.Component {
                     starSize={20}
                     containerStyle={{width: '25%'}}
                 />
-                <Text>Enough changing tables? {(this.state.review.hasChangingTables >= .5) ? 'Yes' : 'No'}</Text>
-                <Text>Family restroom available? {(this.state.review.hasFamilyRestroom >= .5) ? 'Yes' : 'No'}</Text>
-                <Text>Wheelchair accessible? {(this.state.review.isWheelchairAccessible >= .5) ? 'Yes' : 'No'}</Text>                
+                <Text style={styles.radio_title}>
+                <Text>Enough changing tables?</Text>
+                <Text style={{fontWeight:'bold'}}> {(this.state.review.hasChangingTables >= .5) ? 'Yes' : 'No'} </Text>
+                </Text>
+                <Text style={styles.radio_title}>
+                <Text>Family restroom available?</Text>
+                <Text style={{fontWeight:'bold'}}> {(this.state.review.hasFamilyRestroom >= .5) ? 'Yes' : 'No'}</Text>
+                </Text>
+                <Text style={styles.radio_title}>
+                <Text>Wheelchair accessible?</Text>
+                <Text style={{fontWeight:'bold'}}> {(this.state.review.isWheelchairAccessible >= .5) ? 'Yes' : 'No'}</Text>   
+                </Text>              
                 <Text style={styles.radio_title}>Seating Arrangements?</Text>
                 <StarRating
                     disabled={true}
@@ -203,10 +212,16 @@ export class ReviewScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
+    backgroundColor: '#fff',
+    marginLeft: 10,
+    marginRight: 10,
+    marginTop: 5,
+    marginBottom: 5,
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
+    textAlign: 'center',
   },
   subtitle: {
       fontSize: 18,
@@ -214,5 +229,8 @@ const styles = StyleSheet.create({
   },
   list_item_title: {
       fontWeight: 'bold',
+  },
+  radio_title: {
+    marginTop: 5,
   }
 });

@@ -35,7 +35,7 @@ export class RegisterScreen extends React.Component {
         title: "Register",
         headerStyle:  { backgroundColor: "#2196F3", },
         headerTitleStyle: { color: "#FFFFFF" },
-        headerTintColor: "blue"
+        headerTintColor: "white"
     });
 
 
@@ -46,7 +46,8 @@ export class RegisterScreen extends React.Component {
       password: "", 
       username: "",
       registerClicked: false,
-      registerFailed: false
+      registerFailed: false,
+      errorMessage: ""
     };
   }
 
@@ -75,7 +76,7 @@ export class RegisterScreen extends React.Component {
             onPress={this.register.bind(this)}
         ></Button>
         { this.state.registerClicked && <ActivityIndicator size="large" style={{marginTop: 10}} color="#00ff00"/>}
-        { this.state.registerFailed && <Text style={{color: "#ff0000"}}>Registration Failed</Text>}
+        { this.state.registerFailed && <Text style={{color: "#ff0000"}}>{this.state.errorMessage}</Text>}
       </View>
     );
   }
@@ -95,7 +96,6 @@ export class RegisterScreen extends React.Component {
     }
 
   register() {
-      console.log("REGISTER PRESSED");
       this.setState({registerClicked: true, registerFailed: false});
       var s = firebaseApp.auth().createUserWithEmailAndPassword(this.state.email, this.state.password).then(() => {
         currentUser = firebaseApp.auth().currentUser;
@@ -110,8 +110,10 @@ export class RegisterScreen extends React.Component {
         this.props.navigation.navigate("Main", {navigation: this.props.navigation});
       }).catch((error) => {
           console.log("REGISTRATION FAILED");
+          console.log(error)
           this.setState({registerClicked: false});
           this.setState({registerFailed: true});
+          this.setState({errorMessage: error.message})
       });
   }
 }

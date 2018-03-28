@@ -45,6 +45,7 @@ export class FavoritesScreen extends React.Component {
                 keys.forEach((key) => {
                     this.state.favorites.push(snapshot.val()[key])
                 });
+                this.setState({favorites: this.state.favorites});
             }
         });
     }
