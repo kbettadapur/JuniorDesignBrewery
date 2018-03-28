@@ -31,12 +31,11 @@ export class YourReviewsScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            reviews: [],
+            reviews: null,
             location: {
                 lat: 0,
                 lng: 0,
             },
-            spinnerVisible: true,
         }
         firebaseApp.database().ref("Reviews").on('value', (snapshot) => {
             this.state.reviews = [];
@@ -49,7 +48,6 @@ export class YourReviewsScreen extends React.Component {
                 }
             });
             this.setState({reviews: this.state.reviews});
-            this.setState({spinnerVisible: false});
         });
     }
 
@@ -73,7 +71,7 @@ export class YourReviewsScreen extends React.Component {
             <Container>
             <Spinner overlayColor={"rgba(0, 0, 0, 0.3)"} 
                         color={"rgba(66,137,244)"}
-                        visible={this.state.spinnerVisible} 
+                        visible={this.state.reviews == null} 
                         textStyle={{color: '#000000'}} />
             <View style={{flex: 1}}>
                 {this.renderContent()}
@@ -96,48 +94,55 @@ export class YourReviewsScreen extends React.Component {
     }
 
     renderFavoritesList() {
-        var t = this;
-        if(this.props.sort === "Alphabetical") {
-            this.state.reviews.sort(function(a, b){
-                var textA = a.breweryName.toUpperCase();
-                var textB = b.breweryName.toUpperCase();
-                return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
-            })
+        if(this.state.reviews != null) {
+            if(this.state.reviews.length == 0 && !this.state.spinnerVisible) {
+                return(                
+                    <Text style={{textAlign: 'center'}}>No Reviews Yet!</Text>
+                )
+            }
+            var t = this;
+            if(this.props.sort === "Alphabetical") {
+                this.state.reviews.sort(function(a, b){
+                    var textA = a.breweryName.toUpperCase();
+                    var textB = b.breweryName.toUpperCase();
+                    return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+                })
+            }
+            else if(this.props.sort === "Distance") {
+                this.state.reviews.sort(function(a,b) {
+                    var x = t.state.location.coords.latitude;
+                    var y = t.state.location.coords.longitude;
+                    var dist1 = Math.sqrt((x - a.latitude) * (x - a.latitude) + (y - a.longitude) * (y - a.longitude))
+                    var dist2 = Math.sqrt((x - b.latitude) * (x - b.latitude) + (y - b.longitude) * (y - b.longitude))
+                    return (dist1 < dist2) ? -1 : (dist1 > dist2) ? 1 : 0;               
+                })
+            } else if(this.props.sort === "Rating") {
+                this.state.reviews.sort(function(a, b){
+                    var textA = a.overallRating;
+                    var textB = b.overallRating;
+                    return (textA > textB) ? -1 : (textA < textB) ? 1 : 0;
+                })
+            }
+            return _.map(this.state.reviews, (fav) => {
+                return (
+                        <ListItem key={this.hashCode(fav)}>
+                            <TouchableOpacity 
+                                onPress={() => this.props.navigation.navigate("ReviewView", {navigation: this.props.navigation, review: fav})}>
+                                <Text style={{width: '100%'}}>
+                                {fav.breweryName}
+                                </Text>
+                                <StarRating
+                                    disabled={true}
+                                    maxStars={5}
+                                    rating={fav.overallRating}
+                                    fullStarColor={'#eaaa00'}
+                                    starSize={20}
+                                    containerStyle={{width: '25%'}} />
+                            </TouchableOpacity>
+                        </ListItem>
+                );
+            });
         }
-        else if(this.props.sort === "Distance") {
-            this.state.reviews.sort(function(a,b) {
-                var x = t.state.location.coords.latitude;
-                var y = t.state.location.coords.longitude;
-                var dist1 = Math.sqrt((x - a.latitude) * (x - a.latitude) + (y - a.longitude) * (y - a.longitude))
-                var dist2 = Math.sqrt((x - b.latitude) * (x - b.latitude) + (y - b.longitude) * (y - b.longitude))
-                return (dist1 < dist2) ? -1 : (dist1 > dist2) ? 1 : 0;               
-            })
-        } else if(this.props.sort === "Rating") {
-            this.state.reviews.sort(function(a, b){
-                var textA = a.overallRating;
-                var textB = b.overallRating;
-                return (textA > textB) ? -1 : (textA < textB) ? 1 : 0;
-            })
-        }
-        return _.map(this.state.reviews, (fav) => {
-            return (
-                    <ListItem key={this.hashCode(fav)}>
-                        <TouchableOpacity 
-                            onPress={() => this.props.navigation.navigate("ReviewView", {navigation: this.props.navigation, review: fav})}>
-                            <Text style={{width: '100%'}}>
-                            {fav.breweryName}
-                            </Text>
-                            <StarRating
-                                disabled={true}
-                                maxStars={5}
-                                rating={fav.overallRating}
-                                fullStarColor={'#eaaa00'}
-                                starSize={20}
-                                containerStyle={{width: '25%'}} />
-                        </TouchableOpacity>
-                    </ListItem>
-            );
-        });
     }
 
     hashCode(s) {

@@ -109,7 +109,6 @@ export class AddReviewScreen extends React.Component {
                 <Spinner overlayColor={"rgba(0, 0, 0, 0.3)"} 
                         color={"rgba(66,137,244)"}
                         visible={this.state.spinnerVisible} 
-                        textContent={"Submitting..."} 
                         textStyle={{color: '#000000'}} />
                 <Text style={styles.radio_title}>Enough Changing Tables?</Text>
                 <RadioGroup

@@ -48,9 +48,8 @@ export class BreweryScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            spinnerVisible: true,
             brewery: this.props.navigation.state.params.brewery,
-            reviews: [],
+            reviews: null,
             revsAvg: new Review(),
             rev: null,
             favorited: false,
@@ -67,7 +66,6 @@ export class BreweryScreen extends React.Component {
                 }
             });
             this.setState({reviews: this.state.reviews});
-            this.setState({spinnerVisible: false});
 
         });
         firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid + "/Favorites/").on('value', (snapshot) => {
@@ -105,7 +103,7 @@ export class BreweryScreen extends React.Component {
         }
     }
     render() {
-        if(this.state.reviews.length > 0) {
+        if(this.state.reviews != null && this.state.reviews.length > 0) {
             this.state.revsAvg = new Review();
             this.calcAvg(this.state.reviews)
         }  
@@ -113,7 +111,7 @@ export class BreweryScreen extends React.Component {
             <View style={{height: '100%'}}>
             <Spinner overlayColor={"rgba(0, 0, 0, 0.3)"} 
                         color={"rgba(66,137,244)"}
-                        visible={this.state.spinnerVisible} 
+                        visible={this.state.reviews == null} 
                         textStyle={{color: '#000000'}} />
             <ScrollView style={{backgroundColor: '#fff'}}>
             <Image
@@ -123,7 +121,7 @@ export class BreweryScreen extends React.Component {
             <View style={styles.container}>
                 
                 <Text style={styles.title}>{this.state.brewery.name}</Text>
-                { this.state.reviews.length > 0 && <View>
+                { (this.state.reviews != null && this.state.reviews.length > 0) && <View>
                 <Text style={styles.radio_final_title}>Overall Rating?</Text>
                 <StarRating
                     disabled={true}
@@ -293,7 +291,7 @@ export class BreweryScreen extends React.Component {
     }
 
     renderReviewsList() {
-        if (this.state.reviews.length > 0) {
+        if (this.state.reviews != null && this.state.reviews.length > 0) {
         return _.map(this.state.reviews, (rev) => {
                 return (
                     <ListItem key={new Date().getTime()}>
@@ -314,9 +312,9 @@ export class BreweryScreen extends React.Component {
                     </ListItem>
                 )
             })  
-        } else {
+        } else if(this.state.reviews != null && !this.state.spinnerVisible) {
             return (
-                <Text>No Reviews Yet!</Text>
+                <Text style={{textAlign: 'center'}}>No Reviews Yet!</Text>
             )
         }
     }

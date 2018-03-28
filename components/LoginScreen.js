@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
     borderWidth: 0
   },
   button: {
-    flex: 3,
+    width:'100%',
     marginVertical: 10,
     height: 20,
   },

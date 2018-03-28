@@ -38,17 +38,18 @@ export class FavoritesScreen extends React.Component {
     constructor() {
         super();
         this.state = {
-            favorites: [],
-            spinnerVisible: true,
+            favorites: null,
         }
+        console.log("Constructor")
         firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid + "/Favorites/").on('value', (snapshot) => {
+            console.log("Firebase")
+            this.state.favorites = [];
             if(snapshot.val() != null) {
                 var keys = Object.keys(snapshot.val());
                 keys.forEach((key) => {
                     this.state.favorites.push(snapshot.val()[key])
                 });
                 this.setState({favorites: this.state.favorites});
-                this.setState({spinnerVisible: false});
             }
         });
     }
@@ -58,7 +59,7 @@ export class FavoritesScreen extends React.Component {
             <Container>
             <Spinner overlayColor={"rgba(0, 0, 0, 0.3)"} 
                         color={"rgba(66,137,244)"}
-                        visible={this.state.spinnerVisible} 
+                        visible={(this.state.favorites == null)} 
                         textStyle={{color: '#000000'}} />
             <View style={{flex: 1}}>
                 {this.renderContent()}
@@ -82,14 +83,16 @@ export class FavoritesScreen extends React.Component {
 
     renderFavoritesList() {
         var t = this;
-        this.state.favorites.sort(function(a, b){
-            var textA = a.name.toUpperCase();
-            var textB = b.name.toUpperCase();
-            return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
-        })
-        if(this.state.favorites.length == 0 && !this.state.spinnerVisible) {
+        if(this.state.favorites != null) {
+            this.state.favorites.sort(function(a, b){
+                var textA = a.name.toUpperCase();
+                var textB = b.name.toUpperCase();
+                return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+            })
+        }
+        if(this.state.favorites != null && this.state.favorites.length == 0) {
             return(                
-                <Text>No Favorites Yet!</Text>
+                <Text style={{textAlign: 'center'}}>No Reviews Yet!</Text>
             )
         }
         return _.map(this.state.favorites, (fav) => {
