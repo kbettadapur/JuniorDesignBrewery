@@ -28,13 +28,19 @@ export class LoginScreen extends React.Component {
         title: "Login",
         headerStyle:  { backgroundColor: "#2196F3", },
         headerTitleStyle: { color: "#FFFFFF" },
-        headerTintColor: "blue"
+        headerTintColor: "blue",
     });
 
 
   constructor(props) {
     super(props);
-    this.state = {email: "", password: ""};
+    this.state = {
+      email: "", 
+      password: "",
+      error: "",
+      loginFailed: false,
+      loginClicked: false,
+    };
   }
 
   render() {
@@ -48,12 +54,12 @@ export class LoginScreen extends React.Component {
   renderComponent() {
     return (
       <View style={styles.container}>
+          <Text style={styles.logo}>Family Friendly Brewery Trackr</Text>
           <TextInput
             style={styles.textinput}
             onChangeText={(email) => this.setState({email})}
             value={this.state.email}
             placeholder="Email" />
-
           <TextInput
             style={styles.textinput}
             onChangeText={(password) => this.setState({password})}
@@ -64,13 +70,15 @@ export class LoginScreen extends React.Component {
           <View style={{marginVertical: 5}}>
             <Button title="LOGIN" textStyle={{fontSize:18}} buttonStyle={styles.button} onPress={this.login.bind(this)}></Button>
           </View>
-          <Button title="Register" onPress={() => this.props.navigation.navigate("Register", {navigation: this.props.navigation})}> </Button> 
+          <Text style={{color:'blue', textAlign:'center', marginVertical: 15}} onPress={() => this.props.navigation.navigate("Register", {navigation: this.props.navigation})}> Need an account? Click here! </Text> 
+          { this.state.loginFailed && <Text style={{color: "#ff0000", textAlign:'center'}}>{this.state.error}</Text>}
         </View>
       </View>
     );
   }
 
   login() {
+    this.setState({loginClicked: true, loginFailed: false});
     var s = firebaseApp.auth().signInWithEmailAndPassword(this.state.email == "" ? "ricky@gmail.com" : this.state.email, this.state.password == "" ? "ricky123" : this.state.password)
       .then(() => {
         this.props.navigation.navigate("Main", {navigation: this.props.navigation});
@@ -79,7 +87,7 @@ export class LoginScreen extends React.Component {
         console.log("LOGIN FAILED");
         var errorCode = error.code;
         var errorMessage = error.message;
-        console.log(errorMessage);
+        this.setState({error: errorMessage, loginFailed: true, loginClicked: false});
     });
   }
 }
@@ -97,16 +105,23 @@ const styles = StyleSheet.create({
   textinput: {
     height: 58,
     fontSize: 18, 
-    minWidth: '75%',
-    maxWidth: '75%', 
-    marginTop: 5,
+    minWidth: '80%',
+    maxWidth: '80%', 
     marginBottom: 5,
     borderColor: 'gray', 
     borderWidth: 0
   },
   button: {
-    width: '80%',
+    flex: 3,
     marginVertical: 10,
     height: 20,
+  },
+  logo: {
+    textAlign: 'center', 
+    color:"#2196F3", 
+    fontWeight: 'bold', 
+    fontSize: 35, 
+    textShadowColor:'#000000', 
+    textShadowRadius:5
   }
 });

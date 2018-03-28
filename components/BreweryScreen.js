@@ -114,7 +114,6 @@ export class BreweryScreen extends React.Component {
                 />
             <View style={styles.container}>
                 
-
                 <Text style={styles.title}>{this.state.brewery.name}</Text>
                 { this.state.reviews.length > 0 && <View>
                 <Text style={styles.radio_final_title}>Overall Rating?</Text>
@@ -127,9 +126,18 @@ export class BreweryScreen extends React.Component {
                     starSize={20}
                     containerStyle={{width: '25%'}}
                 />
-                <Text>Enough changing tables? {(this.state.revsAvg.hasChangingTables >= .5) ? 'Yes' : 'No'}</Text>
-                <Text>Family restroom available? {(this.state.revsAvg.hasFamilyRestroom >= .5) ? 'Yes' : 'No'}</Text>
-                <Text>Wheelchair accessible? {(this.state.revsAvg.isWheelchairAccessible >= .5) ? 'Yes' : 'No'}</Text>                
+                <Text style={styles.radio_title}>
+                <Text>Enough changing tables?</Text>
+                <Text style={{fontWeight:'bold'}}> {(this.state.revsAvg.hasChangingTables >= .5) ? 'Yes' : 'No'} </Text>
+                </Text>
+                <Text style={styles.radio_title}>
+                <Text>Family restroom available?</Text>
+                <Text style={{fontWeight:'bold'}}> {(this.state.revsAvg.hasFamilyRestroom >= .5) ? 'Yes' : 'No'}</Text>
+                </Text>
+                <Text style={styles.radio_title}>
+                <Text>Wheelchair accessible?</Text>
+                <Text style={{fontWeight:'bold'}}> {(this.state.revsAvg.isWheelchairAccessible >= .5) ? 'Yes' : 'No'}</Text>   
+                </Text>             
                 <Text style={styles.radio_title}>Seating Arrangements?</Text>
                 <StarRating
                     disabled={true}
@@ -346,10 +354,15 @@ export class BreweryScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
+    marginLeft: 10,
+    marginRight: 10,
+    marginTop: 5,
+    marginBottom: 5,
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
+    textAlign: 'center',
   },
   subtitle: {
       fontSize: 18,
@@ -357,5 +370,8 @@ const styles = StyleSheet.create({
   },
   list_item_title: {
       fontWeight: 'bold',
+  },
+  radio_title: {
+    marginTop: 5,
   }
 });

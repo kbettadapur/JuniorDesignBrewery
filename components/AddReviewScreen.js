@@ -19,7 +19,7 @@
 * SOFTWARE IS DISCLAIMED.
 */
 import React from 'react';
-import { StyleSheet, View, Text, TextInput, Button, Image, ScrollView } from 'react-native';
+import { Platform, StyleSheet, View, Text, TextInput, Button, Image, ScrollView, BackHandler } from 'react-native';
 import { Footer, Container } from 'native-base';
 import _ from 'lodash';
 import Brewery from '../models/Brewery';
@@ -36,7 +36,7 @@ export class AddReviewScreen extends React.Component {
         title: "Leave a review",
         headerStyle:  { backgroundColor: "#2196F3", },
         headerTitleStyle: { color: "#FFFFFF" },
-        headerTintColor: "blue"
+        headerTintColor: "white"
     });
 
     constructor(props) {
@@ -96,11 +96,11 @@ export class AddReviewScreen extends React.Component {
             this.state.long = this.state.brewery.longitude;
         }
     }
-
     render() {
         return (
+            <View style={{height:'100%', width:'100%', backgroundColor:'#FFFFFF'}}>
             <ScrollView>
-            <View>
+            <View style={styles.container}>
                 <Text style={styles.title}>{this.state.breweryName}</Text>
                 
                 <Text style={styles.radio_title}>Enough Changing Tables?</Text>
@@ -147,6 +147,7 @@ export class AddReviewScreen extends React.Component {
                     rating={this.state.seatingArrangements}
                     selectedStar={(rating) => this.setState({seatingArrangements: rating})}
                     fullStarColor={'#eaaa00'}
+                    containerStyle={{width: '65%'}}
                 />
 
                 <Text style={styles.radio_title}>Kid Friendly?</Text>
@@ -155,6 +156,7 @@ export class AddReviewScreen extends React.Component {
                     rating={this.state.kidFriendly}
                     selectedStar={(rating) => this.setState({kidFriendly: rating})}
                     fullStarColor={'#eaaa00'}
+                    containerStyle={{width: '65%'}}
                 />
                 
                 <Text style={styles.radio_title}>Safety?</Text>
@@ -163,6 +165,7 @@ export class AddReviewScreen extends React.Component {
                     rating={this.state.safety}
                     selectedStar={(rating) => this.setState({safety: rating})}
                     fullStarColor={'#eaaa00'}
+                    containerStyle={{width: '65%'}}
                 />
                 
                 <Text style={styles.radio_title}>Pet Friendly?</Text>
@@ -171,6 +174,7 @@ export class AddReviewScreen extends React.Component {
                     rating={this.state.petFriendly}
                     selectedStar={(rating) => this.setState({petFriendly: rating})}
                     fullStarColor={'#eaaa00'}
+                    containerStyle={{width: '65%'}}
                 />
                 
                 <Text style={styles.radio_title}>Food Option Diversity?</Text>
@@ -179,6 +183,7 @@ export class AddReviewScreen extends React.Component {
                     rating={this.state.foodOptionDiversity}
                     selectedStar={(rating) => this.setState({foodOptionDiversity: rating})}
                     fullStarColor={'#eaaa00'}
+                    containerStyle={{width: '65%'}}
                 />
                 
                 <Text style={styles.radio_title}>Non Alcoholic Options?</Text>
@@ -187,6 +192,7 @@ export class AddReviewScreen extends React.Component {
                     rating={this.state.nonAlcoholicOptions}
                     selectedStar={(rating) => this.setState({nonAlcoholicOptions: rating})}
                     fullStarColor={'#eaaa00'}
+                    containerStyle={{width: '65%'}}
                 />
 
                 <Text style={styles.radio_title}>Sound Level?</Text>
@@ -195,6 +201,7 @@ export class AddReviewScreen extends React.Component {
                     rating={this.state.soundLevel}
                     selectedStar={(rating) => this.setState({soundLevel: rating})}
                     fullStarColor={'#eaaa00'}
+                    containerStyle={{width: '65%'}}
                 />
                 
                 <Text style={styles.radio_title}>Smoking (1) restricted (5) prevalent</Text>
@@ -203,6 +210,7 @@ export class AddReviewScreen extends React.Component {
                     rating={this.state.isSmokingPermitted}
                     selectedStar={(rating) => this.setState({isSmokingPermitted: rating})}
                     fullStarColor={'#eaaa00'}
+                    containerStyle={{width: '65%'}}
                 />
                 
                 <Text style={styles.radio_title}>How good is it for stroller kids?</Text>
@@ -211,6 +219,7 @@ export class AddReviewScreen extends React.Component {
                     rating={this.state.strollerKids}
                     selectedStar={(rating) => this.setState({strollerKids: rating})}
                     fullStarColor={'#eaaa00'}
+                    containerStyle={{width: '65%'}}
                 />
                 
                 <Text style={styles.radio_title}>How good is it for K-6 kids?</Text>
@@ -219,6 +228,7 @@ export class AddReviewScreen extends React.Component {
                     rating={this.state.kThroughSix}
                     selectedStar={(rating) => this.setState({kThroughSix: rating})}
                     fullStarColor={'#eaaa00'}
+                    containerStyle={{width: '65%'}}
                 />
                 
                 <Text style={styles.radio_title}>How good is it for teenagers?</Text>
@@ -227,6 +237,7 @@ export class AddReviewScreen extends React.Component {
                     rating={this.state.teenagers}
                     selectedStar={(rating) => this.setState({teenagers: rating})}
                     fullStarColor={'#eaaa00'}
+                    containerStyle={{width: '65%'}}
                 />
                 
                 <TextInput
@@ -242,10 +253,12 @@ export class AddReviewScreen extends React.Component {
                     rating={this.state.overallRating}
                     selectedStar={(rating) => this.setState({overallRating: rating})}
                     fullStarColor={'#eaaa00'}
+                    containerStyle={{width: '65%', marginBottom: 50 }}
                 />
                 <Button title="Submit" onPress={this.submitReview.bind(this)}></Button>
             </View>
             </ScrollView>
+            </View>
         )
     }
 
@@ -301,14 +314,16 @@ export class AddReviewScreen extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    marginLeft: 10,
+    marginRight: 10,
+    marginTop: 5,
+    marginBottom: 5,
   },
   radio_title: {
     fontSize: 14,
     fontWeight: 'bold',
+    marginTop: 5,
   },
   radio_final_title: {
       fontSize: 16,
@@ -331,7 +346,7 @@ const styles = StyleSheet.create({
   },
   button: {
     width: '80%',
-    marginVertical: 10,
+    marginVertical: 20,
     height: 20,
   }
 });
