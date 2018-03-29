@@ -27,7 +27,10 @@ import {
   TextInput, 
   View,
   ActivityIndicator,
+  KeyboardAvoidingView,
+  TouchableOpacity,
  } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import firebaseApp from '../firebase';
 
 export class RegisterScreen extends React.Component {
@@ -54,29 +57,35 @@ export class RegisterScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <TextInput
-          style={styles.textinput}
-          onChangeText={(email) => this.setState({email})}
-          value={this.state.email} 
-          placeholder="Email" />
-        <TextInput
-          style={styles.textinput}
-          onChangeText={(password) => this.setState({password})}
-          value={this.state.password} 
-          placeholder="Password" />
+        <KeyboardAvoidingView behavior="padding" style={styles.container}>
+        <Text style={{textAlign:'left', color:'gray'}}>You'll use your email and password to login in</Text>
+        <Text style={{textAlign:'left', color:'gray'}}>Your username will appear alongside your reviews</Text>
+          <TextInput
+            style={styles.textinput}
+            onChangeText={(email) => this.setState({email})}
+            value={this.state.email} 
+            placeholder="Email" />
+          <TextInput
+            style={styles.textinput}
+            onChangeText={(password) => this.setState({password})}
+            value={this.state.password}
+            secureTextEntry={true} 
+            placeholder="Password" />
 
-        <TextInput
-          style={styles.textinput}
-          onChangeText={(username) => this.setState({username})}
-          value={this.state.username} 
-          placeholder="Username" />
+          <TextInput
+            style={styles.textinput}
+            onChangeText={(username) => this.setState({username})}
+            value={this.state.username} 
+            placeholder="Username" />
 
-        <Button
-            title="Register"
-            onPress={this.register.bind(this)}
-        ></Button>
-        { this.state.registerClicked && <ActivityIndicator size="large" style={{marginTop: 10}} color="#00ff00"/>}
-        { this.state.registerFailed && <Text style={{color: "#ff0000"}}>{this.state.errorMessage}</Text>}
+          { this.state.registerClicked && <ActivityIndicator size="large" style={{marginTop: 10}} color="#00ff00"/>}
+          { this.state.registerFailed && <Text style={{color: "#ff0000"}}>{this.state.errorMessage}</Text>}
+          <TouchableOpacity 
+            style={{ height: 40, width:200, marginTop: 10, backgroundColor:"#2196F3", borderRadius:3, alignItems:'center', justifyContent:'center' }}
+            onPress={this.register.bind(this)}>
+            <Text style={{color:"#FFF", fontSize:16, fontWeight:'bold'}}>REGISTER</Text>
+          </TouchableOpacity>
+        </KeyboardAvoidingView>
       </View>
     );
   }
@@ -100,8 +109,8 @@ export class RegisterScreen extends React.Component {
       var s = firebaseApp.auth().createUserWithEmailAndPassword(this.state.email, this.state.password).then(() => {
         currentUser = firebaseApp.auth().currentUser;
         firebaseApp.database().ref("Users/" + currentUser.uid).set({
-          username: this.state.username,
-          email: this.state.email,
+          username: this.state.username.trim(),
+          email: this.state.email.trim(),
           description: "asdf",
           profile_picture: "profile picture",
         });
@@ -120,19 +129,25 @@ export class RegisterScreen extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    display:'flex',
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+    height:'100%'
   },
   textinput: {
     height: 58,
     fontSize: 18, 
-    minWidth: '75%',
-    maxWidth: '75%', 
+    minWidth: '80%',
+    maxWidth: '80%', 
     marginTop: 5,
     marginBottom: 5,
     borderColor: 'gray', 
     borderWidth: 0
+  },
+  button: {
+    width:'100%',
+    marginVertical: 10,
+    height: 20,
   },
 });

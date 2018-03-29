@@ -54,6 +54,17 @@ export class BreweryScreen extends React.Component {
             rev: null,
             favorited: false,
         }
+        firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid + "/Favorites/").on('value', (snapshot) => {
+            if(snapshot.val() != null) {
+                var keys = Object.keys(snapshot.val());
+                keys.forEach((key) => {
+                    if (snapshot.val()[key].id === this.state.brewery.placeId) {
+                        this.props.navigation.setParams({fave: true});
+                        this.state.favorited = true;
+                    }
+                });
+            }
+        });
         firebaseApp.database().ref("Reviews").on('value', (snapshot) => {
             this.state.reviews = [];
             var keys = Object.keys(snapshot.val());
@@ -67,17 +78,6 @@ export class BreweryScreen extends React.Component {
             });
             this.setState({reviews: this.state.reviews});
 
-        });
-        firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid + "/Favorites/").on('value', (snapshot) => {
-            if(snapshot.val() != null) {
-                var keys = Object.keys(snapshot.val());
-                keys.forEach((key) => {
-                    if (snapshot.val()[key].id === this.state.brewery.placeId) {
-                        this.props.navigation.setParams({fave: true});
-                        this.state.favorited = true;
-                    }
-                });
-            }
         });
     }
     componentDidMount() {
@@ -253,15 +253,16 @@ export class BreweryScreen extends React.Component {
                     starSize={20}
                     containerStyle={{width: '25%'}}
                 />
-                </View>}
                 <Text style={styles.subtitle}>Reviews</Text>
+                </View>
+            }
                 {this.renderContent()}
                 
             </View>
             </ScrollView>
             {/*<Button title="Add Review" onPress={() => this.props.navigation.navigate("AddReview", {navigation: this.props.navigation, brewery: this.state.brewery})}></Button>
             */}
-            {this.state.rev == null && <View>
+            {(this.state.rev == null && this.state.reviews != null) && <View>
             <FAB 
                 buttonColor="green"
                 iconTextColor="#FFFFFF"

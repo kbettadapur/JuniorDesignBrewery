@@ -19,7 +19,7 @@
 * SOFTWARE IS DISCLAIMED.
 */
 import React from 'react';
-import { Platform, StyleSheet, View, Text, TextInput, Button, Image, ScrollView, BackHandler } from 'react-native';
+import { Platform, StyleSheet, View, Text, TextInput, Button, Image, ScrollView, BackHandler, KeyboardAvoidingView, TouchableOpacity } from 'react-native';
 import { Footer, Container } from 'native-base';
 import _ from 'lodash';
 import Brewery from '../models/Brewery';
@@ -51,20 +51,20 @@ export class AddReviewScreen extends React.Component {
             hasChangingTables: 1,
             hasFamilyRestroom: 1,
             isWheelchairAccessible: 1,
-            seatingArrangements: 0,
-            kidFriendly: 0,
-            safety: 0,
-            petFriendly: 0,
-            foodOptionDiversity: 0,
-            nonAlcoholicOptions: 0,
-            soundLevel: 0,
-            isSmokingPermitted: 0,
-            strollerKids: 0,
-            kThroughSix: 0,
-            teenagers: 0,
-            overallRating: 0,
-            comments: null,
-            revId: 0,
+            seatingArrangements: 1,
+            kidFriendly: 1,
+            safety: 1,
+            petFriendly: 1,
+            foodOptionDiversity: 1,
+            nonAlcoholicOptions: 1,
+            soundLevel: 1,
+            isSmokingPermitted: 1,
+            strollerKids: 1,
+            kThroughSix: 1,
+            teenagers: 1,
+            overallRating: 1,
+            comments: "",
+            revId: 1,
             breweryName: this.props.navigation.state.params.brewery.name,
             photo: null,
             lat: 0,
@@ -102,9 +102,8 @@ export class AddReviewScreen extends React.Component {
     render() {
         return (
             <View style={{height:'100%', width:'100%', backgroundColor:'#FFFFFF'}}>
-
+            <KeyboardAvoidingView behavior="padding" style={styles.container}>
             <ScrollView>
-            <View style={styles.container}>
                 <Text style={styles.title}>{this.state.breweryName}</Text>
                 <Spinner overlayColor={"rgba(0, 0, 0, 0.3)"} 
                         color={"rgba(66,137,244)"}
@@ -246,12 +245,12 @@ export class AddReviewScreen extends React.Component {
                     fullStarColor={'#eaaa00'}
                     containerStyle={{width: '65%'}}
                 />
-                
+                <Text style={styles.radio_title}>Comments:</Text>
                 <TextInput
                     style={styles.textinput}
                     onChangeText={(comments) => this.setState({comments})}
                     value={this.state.comments}
-                    placeholder="Comments?" />
+                    placeholder="Comments" />
                 
 
                 <Text style={styles.radio_final_title}>Overall Rating?</Text>
@@ -260,11 +259,17 @@ export class AddReviewScreen extends React.Component {
                     rating={this.state.overallRating}
                     selectedStar={(rating) => this.setState({overallRating: rating})}
                     fullStarColor={'#eaaa00'}
-                    containerStyle={{width: '65%', marginBottom: 50 }}
+                    containerStyle={{width: '65%', marginBottom: 25 }}
                 />
-                <Button title="Submit" onPress={this.submitReview.bind(this)}></Button>
-            </View>
+                <View style={{alignItems:'center', marginBottom:20}}>
+                <TouchableOpacity 
+                    style={{ height: 40, width:200, marginTop: 10, backgroundColor:"#2196F3", borderRadius:3, alignItems:'center', justifyContent:'center' }}
+                    onPress={this.submitReview.bind(this)}>
+                    <Text style={{color:"#FFF", fontSize:16, fontWeight:'bold'}}>SUBMIT</Text>
+                </TouchableOpacity>
+                </View>
             </ScrollView>
+            </KeyboardAvoidingView>
             </View>
         )
     }
@@ -294,12 +299,12 @@ export class AddReviewScreen extends React.Component {
             kThroughSix: this.state.kThroughSix,
             teenagers: this.state.teenagers,
             overallRating: this.state.overallRating,
-            comments: this.state.comments,
             revId: this.state.revId,
             breweryName: this.state.breweryName,
             photo: this.state.photo,
             latitude: this.state.lat,
             longitude: this.state.long,
+            comments: this.state.comments,
             }).then(() => {
                 const backAction = NavigationActions.back({
                     key: null

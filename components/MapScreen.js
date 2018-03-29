@@ -177,7 +177,7 @@ export class MapScreen extends React.Component {
                 location = {};
                 location.lat = d.results[0].geometry.location.lat;
                 location.lng = d.results[0].geometry.location.lng;
-                //this.setState({location});
+                this.setState({location});
             })).then(() => {
                 this.searchBreweries(location.lat, location.lng)
             })

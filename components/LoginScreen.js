@@ -20,7 +20,7 @@
 */
 
 import React from 'react';
-import { StyleSheet, Button, Text, TextInput, ViewText, View } from 'react-native';
+import { StyleSheet, Button, Text, TextInput, ViewText, View, KeyboardAvoidingView, TouchableOpacity } from 'react-native';
 import firebaseApp from '../firebase';
 
 export class LoginScreen extends React.Component {
@@ -53,33 +53,56 @@ export class LoginScreen extends React.Component {
 
   renderComponent() {
     return (
-      <View style={styles.container}>
-          <Text style={styles.logo}>Family Friendly Brewery Trackr</Text>
-          <TextInput
-            style={styles.textinput}
-            onChangeText={(email) => this.setState({email})}
-            value={this.state.email}
-            placeholder="Email" />
-          <TextInput
-            style={styles.textinput}
-            onChangeText={(password) => this.setState({password})}
-            value={this.state.password}
-            secureTextEntry={true}
-            placeholder="Password" />
-        <View style={{marginVertical: 5, justifyContent:'center'}}>
-          <View style={{marginVertical: 5}}>
-            <Button title="LOGIN" textStyle={{fontSize:18}} buttonStyle={styles.button} onPress={this.login.bind(this)}></Button>
+      <KeyboardAvoidingView behavior="padding"  style={styles.container}>
+
+          <View style={{flex:1}}/>          
+
+          <View style={{flex:1}}>
+            <Text style={styles.logo}>Family Friendly Brewery Trackr</Text>
           </View>
-          <Text style={{color:'blue', textAlign:'center', marginVertical: 15}} onPress={() => this.props.navigation.navigate("Register", {navigation: this.props.navigation})}> Need an account? Click here! </Text> 
-          { this.state.loginFailed && <Text style={{color: "#ff0000", textAlign:'center'}}>{this.state.error}</Text>}
-        </View>
-      </View>
+
+          <View style={{flex:3, alignItems:'center', paddingTop:50}}>
+
+            <TextInput
+              style={styles.textinput}
+              onChangeText={(email) => this.setState({email})}
+              value={this.state.email}
+              placeholder="Email" />
+
+            <TextInput
+              style={styles.textinput}
+              onChangeText={(password) => this.setState({password})}
+              value={this.state.password}
+              secureTextEntry={true}
+              placeholder="Password" />
+
+            <TouchableOpacity 
+                style={{ height: 40, width:200, marginTop: 10, backgroundColor:"#2196F3", borderRadius:3, alignItems:'center', justifyContent:'center' }}
+                onPress={this.login.bind(this)}>
+                <Text style={{color:"#FFF", fontSize:16, fontWeight:'bold'}}>LOGIN</Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={{flex:3}}>
+
+            <TouchableOpacity
+              style={{ height: 40, width:200, marginTop: 10, backgroundColor:"#FFF", borderRadius:3, alignItems:'center', justifyContent:'center' }}
+              onPress={() => this.props.navigation.navigate("Register", {navigation: this.props.navigation})}>
+              <Text 
+              style={{color:'blue', textAlign:'center', marginVertical: 15}}> 
+              Need an account? Click here! 
+              </Text> 
+            </TouchableOpacity>
+
+            { this.state.loginFailed && <Text style={{color: "#ff0000", textAlign:'center'}}>{this.state.error}</Text>}
+          </View>
+      </KeyboardAvoidingView>
     );
   }
 
   login() {
     this.setState({loginClicked: true, loginFailed: false});
-    var s = firebaseApp.auth().signInWithEmailAndPassword(this.state.email == "" ? "ricky@gmail.com" : this.state.email, this.state.password == "" ? "ricky123" : this.state.password)
+    var s = firebaseApp.auth().signInWithEmailAndPassword(this.state.email == "" ? "ricky@gmail.com" : this.state.email.trim(), this.state.password == "" ? "ricky123" : this.state.password)
       .then(() => {
         this.props.navigation.navigate("Main", {navigation: this.props.navigation});
       })
@@ -93,7 +116,7 @@ export class LoginScreen extends React.Component {
 }
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    display:'flex',
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
@@ -121,7 +144,5 @@ const styles = StyleSheet.create({
     color:"#2196F3", 
     fontWeight: 'bold', 
     fontSize: 35, 
-    textShadowColor:'#000000', 
-    textShadowRadius:5
   }
 });
