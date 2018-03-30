@@ -38,10 +38,10 @@ export class BreweryScreen extends React.Component {
         headerTintColor: "white",
         headerRight: 
             (<View style={{width:40}}>
-                    {<Icon style={{paddingRight: 15, color:"#FFFFFF"}}
+                    <Icon style={{paddingRight: 15, color:"#FFFFFF"}}
                     name={(navigation.state.params.fave) ? "md-star" : "md-star-outline"}
                     onPress={() => {navigation.state.params.setFavorite() }}/>
-                    }
+                    
             </View>), 
     });
 
@@ -54,17 +54,6 @@ export class BreweryScreen extends React.Component {
             rev: null,
             favorited: false,
         }
-        firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid + "/Favorites/").on('value', (snapshot) => {
-            if(snapshot.val() != null) {
-                var keys = Object.keys(snapshot.val());
-                keys.forEach((key) => {
-                    if (snapshot.val()[key].id === this.state.brewery.placeId) {
-                        this.props.navigation.setParams({fave: true});
-                        this.state.favorited = true;
-                    }
-                });
-            }
-        });
         firebaseApp.database().ref("Reviews").on('value', (snapshot) => {
             this.state.reviews = [];
             var keys = Object.keys(snapshot.val());
@@ -78,6 +67,17 @@ export class BreweryScreen extends React.Component {
             });
             this.setState({reviews: this.state.reviews});
 
+        });
+        firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid + "/Favorites/").on('value', (snapshot) => {
+            if(snapshot.val() != null) {
+                var keys = Object.keys(snapshot.val());
+                keys.forEach((key) => {
+                    if (snapshot.val()[key].id === this.state.brewery.placeId) {
+                        this.props.navigation.setParams({fave: true});
+                        this.state.favorited = true;
+                    }
+                });
+            }
         });
     }
     componentDidMount() {
@@ -110,7 +110,7 @@ export class BreweryScreen extends React.Component {
         return (
             <View style={{height: '100%'}}>
             <Spinner overlayColor={"rgba(0, 0, 0, 0.3)"} 
-                        color={"rgba(66,137,244)"}
+                        color={"rgb(66,137,244)"}
                         visible={this.state.reviews == null} 
                         textStyle={{color: '#000000'}} />
             <ScrollView style={{backgroundColor: '#fff'}}>

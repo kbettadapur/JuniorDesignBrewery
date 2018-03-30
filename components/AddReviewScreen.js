@@ -64,7 +64,7 @@ export class AddReviewScreen extends React.Component {
             teenagers: 1,
             overallRating: 1,
             comments: "",
-            revId: 1,
+            revId: 0,
             breweryName: this.props.navigation.state.params.brewery.name,
             photo: null,
             lat: 0,
@@ -106,7 +106,7 @@ export class AddReviewScreen extends React.Component {
             <ScrollView>
                 <Text style={styles.title}>{this.state.breweryName}</Text>
                 <Spinner overlayColor={"rgba(0, 0, 0, 0.3)"} 
-                        color={"rgba(66,137,244)"}
+                        color={"rgb(66,137,244)"}
                         visible={this.state.spinnerVisible} 
                         textStyle={{color: '#000000'}} />
                 <Text style={styles.radio_title}>Enough Changing Tables?</Text>
@@ -277,8 +277,10 @@ export class AddReviewScreen extends React.Component {
     submitReview() {
         this.setState({spinnerVisible: true})
         console.log("Submitting Review");
-        if(this.state.revId == 0)
+        if(this.state.revId == 0) {
             this.state.revId = this.newGuid();
+        console.log(this.state.revId)
+        }
         firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid).on("value", (snapshot) => {
             firebaseApp.database().ref("Reviews/" + this.state.revId).set({
             userId: firebaseApp.auth().currentUser.uid,

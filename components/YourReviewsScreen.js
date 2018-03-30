@@ -70,7 +70,7 @@ export class YourReviewsScreen extends React.Component {
         return (
             <Container>
             <Spinner overlayColor={"rgba(0, 0, 0, 0.3)"} 
-                        color={"rgba(66,137,244)"}
+                        color={"rgb(66,137,244)"}
                         visible={this.state.reviews == null} 
                         textStyle={{color: '#000000'}} />
             <View style={{flex: 1}}>
