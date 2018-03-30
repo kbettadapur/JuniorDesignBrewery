@@ -38,10 +38,10 @@ export class BreweryScreen extends React.Component {
         headerTintColor: "white",
         headerRight: 
             (<View style={{width:40}}>
-                    {<Icon style={{paddingRight: 15, color:"#FFFFFF"}}
+                    <Icon style={{paddingRight: 15, color:"#FFFFFF"}}
                     name={(navigation.state.params.fave) ? "md-star" : "md-star-outline"}
                     onPress={() => {navigation.state.params.setFavorite() }}/>
-                    }
+                    
             </View>), 
     });
 
@@ -110,7 +110,7 @@ export class BreweryScreen extends React.Component {
         return (
             <View style={{height: '100%'}}>
             <Spinner overlayColor={"rgba(0, 0, 0, 0.3)"} 
-                        color={"rgba(66,137,244)"}
+                        color={"rgb(66,137,244)"}
                         visible={this.state.reviews == null} 
                         textStyle={{color: '#000000'}} />
             <ScrollView style={{backgroundColor: '#fff'}}>

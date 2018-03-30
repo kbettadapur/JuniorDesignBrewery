@@ -58,7 +58,7 @@ export class FavoritesScreen extends React.Component {
         return (
             <Container>
             <Spinner overlayColor={"rgba(0, 0, 0, 0.3)"} 
-                        color={"rgba(66,137,244)"}
+                        color={"rgb(66,137,244)"}
                         visible={(this.state.favorites == null)} 
                         textStyle={{color: '#000000'}} />
             <View style={{flex: 1}}>
@@ -92,7 +92,7 @@ export class FavoritesScreen extends React.Component {
         }
         if(this.state.favorites != null && this.state.favorites.length == 0) {
             return(                
-                <Text style={{textAlign: 'center'}}>No Reviews Yet!</Text>
+                <Text style={{textAlign: 'center'}}>No Favorites Yet!</Text>
             )
         }
         return _.map(this.state.favorites, (fav) => {
