@@ -39,19 +39,23 @@ export class FavoritesScreen extends React.Component {
         super();
         this.state = {
             favorites: null,
+            isMounted: false,
         }
-        console.log("Constructor")
         firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid + "/Favorites/").on('value', (snapshot) => {
-            console.log("Firebase")
             this.state.favorites = [];
             if(snapshot.val() != null) {
                 var keys = Object.keys(snapshot.val());
                 keys.forEach((key) => {
                     this.state.favorites.push(snapshot.val()[key])
                 });
+            if(this.state.isMounted)
                 this.setState({favorites: this.state.favorites});
             }
         });
+    }
+
+    componentDidMount() {
+        this.state.isMounted = true;
     }
 
     render() {
@@ -100,7 +104,7 @@ export class FavoritesScreen extends React.Component {
                     <ListItem key={this.hashCode(fav)}>
                         <TouchableOpacity 
                             onPress={() => this.props.navigation.navigate("Brewery", {navigation: this.props.navigation, 
-                                                                            brewery: {name: fav.name, placeId: fav.id, photo: fav.photo}})}>
+                                                                            brewery: {name: fav.name, placeId: fav.id, photo: fav.photo, latitude: fav.latitude, longitude: fav.longitude}})}>
                             <Text style={{width: '100%'}}>{fav.name}</Text>
                         </TouchableOpacity>
                     </ListItem>
@@ -113,6 +117,7 @@ export class FavoritesScreen extends React.Component {
         if ( l > 0 )
             while (i < l)
             h = (h << 5) - h + s.charCodeAt(i++) | 0;
+        console.log(h)
         return h;
     };
 }
