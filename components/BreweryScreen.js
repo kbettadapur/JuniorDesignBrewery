@@ -53,21 +53,8 @@ export class BreweryScreen extends React.Component {
             revsAvg: new Review(),
             rev: null,
             favorited: false,
+            isMounted: false,
         }
-        firebaseApp.database().ref("Reviews").on('value', (snapshot) => {
-            this.state.reviews = [];
-            var keys = Object.keys(snapshot.val());
-            keys.forEach((key) => {
-                if (snapshot.val()[key].breweryId == this.state.brewery.placeId) {
-                    this.state.reviews.push(snapshot.val()[key]);
-                    if(snapshot.val()[key].userId === firebaseApp.auth().currentUser.uid) {
-                       this.state.rev = snapshot.val()[key];
-                    }
-                }
-            });
-            this.setState({reviews: this.state.reviews});
-
-        });
         firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid + "/Favorites/").on('value', (snapshot) => {
             if(snapshot.val() != null) {
                 var keys = Object.keys(snapshot.val());
@@ -79,6 +66,20 @@ export class BreweryScreen extends React.Component {
                 });
             }
         });
+        firebaseApp.database().ref("Reviews").on('value', (snapshot) => {
+            this.state.reviews = [];
+            var keys = Object.keys(snapshot.val());
+            keys.forEach((key) => {
+                if (snapshot.val()[key].breweryId == this.state.brewery.placeId) {
+                    this.state.reviews.push(snapshot.val()[key]);
+                    if(snapshot.val()[key].userId === firebaseApp.auth().currentUser.uid) {
+                       this.state.rev = snapshot.val()[key];
+                    }
+                }
+            });
+            if(this.state.isMounted)
+                this.setState({reviews: this.state.reviews});
+        });
     }
     componentDidMount() {
         // set handler method with setParams
@@ -86,10 +87,13 @@ export class BreweryScreen extends React.Component {
           setFavorite: this._setFavorite.bind(this),
           fave: this.state.favorited,  
         });
+        this.state.isMounted = true;
     }
     _setFavorite() {
-        this.state.favorited = !this.state.favorited;
-        this.props.navigation.setParams({fave: this.state.favorited})
+        if(this.state.isMounted) {
+            this.state.favorited = !this.state.favorited;
+            this.props.navigation.setParams({fave: this.state.favorited})
+        }
         if(this.state.favorited) {
             firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid + "/Favorites/" + this.state.brewery.name).set({
                 name: this.state.brewery.name,
