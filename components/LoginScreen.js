@@ -53,50 +53,52 @@ export class LoginScreen extends React.Component {
 
   renderComponent() {
     return (
-      <KeyboardAvoidingView behavior="padding"  style={styles.container}>
+      <View style={styles.container}>
 
-          <View style={{flex:1}}/>          
+        <View style={{flex:1}}/>          
 
-          <View style={{flex:1}}>
-            <Text style={styles.logo}>Family Friendly Brewery Trackr</Text>
-          </View>
+        <View style={{flex:1}}>
+          <Text style={styles.logo}>Family Friendly Brewery Trackr</Text>
+        </View>
 
-          <View style={{flex:3, alignItems:'center', paddingTop:50}}>
+        <KeyboardAvoidingView behavior="padding" style={{flex:6}}>
 
-            <TextInput
-              style={styles.textinput}
-              onChangeText={(email) => this.setState({email})}
-              value={this.state.email}
-              placeholder="Email" />
+            <View style={{flex:3, alignItems:'center', paddingTop:50}}>
 
-            <TextInput
-              style={styles.textinput}
-              onChangeText={(password) => this.setState({password})}
-              value={this.state.password}
-              secureTextEntry={true}
-              placeholder="Password" />
+              <TextInput
+                style={styles.textinput}
+                onChangeText={(email) => this.setState({email})}
+                value={this.state.email}
+                placeholder="Email" />
 
-            <TouchableOpacity 
-                style={{ height: 40, width:200, marginTop: 10, backgroundColor:"#2196F3", borderRadius:3, alignItems:'center', justifyContent:'center' }}
-                onPress={this.login.bind(this)}>
-                <Text style={{color:"#FFF", fontSize:16, fontWeight:'bold'}}>LOGIN</Text>
-            </TouchableOpacity>
-          </View>
+              <TextInput
+                style={styles.textinput}
+                onChangeText={(password) => this.setState({password})}
+                value={this.state.password}
+                secureTextEntry={true}
+                placeholder="Password" />
 
+              <TouchableOpacity 
+                  style={{ height: 40, width:200, marginTop: 10, backgroundColor:"#2196F3", borderRadius:3, alignItems:'center', justifyContent:'center' }}
+                  onPress={this.login.bind(this)}>
+                  <Text style={{color:"#FFF", fontSize:16, fontWeight:'bold'}}>LOGIN</Text>
+              </TouchableOpacity>
+            </View>
+        </KeyboardAvoidingView>
           <View style={{flex:3}}>
 
-            <TouchableOpacity
-              style={{ height: 40, width:200, marginTop: 10, backgroundColor:"#FFF", borderRadius:3, alignItems:'center', justifyContent:'center' }}
-              onPress={() => this.props.navigation.navigate("Register", {navigation: this.props.navigation})}>
-              <Text 
-              style={{color:'blue', textAlign:'center', marginVertical: 15}}> 
-              Need an account? Click here! 
-              </Text> 
-            </TouchableOpacity>
+              <TouchableOpacity
+                style={{ height: 40, width:200, marginTop: 10, backgroundColor:"#FFF", borderRadius:3, alignItems:'center', justifyContent:'center' }}
+                onPress={() => this.props.navigation.navigate("Register", {navigation: this.props.navigation})}>
+                <Text 
+                style={{color:'blue', textAlign:'center', marginVertical: 15}}> 
+                Need an account? Click here! 
+                </Text> 
+              </TouchableOpacity>
 
-            { this.state.loginFailed && <Text style={{color: "#ff0000", textAlign:'center'}}>{this.state.error}</Text>}
-          </View>
-      </KeyboardAvoidingView>
+              { this.state.loginFailed && <Text style={{color: "#ff0000", textAlign:'center'}}>{this.state.error}</Text>}
+            </View>
+      </View>
     );
   }
 

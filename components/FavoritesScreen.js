@@ -101,7 +101,7 @@ export class FavoritesScreen extends React.Component {
         }
         return _.map(this.state.favorites, (fav) => {
                 return (
-                    <ListItem key={this.hashCode(fav)}>
+                    <ListItem key={this.hashCode(fav.id)}>
                         <TouchableOpacity 
                             onPress={() => this.props.navigation.navigate("Brewery", {navigation: this.props.navigation, 
                                                                             brewery: {name: fav.name, placeId: fav.id, photo: fav.photo, latitude: fav.latitude, longitude: fav.longitude}})}>
@@ -117,7 +117,6 @@ export class FavoritesScreen extends React.Component {
         if ( l > 0 )
             while (i < l)
             h = (h << 5) - h + s.charCodeAt(i++) | 0;
-        console.log(h)
         return h;
     };
 }
