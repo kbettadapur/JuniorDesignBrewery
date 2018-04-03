@@ -61,7 +61,7 @@ export class LoginScreen extends React.Component {
           <Text style={styles.logo}>Family Friendly Brewery Trackr</Text>
         </View>
 
-        <KeyboardAvoidingView behavior="padding" style={{flex:6}}>
+        <KeyboardAvoidingView behavior="padding" style={{flex:4}}>
 
             <View style={{flex:3, alignItems:'center', paddingTop:50}}>
 
