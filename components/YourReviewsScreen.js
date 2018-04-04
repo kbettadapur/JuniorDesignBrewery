@@ -39,11 +39,9 @@ export class YourReviewsScreen extends React.Component {
         }
         firebaseApp.database().ref("Reviews").on('value', (snapshot) => {
             this.state.reviews = [];
-            console.log(snapshot.val());
             var keys = Object.keys(snapshot.val());
             keys.forEach((key) => {
                 if(snapshot.val()[key].userId === firebaseApp.auth().currentUser.uid) {
-                    console.log(snapshot.val()[key])
                     this.state.reviews.push(snapshot.val()[key]);
                 }
             });
@@ -62,7 +60,9 @@ export class YourReviewsScreen extends React.Component {
         }
 
         let location = await Location.getCurrentPositionAsync({});
-        this.setState({location});
+        this.state.location.lat = location.coords.latitude;
+        this.state.location.lng = location.coords.longitude;
+        this.setState({});
         console.log(this.state.location);
     }
 
@@ -125,11 +125,17 @@ export class YourReviewsScreen extends React.Component {
             }
             return _.map(this.state.reviews, (fav) => {
                 return (
-                        <ListItem key={this.hashCode(fav)}>
+                        <ListItem key={this.hashCode(fav.breweryName)}>
                             <TouchableOpacity 
                                 onPress={() => this.props.navigation.navigate("ReviewView", {navigation: this.props.navigation, review: fav})}>
                                 <Text style={{width: '100%'}}>
                                 {fav.breweryName}
+                                </Text>
+                                <Text style={{width:'100%', color:'gray', fontSize:11}}>
+                                Distance:   
+                                    {(this.state.location.lat || this.state.location.lng) 
+                                    ? ' ' + Number(geolib.getDistance({latitude: this.state.location.lat, longitude: this.state.location.lng}, 
+                                    {latitude: fav.latitude, longitude: fav.longitude}) * 0.000621371).toFixed(2) + ' miles': ' location not turned on'}
                                 </Text>
                                 <StarRating
                                     disabled={true}
