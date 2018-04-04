@@ -49,7 +49,7 @@ export class YourReviewsScreen extends React.Component {
         });
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this._getLocationAsync()
     }
     
@@ -108,12 +108,12 @@ export class YourReviewsScreen extends React.Component {
                     return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
                 })
             }
-            else if(this.props.sort === "Distance") {
+            else if(this.props.sort === "Distance" && (this.state.location.lng || this.state.location.lat)) {
                 this.state.reviews.sort(function(a,b) {
-                    var x = t.state.location.coords.latitude;
-                    var y = t.state.location.coords.longitude;
-                    var dist1 = Math.sqrt((x - a.latitude) * (x - a.latitude) + (y - a.longitude) * (y - a.longitude))
-                    var dist2 = Math.sqrt((x - b.latitude) * (x - b.latitude) + (y - b.longitude) * (y - b.longitude))
+                    var x = t.state.location.lat;
+                    var y = t.state.location.lng;
+                    var dist1 = geolib.getDistance({latitude: x, longitude: y}, {latitude: a.latitude, longitude: a.longitude});
+                    var dist2 = geolib.getDistance({latitude: x, longitude: y}, {latitude: b.latitude, longitude: b.longitude});
                     return (dist1 < dist2) ? -1 : (dist1 > dist2) ? 1 : 0;               
                 })
             } else if(this.props.sort === "Rating") {
