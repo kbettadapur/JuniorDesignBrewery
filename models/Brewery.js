@@ -34,6 +34,8 @@ export default class Brewery {
         this.placeId = res.place_id;
         this.genRating = res.rating;
         this.price = res.price_level;
-        this.photo = res.photos[0].photo_reference;
+        if (res.photos) {
+            this.photo = res.photos[0].photo_reference;
+        }
     }
 }
