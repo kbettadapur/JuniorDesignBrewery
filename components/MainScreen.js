@@ -31,7 +31,7 @@ import ModalDropdown from 'react-native-modal-dropdown';
 
 
 
-const MAP_TAB = "Map";
+const MAP_TAB = "Brewery Map";
 const FAVORITES_TAB = "Favorites";
 const YOUR_REVIEWS_TAB = "Your Reviews";
 const PROFILE_TAB = "Profile";
@@ -39,7 +39,7 @@ const PROFILE_TAB = "Profile";
 export class MainScreen extends React.Component {
 
     static navigationOptions = ({ navigation }) => ({
-        title: "Brewery Trackr",
+        title: navigation.state.params.tab,
         headerStyle:  { backgroundColor: "#2196F3", },
         headerTitleStyle: { color: "#FFFFFF" },
         headerTintColor: "blue",
