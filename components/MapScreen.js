@@ -44,9 +44,10 @@ export class MapScreen extends React.Component {
             mapVisible: true,
         }  
 
-        this._getLocationAsync().then(() => {
-            this.searchLocalBreweriesOnStartUp();
-        }) 
+        // this._getLocationAsync().then(() => {
+        //     this.searchLocalBreweries();
+        // }) 
+        this.searchLocalBreweries();
     }
     
     _getLocationAsync = async () => {
@@ -58,7 +59,6 @@ export class MapScreen extends React.Component {
         let location = await Location.getCurrentPositionAsync({});
         this.state.lat = location.coords.latitude;
         this.state.lng = location.coords.longitude;
-        this.setState({});
     }
     
 
@@ -68,11 +68,12 @@ export class MapScreen extends React.Component {
             <View style={{flex: 1}}>
                 {this.state.mapVisible && this.state.lat != 0 && <MapView 
                     style={styles.map}
-                    initialRegion={{
-                    latitude: this.state.lat,
+
+                    region={{latitude: this.state.lat,
                     longitude: this.state.lng,
-                    latitudeDelta: 0.0922,
-                    longitudeDelta: 0.0421,}}>
+                    latitudeDelta: 0.6,
+                    longitudeDelta: 0.6,}}
+                    >
 
                     {this.renderMapViewMarkers()}
 
@@ -188,12 +189,11 @@ export class MapScreen extends React.Component {
     }
 
     searchLocalBreweries() {
-        this.searchBreweries(this.state.lat, this.state.lng);
+        this._getLocationAsync().then(() => {
+            this.searchBreweries(this.state.lat, this.state.lng);
+        });
     }
 
-    searchLocalBreweriesOnStartUp() {
-        this.searchBreweries(this.state.lat, this.state.lng);
-    }
 
     searchBreweries(lat, lng) {
         fetch('https://maps.googleapis.com/maps/api/place/nearbysearch/'
@@ -208,7 +208,7 @@ export class MapScreen extends React.Component {
                     b.merge(val);
                     res.push(b);
                 });
-                this.setState({breweries: res});
+                this.setState({breweries: res, lat: lat, lng: lng});
             }));
     }
 
