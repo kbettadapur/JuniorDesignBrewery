@@ -60,6 +60,12 @@ export class RegisterScreen extends React.Component {
         <KeyboardAvoidingView behavior="padding" style={styles.container}>
         <Text style={{textAlign:'left', color:'gray'}}>You'll use your email and password to login in</Text>
         <Text style={{textAlign:'left', color:'gray'}}>Your username will appear alongside your reviews</Text>
+      
+        <TextInput
+            style={styles.textinput}
+            onChangeText={(username) => this.setState({username})}
+            value={this.state.username} 
+            placeholder="Username" />
           <TextInput
             style={styles.textinput}
             onChangeText={(email) => this.setState({email})}
@@ -72,19 +78,13 @@ export class RegisterScreen extends React.Component {
             secureTextEntry={true} 
             placeholder="Password" />
 
-          <TextInput
-            style={styles.textinput}
-            onChangeText={(username) => this.setState({username})}
-            value={this.state.username} 
-            placeholder="Username" />
-
           { this.state.registerClicked && <ActivityIndicator size="large" style={{marginTop: 10}} color="#00ff00"/>}
-          { this.state.registerFailed && <Text style={{color: "#ff0000"}}>{this.state.errorMessage}</Text>}
           <TouchableOpacity 
-            style={{ height: 40, width:200, marginTop: 10, backgroundColor:"#2196F3", borderRadius:3, alignItems:'center', justifyContent:'center' }}
+            style={styles.button}
             onPress={this.register.bind(this)}>
             <Text style={{color:"#FFF", fontSize:16, fontWeight:'bold'}}>REGISTER</Text>
           </TouchableOpacity>
+          { this.state.registerFailed && <Text style={{color: "#ff0000"}}>{this.state.errorMessage}</Text>}
         </KeyboardAvoidingView>
       </View>
     );
@@ -105,13 +105,17 @@ export class RegisterScreen extends React.Component {
     }
 
   register() {
-      this.setState({registerClicked: true, registerFailed: false});
+      if(!this.state.username || this.state.username.trim().length == 0) {
+        this.setState({errorMessage: "Please enter a username", registerFailed: true});
+        return;
+      }
+      this.setState({registerClicked: true, registerFailed: false});      
       var s = firebaseApp.auth().createUserWithEmailAndPassword(this.state.email, this.state.password).then(() => {
         currentUser = firebaseApp.auth().currentUser;
         firebaseApp.database().ref("Users/" + currentUser.uid).set({
           username: this.state.username.trim(),
           email: this.state.email.trim(),
-          description: "asdf",
+          description: "None",
           profile_picture: "profile picture",
         });
 
@@ -145,9 +149,12 @@ const styles = StyleSheet.create({
     borderColor: 'gray', 
     borderWidth: 0
   },
-  button: {
-    width:'100%',
-    marginVertical: 10,
-    height: 20,
-  },
+  button: { 
+    height: 40, 
+    width:200, 
+    marginVertical: 10, 
+    backgroundColor:"#2196F3", 
+    borderRadius:3, 
+    alignItems:'center', 
+    justifyContent:'center' }
 });

@@ -79,25 +79,27 @@ export class LoginScreen extends React.Component {
                 placeholder="Password" />
 
               <TouchableOpacity 
-                  style={{ height: 40, width:200, marginTop: 10, backgroundColor:"#2196F3", borderRadius:3, alignItems:'center', justifyContent:'center' }}
+                  style={styles.button}
                   onPress={this.login.bind(this)}>
                   <Text style={{color:"#FFF", fontSize:16, fontWeight:'bold'}}>LOGIN</Text>
               </TouchableOpacity>
             </View>
         </KeyboardAvoidingView>
           <View style={{flex:3}}>
-
-              <TouchableOpacity
-                style={{ height: 40, width:200, marginTop: 10, backgroundColor:"#FFF", borderRadius:3, alignItems:'center', justifyContent:'center' }}
-                onPress={() => this.props.navigation.navigate("Register", {navigation: this.props.navigation})}>
-                <Text 
-                style={{color:'blue', textAlign:'center', marginVertical: 15}}> 
-                Need an account? Click here! 
-                </Text> 
-              </TouchableOpacity>
-
-              { this.state.loginFailed && <Text style={{color: "#ff0000", textAlign:'center'}}>{this.state.error}</Text>}
-            </View>
+              <View>
+                  { this.state.loginFailed && <Text style={{color: "#ff0000", textAlign:'center'}}>{this.state.error}</Text>}
+              </View>
+              <View>
+                <TouchableOpacity
+                  style={{width:'100%'}}
+                  onPress={() => this.props.navigation.navigate("Register", {navigation: this.props.navigation})}>
+                  <Text 
+                    style={{color:'blue', textAlign:'center', marginVertical: 15}}> 
+                    Need an account? Click here! 
+                  </Text> 
+                </TouchableOpacity>
+              </View>
+          </View>
       </View>
     );
   }
@@ -130,21 +132,26 @@ const styles = StyleSheet.create({
   textinput: {
     height: 58,
     fontSize: 18, 
-    minWidth: '80%',
-    maxWidth: '80%', 
+    minWidth: '85%',
+    maxWidth: '85%', 
     marginBottom: 5,
     borderColor: 'gray', 
     borderWidth: 0
   },
-  button: {
-    width:'100%',
-    marginVertical: 10,
-    height: 20,
+  button: { 
+    height: 40, 
+    width:200, 
+    marginVertical: 10, 
+    backgroundColor:"#2196F3", 
+    borderRadius:3, 
+    alignItems:'center', 
+    justifyContent:'center',
   },
   logo: {
     textAlign: 'center', 
     color:"#2196F3", 
     fontWeight: 'bold', 
     fontSize: 35, 
+    marginVertical: 10,
   }
 });
