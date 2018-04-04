@@ -28,6 +28,7 @@ import Brewery from '../models/Brewery';
 import firebaseApp from '../firebase';
 import FAB from 'react-native-fab';
 import StarRating from 'react-native-star-rating';
+import current_location from '../current_location.png';
 
 
 export class MapScreen extends React.Component {
@@ -41,13 +42,11 @@ export class MapScreen extends React.Component {
             lat: 0,
             lng: 0,
             mapVisible: true,
-        }   
-    }
+        }  
 
-    componentWillMount() {
         this._getLocationAsync().then(() => {
             this.searchLocalBreweriesOnStartUp();
-        })
+        }) 
     }
     
     _getLocationAsync = async () => {
@@ -57,8 +56,6 @@ export class MapScreen extends React.Component {
         }
 
         let location = await Location.getCurrentPositionAsync({});
-        console.log("--------Location----------");
-        console.log(location);
         this.state.lat = location.coords.latitude;
         this.state.lng = location.coords.longitude;
         this.setState({});
@@ -69,15 +66,21 @@ export class MapScreen extends React.Component {
         return (
             <Container>
             <View style={{flex: 1}}>
-                {this.state.mapVisible && <MapView 
+                {this.state.mapVisible && this.state.lat != 0 && <MapView 
                     style={styles.map}
                     initialRegion={{
-                    latitude: 33.753746,
-                    longitude: -84.386330,
+                    latitude: this.state.lat,
+                    longitude: this.state.lng,
                     latitudeDelta: 0.0922,
                     longitudeDelta: 0.0421,}}>
-                
+
                     {this.renderMapViewMarkers()}
+
+                    <MapView.Marker
+                            coordinate={{latitude: this.state.lat, longitude: this.state.lng}}
+                            name={"Your Location"}
+                            image={current_location}
+                        ></MapView.Marker>
                 
                 </MapView>}
                 {!this.state.mapVisible && 
