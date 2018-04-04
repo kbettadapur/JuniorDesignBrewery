@@ -65,7 +65,7 @@ export class MapScreen extends React.Component {
     render() {
         return (
             <Container>
-            <View style={{flex: 1}}>
+            <View style={{flex: 1, backgroundColor:'white'}}>
                 {this.state.mapVisible && this.state.lat != 0 && <MapView 
                     style={styles.map}
                     initialRegion={{
@@ -224,10 +224,10 @@ export class MapScreen extends React.Component {
         }
         else if(this.props.sort === "Distance") {
             this.state.breweries.sort(function(a,b) {
-                var x = t.state.location.coords.latitude;
-                var y = t.state.location.coords.longitude;
-                var dist1 = Math.sqrt((x - a.latitude) * (x - a.latitude) + (y - a.longitude) * (y - a.longitude))
-                var dist2 = Math.sqrt((x - b.latitude) * (x - b.latitude) + (y - b.longitude) * (y - b.longitude))
+                var x = t.state.lat;
+                var y = t.state.lng;
+                var dist1 = geolib.getDistance({latitude: x, longitude: y}, {latitude: a.latitude, longitude: a.longitude});
+                var dist2 = geolib.getDistance({latitude: x, longitude: y}, {latitude: b.latitude, longitude: b.longitude});
                 return (dist1 < dist2) ? -1 : (dist1 > dist2) ? 1 : 0;               
             })
         } else if(this.props.sort === "Rating") {
@@ -240,8 +240,18 @@ export class MapScreen extends React.Component {
         return _.map(this.state.breweries, (b) => {
             counter = counter + 1;
             return (
-                <ListItem key={counter} onPress={() => this.props.navigation.navigate("Brewery", {navigation: this.props.navigation, brewery: b})}>
+                <ListItem 
+                style={{display:'flex'}}
+                key={counter} onPress={() => this.props.navigation.navigate("Brewery", {navigation: this.props.navigation, brewery: b})}>
+                    <View style={{flexDirection:'column'}}>
                     <Text style={{width: '100%'}}>{b.name}</Text>
+                    <Text style={{width:'100%', color:'gray', fontSize:11}}>
+                        Distance:   
+                            {(this.state.lat || this.state.lng) 
+                            ? ' ' + Number(geolib.getDistance({latitude: this.state.lat, longitude: this.state.lng}, 
+                            {latitude: b.latitude, longitude: b.longitude}) * 0.000621371).toFixed(2) + ' miles': ' location not turned on'}
+                    </Text>
+                    </View>    
                 </ListItem>
             );
         });
