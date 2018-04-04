@@ -68,7 +68,7 @@ export class MainScreen extends React.Component {
     this.state = {
         selectedTab: MAP_TAB,
         title: "Map",
-        sort:"",
+        sort:"Alphabetical",
     };
   }
 
