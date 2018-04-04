@@ -25,6 +25,7 @@ import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { Footer, Container, List, ListItem } from 'native-base';
 import firebaseApp from '../firebase';
 import Spinner from 'react-native-loading-spinner-overlay';
+import geolib from 'geolib'
 
 export class FavoritesScreen extends React.Component {
 
@@ -106,6 +107,7 @@ export class FavoritesScreen extends React.Component {
                             onPress={() => this.props.navigation.navigate("Brewery", {navigation: this.props.navigation, 
                                                                             brewery: {name: fav.name, placeId: fav.id, photo: fav.photo, latitude: fav.latitude, longitude: fav.longitude}})}>
                             <Text style={{width: '100%'}}>{fav.name}</Text>
+                            <Text style={{width:'100%', fontSize:11, color:'gray'}}>Distance: {} </Text>
                         </TouchableOpacity>
                     </ListItem>
                 )
