@@ -190,10 +190,26 @@ export class MapScreen extends React.Component {
 
     searchLocalBreweries() {
         this._getLocationAsync().then(() => {
-            this.searchBreweries(this.state.lat, this.state.lng);
+            this.searchBreweriesOnPress(this.state.lat, this.state.lng);
         });
     }
 
+    searchBreweriesOnPress(lat, lng) {
+        fetch('https://maps.googleapis.com/maps/api/place/nearbysearch/'
+                    + 'json?key=AIzaSyDiooLoAXwvs42CPdgVKhqRwjqiUHok8gs'
+                    + '&location=' + `${lat}` + ',' + `${lng}`
+                    + '&radius=50000&name=brewery&keyword=brewery')
+            .then((response) => response.json().then(data => {
+                res = []
+                var results = JSON.parse(JSON.stringify(data)).results;
+                results.forEach((val) => {
+                    var b = new Brewery();
+                    b.merge(val);
+                    res.push(b);
+                });
+                this.setState({breweries: res, lat: lat, lng: lng});
+            }));
+    }
 
     searchBreweries(lat, lng) {
         fetch('https://maps.googleapis.com/maps/api/place/nearbysearch/'
@@ -208,7 +224,7 @@ export class MapScreen extends React.Component {
                     b.merge(val);
                     res.push(b);
                 });
-                this.setState({breweries: res, lat: lat, lng: lng});
+                this.setState({breweries: res});
             }));
     }
 
