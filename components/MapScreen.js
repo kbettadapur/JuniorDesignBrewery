@@ -38,17 +38,15 @@ export class MapScreen extends React.Component {
         this.state = {
             query: "",
             breweries: [],
-            location: {
-                lat: 0,
-                lng: 0,
-            },
+            lat: 0,
+            lng: 0,
             mapVisible: true,
         }   
     }
 
     componentWillMount() {
         this._getLocationAsync().then(() => {
-            this.searchLocalBreweries();
+            this.searchLocalBreweriesOnStartUp();
         })
     }
     
@@ -59,8 +57,11 @@ export class MapScreen extends React.Component {
         }
 
         let location = await Location.getCurrentPositionAsync({});
-        this.setState({location});
-        console.log(this.state.location);
+        console.log("--------Location----------");
+        console.log(location);
+        this.state.lat = location.coords.latitude;
+        this.state.lng = location.coords.longitude;
+        this.setState({});
     }
     
 
@@ -184,7 +185,11 @@ export class MapScreen extends React.Component {
     }
 
     searchLocalBreweries() {
-        this.searchBreweries(this.state.location.coords.latitude, this.state.location.coords.longitude);
+        this.searchBreweries(this.state.lat, this.state.lng);
+    }
+
+    searchLocalBreweriesOnStartUp() {
+        this.searchBreweries(this.state.lat, this.state.lng);
     }
 
     searchBreweries(lat, lng) {
