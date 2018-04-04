@@ -144,73 +144,69 @@ export class MainScreen extends React.Component {
     return (
       <Container>
         <Footer>
-            <FooterTab tabActiveBgColor="#FFFFF">
+            <FooterTab tabActiveBgColor="#FFFFF" style={{backgroundColor: '#2196f3'}}>
                 {this.state.selectedTab == MAP_TAB && <Button
                     active={this.state.selectedTab === MAP_TAB}
                     onPress={() => this.changeTab(MAP_TAB)}
-                    style={{backgroundColor: '#76a8f7'}}
+                    style={{backgroundColor: '#2196f3'}}
                 >
-                    <Icon name="md-beer"/>
-                    <Text>{"Breweries"}</Text>
+                    <Icon name="md-beer" style={{color: "#FFF"}}/>
                 </Button>}
 
                 {this.state.selectedTab != MAP_TAB && <Button
                     active={this.state.selectedTab === MAP_TAB}
                     onPress={() => this.changeTab(MAP_TAB)}
+                    style={{backgroundColor: '#2196f3'}}
                 >
-                    <Icon name="md-beer" />
-                    <Text>{"Breweries"}</Text>
+                    <Icon name="md-beer" style={{color: 'rgba(255, 255, 255, 0.5)'}}/>
                 </Button>}
 
                 {this.state.selectedTab == FAVORITES_TAB && <Button
                     active={this.state.selectedTab === FAVORITES_TAB}
                     onPress={() => this.changeTab(FAVORITES_TAB)}
-                    style={{backgroundColor: '#76a8f7'}}
+                    style={{backgroundColor: '#2196f3'}}
                 >
-                    <Icon name="star" />
-                    <Text>{"Favorites"}</Text>
+                    <Icon name="star" style={{fontSize: 28, color: '#FFF'}}/>
                 </Button>}
 
                 {this.state.selectedTab != FAVORITES_TAB && <Button
                     active={this.state.selectedTab === FAVORITES_TAB}
                     onPress={() => this.changeTab(FAVORITES_TAB)}
+                    style={{backgroundColor: '#2196f3'}}
                 >
-                    <Icon name="star" />
-                    <Text>{"Favorites"}</Text>
+                    <Icon name="star" style={{fontSize: 28, color: 'rgba(255, 255, 255, 0.5)'}}/>
                 </Button>}
 
                 {this.state.selectedTab == YOUR_REVIEWS_TAB && <Button
                     active={this.state.selectedTab === YOUR_REVIEWS_TAB}
                     onPress={() => this.changeTab(YOUR_REVIEWS_TAB)}
-                    style={{backgroundColor: '#76a8f7'}}
+                    style={{backgroundColor: '#2196f3'}}
                 >
-                    <Icon name="list" />
-                    <Text>{"Your Reviews"}</Text>
+                    <Icon name="list" style={{color: "#FFF"}}/>
                 </Button>}
 
                 {this.state.selectedTab != YOUR_REVIEWS_TAB && <Button
                     active={this.state.selectedTab === YOUR_REVIEWS_TAB}
                     onPress={() => this.changeTab(YOUR_REVIEWS_TAB)}
+                    style={{backgroundColor: '#2196f3'}}
                 >
-                    <Icon name="list" />
-                    <Text>{"Your Reviews"}</Text>
+                    <Icon name="list" style={{color: 'rgba(255, 255, 255, 0.5)'}}/>
                 </Button>}
 
                 {this.state.selectedTab == PROFILE_TAB && <Button
                     active={this.state.selectedTab === PROFILE_TAB}
                     onPress={() => this.changeTab(PROFILE_TAB)}
-                    style={{backgroundColor: '#76a8f7'}}
+                    style={{backgroundColor: '#2196f3'}}
                 >
-                    <Icon name="more" />
-                    <Text>{"Profile"}</Text>
+                    <Icon name="md-person" style={{color: "#FFF"}}/>
                 </Button>}
 
                 {this.state.selectedTab != PROFILE_TAB && <Button
                     active={this.state.selectedTab === PROFILE_TAB}
                     onPress={() => this.changeTab(PROFILE_TAB)}
+                    style={{backgroundColor: '#2196f3'}}
                 >
-                    <Icon name="more" />
-                    <Text>{"Profile"}</Text>
+                    <Icon name="md-person" style={{color: 'rgba(255, 255, 255, 0.5)'}}/>
                 </Button>}
             </FooterTab>
         </Footer>
