@@ -20,10 +20,11 @@
 */
 
 import React from 'react';
-import { StyleSheet, View, Text, Image, TouchableHighlight } from 'react-native';
-import { Footer, Container } from 'native-base';
+import { StyleSheet, View, Text, Image, TouchableHighlight, TouchableOpacity, ScrollView } from 'react-native';
+import { Footer, Container, List, ListItem } from 'native-base';
 import firebaseApp from '../firebase';
 import { ImagePicker } from 'expo';
+import StarRating from 'react-native-star-rating';
 console.disableYellowBox = true;
 
 export class ViewProfileScreen extends React.Component {
@@ -39,6 +40,10 @@ export class ViewProfileScreen extends React.Component {
         console.log("ID: " + id);
         firebaseApp.database().ref("/Users/" + id).once('value').then((snapshot) => {
             this.setState({user: snapshot.val()});
+            if (this.state.user.reviews.length > 3) {
+                this.state.user.reviews = this.state.user.reviews.slice(0,3);
+                this.setState({});
+            }
         });
 
         
@@ -50,6 +55,7 @@ export class ViewProfileScreen extends React.Component {
         } 
         return (
             <Container>
+                <ScrollView>
                 <View style={{flex: 1, backgroundColor: '#fff'}}>
                     <View style={{alignItems: 'center', marginTop: 30}}>
                             <View>
@@ -67,34 +73,52 @@ export class ViewProfileScreen extends React.Component {
                     <View style={{width: '100%', padding: 10}}>
                         <Text style={[styles.subtitle_style, {marginTop: 10}]}>Number of kids: {this.state.user.num_children}</Text>
                     </View>
-                    <List>
+                    <View style={{width: '100%', padding: 10}}>
+                        <Text style={[styles.subtitle_style, {marginTop: 10}]}>Reviews:</Text>
+                    </View>
+                        <List>
                         {this.renderReviewsList()}
-                    </List>
+                        </List>
+                    
                 </View>
+                </ScrollView>
             </Container>
         );
     }
 
     renderReviewsList() {
-        /*return _.map(this.state., (fav) => {
+        if (this.state.user.reviews == null) {
+            return <Text>No Reviews Yet!</Text>
+        }
+        return _.map(this.state.user.reviews, (rev) => {
             return (
-                <ListItem key={this.hashCode(fav.id)}>
-                    <TouchableOpacity 
-                        onPress={() => this.props.navigation.navigate("Brewery", {navigation: this.props.navigation, 
-                                                                        brewery: {name: fav.name, placeId: fav.id, photo: fav.photo, latitude: fav.latitude, longitude: fav.longitude},
-                                                                        })}>
-                        <Text style={{width: '100%'}}>{fav.name}</Text>
-                        <Text style={{width:'100%', color:'gray', fontSize:11}}>
-                            Distance:   
-                                {(this.state.location.lat || this.state.location.lng) 
-                                ? ' ' + Number(geolib.getDistance({latitude: this.state.location.lat, longitude: this.state.location.lng}, 
-                                {latitude: fav.latitude, longitude: fav.longitude}) * 0.000621371).toFixed(2) + ' miles': ' location not turned on'}
+                <ListItem key={this.hashCode(rev.revId)}>
+                    <TouchableOpacity> 
+                        <Text style={{width: '100%'}}>{rev.breweryName}</Text>
+                        <StarRating
+                            disabled={true}
+                            maxStars={5}
+                            rating={rev.overallRating}
+                            fullStarColor={'#eaaa00'}
+                            starSize={20}
+                            containerStyle={{width: '25%'}}
+                        />
+                        <Text style={{width:'100%', fontSize:11}}>
+                            {rev.comments}
                         </Text>                        
                         </TouchableOpacity>
                 </ListItem>
             );
-        });*/
+        });
     }
+
+    hashCode(s) {
+        var h = 0, l = s.length, i = 0;
+        if ( l > 0 )
+            while (i < l)
+            h = (h << 5) - h + s.charCodeAt(i++) | 0;
+        return h;
+    };
 }
 
 const styles = StyleSheet.create({
