@@ -1136,6 +1136,10 @@ balanced-match@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.0.tgz#89b4d199ab2bee49de164ea02b89ce462d71b767"
 
+base-64@0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/base-64/-/base-64-0.1.0.tgz#780a99c84e7d600260361511c4877613bf24f6bb"
+
 base64-js@0.0.8:
   version "0.0.8"
   resolved "https://registry.yarnpkg.com/base64-js/-/base64-js-0.0.8.tgz#1101e9544f4a76b1bc3b26d452ca96d7a35e7978"
@@ -2554,6 +2558,10 @@ gauge@~2.7.3:
     strip-ansi "^3.0.1"
     wide-align "^1.1.0"
 
+geolib@^2.0.24:
+  version "2.0.24"
+  resolved "https://registry.yarnpkg.com/geolib/-/geolib-2.0.24.tgz#eb3d7fbc65f5ea3354a5af6054563ebe9f33e5f4"
+
 get-caller-file@^1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/get-caller-file/-/get-caller-file-1.0.2.tgz#f702e63127e7e231c160a80c1554acb70d5047e5"
@@ -2615,6 +2623,17 @@ glob-stream@^5.3.2:
     through2 "^0.6.0"
     to-absolute-glob "^0.1.1"
     unique-stream "^2.0.2"
+
+glob@7.0.6:
+  version "7.0.6"
+  resolved "https://registry.yarnpkg.com/glob/-/glob-7.0.6.tgz#211bafaf49e525b8cd93260d14ab136152b3f57a"
+  dependencies:
+    fs.realpath "^1.0.0"
+    inflight "^1.0.4"
+    inherits "2"
+    minimatch "^3.0.2"
+    once "^1.3.0"
+    path-is-absolute "^1.0.0"
 
 glob@^5.0.3:
   version "5.0.15"
@@ -5024,6 +5043,13 @@ react-native-fab@^1.0.6:
   dependencies:
     prop-types "^15.5.10"
 
+react-native-fetch-blob@^0.10.8:
+  version "0.10.8"
+  resolved "https://registry.yarnpkg.com/react-native-fetch-blob/-/react-native-fetch-blob-0.10.8.tgz#4fc256abae0cb5f10e7c41f28c11b3ff330d72a9"
+  dependencies:
+    base-64 "0.1.0"
+    glob "7.0.6"
+
 react-native-flexi-radio-button@^0.2.2:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/react-native-flexi-radio-button/-/react-native-flexi-radio-button-0.2.2.tgz#a0180393c531ba3477722c6e42a31ceb1c11623b"
@@ -5033,6 +5059,10 @@ react-native-gesture-handler@1.0.0-alpha.30:
   resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-1.0.0-alpha.30.tgz#7f79c2da5a59cc8ce20cf04c11360409a53bef59"
   dependencies:
     prop-types "^15.5.10"
+
+react-native-image-base64@^0.1.3:
+  version "0.1.3"
+  resolved "https://registry.yarnpkg.com/react-native-image-base64/-/react-native-image-base64-0.1.3.tgz#bfc9eaf7cd3ec705aa25f00f6a11d0c379217fe8"
 
 react-native-iphone-x-helper@^1.0.1:
   version "1.0.2"
@@ -5044,6 +5074,17 @@ react-native-keyboard-aware-scroll-view@0.4.2:
   dependencies:
     prop-types "^15.6.0"
     react-native-iphone-x-helper "^1.0.1"
+
+react-native-keyboard-aware-scroll-view@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/react-native-keyboard-aware-scroll-view/-/react-native-keyboard-aware-scroll-view-0.5.0.tgz#57ab933089375bf62f4324797e8be949ad97849d"
+  dependencies:
+    prop-types "^15.6.0"
+    react-native-iphone-x-helper "^1.0.1"
+
+react-native-loading-spinner-overlay@^0.5.2:
+  version "0.5.2"
+  resolved "https://registry.yarnpkg.com/react-native-loading-spinner-overlay/-/react-native-loading-spinner-overlay-0.5.2.tgz#b7bcd277476d596615fd7feee601789f9bdc7acc"
 
 react-native-maps@0.17.1:
   version "0.17.1"
@@ -5084,6 +5125,10 @@ react-native-scripts@1.8.1:
     qrcode-terminal "^0.11.0"
     rimraf "^2.6.1"
     xdl "47.0.4"
+
+react-native-simple-toast@0.0.8:
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/react-native-simple-toast/-/react-native-simple-toast-0.0.8.tgz#513f4add8d30e4c5109e536bfc6ea5825fea5d83"
 
 react-native-star-rating@^1.0.9:
   version "1.0.9"

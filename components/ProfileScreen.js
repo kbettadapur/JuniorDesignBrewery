@@ -20,21 +20,24 @@
 */
 
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, Image, TouchableHighlight } from 'react-native';
 import { Footer, Container } from 'native-base';
 import firebaseApp from '../firebase';
+import { ImagePicker } from 'expo';
 console.disableYellowBox = true;
 
 export class ProfileScreen extends React.Component {
-    user;
-
     constructor() {
         super();
-        this.state = {user: null}
+        this.state = {
+            user: null,
+            image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Default_profile_picture_%28male%29_on_Facebook.jpg/600px-Default_profile_picture_%28male%29_on_Facebook.jpg",
+            imageBase64: null,
+        }
         id = firebaseApp.auth().currentUser.uid;
         console.log("ID: " + id);
         firebaseApp.database().ref("/Users/" + id).once('value').then((snapshot) => {
-            this.setState({user: snapshot});
+            this.setState({user: snapshot.val()});
         });
     }
 
@@ -53,16 +56,54 @@ export class ProfileScreen extends React.Component {
         } else {
             return (
                 <Container>
-                    <View style={{flex: 1, alignItems: 'center'}}>
-                        <View style={styles.image_style}><Text>[Image Here]</Text></View>
-                        <Text style={{textAlign: 'center'}}>Username</Text>
-                        <Text style={{textAlign: 'center'}}>Description</Text>
+                    <View style={{flex: 1, backgroundColor: '#fff'}}>
+                        <View style={{alignItems: 'center', marginTop: 30}}>
+                            <TouchableHighlight onPress={this.pickImage.bind(this)}>
+                                <View>
+                                        <Image source={{ uri:  'data:image/png;base64,' + this.state.user.profile_picture}} style={styles.image_style} />
+                                </View>
+                            </TouchableHighlight>
+                            
+                            <Text style={styles.title_style}>{this.state.user.username}</Text>
+                        </View>
+                        <View style={{width: '100%', padding: 10}}>
+                            <Text style={[styles.subtitle_style, {marginTop: 10}]}>Bio</Text>
+                            <Text>{this.state.user.description}</Text>
+                        </View>
                     </View>
+
                     <Footer style={styles.footer_style}>
                         {this.props.renderTabs()}
                     </Footer>
                 </Container>
             );
+        }
+    }
+
+    async pickImage() {
+        result = await ImagePicker.launchImageLibraryAsync({
+            allowsEditing: true,
+            base64: true,
+            aspect: [1, 1]
+        })
+        this.handleImage(result);
+    }
+
+    handleImage(result) {
+        if (!result.cancelled) {
+            firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid).set({
+                userId: firebaseApp.auth().currentUser.uid,
+                username: this.state.user.username,
+                description: this.state.user.description,
+                email: this.state.user.email,
+                profile_picture: result.base64
+            }).then(() => {
+                this.state.user.profile_picture = result.base64;
+                this.state.image = result.uri;
+                this.setState({});                
+            }).catch((err) => {
+                console.log(err);
+            });
         }
     }
 }
@@ -78,12 +119,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   image_style: {
-    borderWidth: 1,
-    borderColor: 'black',
-    width: 100,
-    height: 100
+    borderRadius: 100,
+    width: 150,
+    height: 150
   },
   footer_style: {
       width: '100%'
+  },
+  title_style: {
+      textAlign: 'center',
+      fontWeight: 'bold',
+      fontSize: 25
+  },
+  subtitle_style: {
+      fontSize: 18,
+      fontWeight: 'bold'
   }
 })
