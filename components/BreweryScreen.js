@@ -68,15 +68,17 @@ export class BreweryScreen extends React.Component {
         });
         firebaseApp.database().ref("Reviews").on('value', (snapshot) => {
             this.state.reviews = [];
+            if (snapshot.val() != null) {
             var keys = Object.keys(snapshot.val());
-            keys.forEach((key) => {
-                if (snapshot.val()[key].breweryId == this.state.brewery.placeId) {
-                    this.state.reviews.push(snapshot.val()[key]);
-                    if(snapshot.val()[key].userId === firebaseApp.auth().currentUser.uid) {
-                       this.state.rev = snapshot.val()[key];
+                keys.forEach((key) => {
+                    if (snapshot.val()[key].breweryId == this.state.brewery.placeId) {
+                        this.state.reviews.push(snapshot.val()[key]);
+                        if(snapshot.val()[key].userId === firebaseApp.auth().currentUser.uid) {
+                        this.state.rev = snapshot.val()[key];
+                        }
                     }
-                }
-            });
+                });
+            }
             if(this.state.isMounted)
                 this.setState({reviews: this.state.reviews});
         });
@@ -264,8 +266,7 @@ export class BreweryScreen extends React.Component {
                 
             </View>
             </ScrollView>
-            {/*<Button title="Add Review" onPress={() => this.props.navigation.navigate("AddReview", {navigation: this.props.navigation, brewery: this.state.brewery})}></Button>
-            */}
+
             {(this.state.rev == null && this.state.reviews != null) && <View>
             <FAB 
                 buttonColor="green"
@@ -300,8 +301,11 @@ export class BreweryScreen extends React.Component {
         return _.map(this.state.reviews, (rev) => {
                 return (
                     <ListItem key={new Date().getTime()}>
-                        <TouchableOpacity onPress={() => this.props.navigation.navigate("ReviewView", {navigation: this.props.navigation, review: rev})}>
-                            <View style={{width: '100%'}}>
+                        <TouchableOpacity style={{display: 'flex', flexDirection: 'row'}} onPress={() => this.props.navigation.navigate("ReviewView", {navigation: this.props.navigation, review: rev})}>
+                            {/*<View style={{flex: 1, paddingTop: 7, paddingRight: 10}}>
+                                <Image style={{height: 50, width: 50, borderRadius: 100}} source={{uri:'data:image/png;base64,' + this.state.user.profile_picture}}></Image>
+                            </View>*/}
+                            <View style={{flex: 5}}>
                                 <Text style={styles.list_item_title}>{rev.username}</Text>
                                 <Text style={{width: '100%'}}>"{rev.comments}"</Text>
                                 <StarRating

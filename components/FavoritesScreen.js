@@ -38,15 +38,15 @@ export class FavoritesScreen extends React.Component {
         headerTintColor: "blue"
     });
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             favorites: null,
             isMounted: false,
             location: {
                 lng: 0,
                 lat: 0,
-            }
+            },
         }
         firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid + "/Favorites/").on('value', (snapshot) => {
             this.state.favorites = [];
@@ -129,7 +129,8 @@ export class FavoritesScreen extends React.Component {
                     <ListItem key={this.hashCode(fav.id)}>
                         <TouchableOpacity 
                             onPress={() => this.props.navigation.navigate("Brewery", {navigation: this.props.navigation, 
-                                                                            brewery: {name: fav.name, placeId: fav.id, photo: fav.photo, latitude: fav.latitude, longitude: fav.longitude}})}>
+                                                                            brewery: {name: fav.name, placeId: fav.id, photo: fav.photo, latitude: fav.latitude, longitude: fav.longitude},
+                                                                            })}>
                             <Text style={{width: '100%'}}>{fav.name}</Text>
                             <Text style={{width:'100%', color:'gray', fontSize:11}}>
                                 Distance:   

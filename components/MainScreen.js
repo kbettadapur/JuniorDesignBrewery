@@ -28,7 +28,7 @@ import { FavoritesScreen } from './FavoritesScreen';
 import { YourReviewsScreen } from './YourReviewsScreen';
 import { ProfileScreen } from './ProfileScreen';
 import ModalDropdown from 'react-native-modal-dropdown';
-
+import firebaseApp from '../firebase';
 
 
 const MAP_TAB = "Brewery Map";
@@ -63,12 +63,13 @@ export class MainScreen extends React.Component {
         });
     }
   constructor(props) {
-    super();
+    super(props);
     a = this;
     this.state = {
         selectedTab: MAP_TAB,
         title: "Map",
         sort:"",
+        id: this.props.navigation.state.params.id,
     };
   }
 
@@ -103,41 +104,42 @@ export class MainScreen extends React.Component {
     // this.props.navigation.setParams({ 
     //     tab: this.state.selectedTab          
     // });
-    switch (this.state.selectedTab) {
-        case MAP_TAB:
-            return (
-                <MapScreen
-                    renderTabs={() => this.renderTabs()}
-                    navigation={this.props.navigation}
-                    sort={this.state.sort}
-                />
-            );
-        case FAVORITES_TAB:
-            return (
-              <FavoritesScreen
-                    renderTabs={() => this.renderTabs()}
-                    navigation={this.props.navigation}
-                    sort={this.state.sort}
-                />
-            );
-        case YOUR_REVIEWS_TAB:
-            return (
-              <YourReviewsScreen
-                    renderTabs={() => this.renderTabs()}
-                    navigation={this.props.navigation}
-                    sort={this.state.sort}
-                />
-            );
-        case PROFILE_TAB:
-            return (
-              <ProfileScreen
-                    renderTabs={() => this.renderTabs()}
-                    navigation={this.props.navigation}
-                />
-            );
+        switch (this.state.selectedTab) {
+            case MAP_TAB:
+                return (
+                    <MapScreen
+                        renderTabs={() => this.renderTabs()}
+                        navigation={this.props.navigation}
+                        sort={this.state.sort}
+                    />
+                );
+            case FAVORITES_TAB:
+                return (
+                <FavoritesScreen
+                        renderTabs={() => this.renderTabs()}
+                        navigation={this.props.navigation}
+                        sort={this.state.sort}
+                    />
+                );
+            case YOUR_REVIEWS_TAB:
+                return (
+                <YourReviewsScreen
+                        renderTabs={() => this.renderTabs()}
+                        navigation={this.props.navigation}
+                        sort={this.state.sort}
+                    />
+                );
+            case PROFILE_TAB:
+                return (
+                <ProfileScreen
+                        renderTabs={() => this.renderTabs()}
+                        navigation={this.props.navigation}
+                    />
+                );
 
-        default: return null;
-    }
+            default: return null;
+        }
+    
   }
 
   renderTabs() {

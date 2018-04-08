@@ -42,8 +42,7 @@ export class MapScreen extends React.Component {
             lat: 0,
             lng: 0,
             mapVisible: true,
-        }  
-
+        }
         // this._getLocationAsync().then(() => {
         //     this.searchLocalBreweries();
         // }) 
