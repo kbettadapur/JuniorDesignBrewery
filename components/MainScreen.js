@@ -45,26 +45,34 @@ export class MainScreen extends React.Component {
         headerTintColor: "blue",
         headerLeft: null,
         headerRight: 
-            (<View style={{width:40}}>
-                    {(navigation.state.params.tab !== PROFILE_TAB && navigation.state.params.tab !== FAVORITES_TAB) 
+            (<View style={{width:80, display:'flex', flexDirection:'row'}}>
+                {navigation.state.params.tab === MAP_TAB && 
+                <TouchableOpacity style={{flex: 1}}
+                    onPress={() => {global.mapVisible = !global.mapVisible; navigation.state.params.parent.setState({}); navigation.setParams({});}}>                 
+                <Icon name={(global.mapVisible) ? "list" : "md-map"} style={{color: 'white'}}/>
+                </TouchableOpacity> }
+                <View style={{flex:1, marginRight: 15}}>
+                {(navigation.state.params.tab !== PROFILE_TAB && navigation.state.params.tab !== FAVORITES_TAB) 
                         && <ModalDropdown dropdownStyle = {{flexDirection:'row', height:127}} 
                         dropdownTextStyle={{fontWeight:'bold', fontSize:16, color:'black'}}
-                        options={['Distance', 'Alphabetical', 'Rating']}
+                        options={['Distance', 'Name', 'Rating']}
                         onSelect = {(index, value) => {navigation.state.params.sortClick(index)}}>                        
                         <Icon style={{paddingLeft: 20, color:"#FFFFFF"}}name="md-more"/>
                     </ModalDropdown>}
-            </View>), 
+                </View>
+            </View>),
     });
     componentDidMount() {
         // set handler method with setParams
         this.props.navigation.setParams({ 
           sortClick: this._sortClick.bind(this),
-          tab: this.state.selectedTab  
+          tab: this.state.selectedTab,
+          parent: this,
         });
     }
+
   constructor(props) {
     super(props);
-    a = this;
     this.state = {
         selectedTab: MAP_TAB,
         title: "Map",
@@ -142,6 +150,7 @@ export class MainScreen extends React.Component {
   }
 
   renderTabs() {
+   // console.log(global.mapVisible);
     return (
       <Container>
         <Footer>

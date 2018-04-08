@@ -29,6 +29,7 @@ import firebaseApp from '../firebase';
 import FAB from 'react-native-fab';
 import StarRating from 'react-native-star-rating';
 import current_location from '../current_location.png';
+import ModalDropdown from 'react-native-modal-dropdown';
 
 
 export class MapScreen extends React.Component {
@@ -42,6 +43,9 @@ export class MapScreen extends React.Component {
             lat: 0,
             lng: 0,
             mapVisible: true,
+        }
+        if(global.mapVisible == null) {
+            global.mapVisible = true;
         }
         // this._getLocationAsync().then(() => {
         //     this.searchLocalBreweries();
@@ -65,7 +69,7 @@ export class MapScreen extends React.Component {
         return (
             <Container>
             <View style={{flex: 1, backgroundColor:'white'}}>
-                {this.state.mapVisible && this.state.lat != 0 && <MapView 
+                {global.mapVisible && this.state.lat != 0 && <MapView 
                     style={styles.map}
 
                     region={{latitude: this.state.lat,
@@ -83,7 +87,7 @@ export class MapScreen extends React.Component {
                         ></MapView.Marker>
                 
                 </MapView>}
-                {!this.state.mapVisible && 
+                {!global.mapVisible && 
                     <ScrollView style={{marginTop: 60}}>
                     <List style={styles.listStyle}>
                             {this.renderListView()}
@@ -93,25 +97,6 @@ export class MapScreen extends React.Component {
                     </ScrollView> 
                 }
 
-                {!this.state.mapVisible && 
-                <View style={{position:'absolute', right:0, top:140}}>
-                <FAB 
-                    buttonColor="red"
-                    iconTextColor="#FFFFFF"
-                    onClickAction={this.mapToggle.bind(this)}
-                    visible={true}
-                    iconTextComponent={<Icon name="map"/>} />
-                </View>}
-
-                {this.state.mapVisible && 
-                <View style={{position:'absolute', left:90, top:135}}>
-                    <FAB 
-                        buttonColor="red"
-                        iconTextColor="#FFFFFF"
-                        onClickAction={this.mapToggle.bind(this)}
-                        visible={true}
-                        iconTextComponent={<Icon name="list"/>} />
-                </View>}
                 <View style={{bottom: 0, right: 0, position: 'absolute'}}>
                     <FAB 
                         buttonColor="blue"
@@ -274,6 +259,8 @@ export class MapScreen extends React.Component {
 
     mapToggle() {
         this.setState({mapVisible: !this.state.mapVisible});
+        global.mapVisible = !global.mapVisible; 
+        console.log(global.mapVisible)
     }
 }
 

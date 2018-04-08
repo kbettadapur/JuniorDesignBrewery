@@ -39,13 +39,15 @@ export class YourReviewsScreen extends React.Component {
         }
         firebaseApp.database().ref("Reviews").on('value', (snapshot) => {
             this.state.reviews = [];
-            var keys = Object.keys(snapshot.val());
-            keys.forEach((key) => {
-                if(snapshot.val()[key].userId === firebaseApp.auth().currentUser.uid) {
-                    this.state.reviews.push(snapshot.val()[key]);
-                }
-            });
-            this.setState({reviews: this.state.reviews});
+            if(snapshot.val() != null) {
+                var keys = Object.keys(snapshot.val());
+                keys.forEach((key) => {
+                    if(snapshot.val()[key].userId === firebaseApp.auth().currentUser.uid) {
+                        this.state.reviews.push(snapshot.val()[key]);
+                    }
+                });
+                this.setState({reviews: this.state.reviews});
+            }
         });
     }
 
