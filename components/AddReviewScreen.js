@@ -281,7 +281,51 @@ export class AddReviewScreen extends React.Component {
             this.state.revId = this.newGuid();
         console.log(this.state.revId)
         }
-        firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid).on("value", (snapshot) => {
+       
+        users_ref = firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid);
+        
+        users_ref.on("value", (snapshot) => {
+            users_ref.off("value");
+
+            reviews_list = [];
+            if (snapshot.val().reviews != null) {
+                var keys = Object.keys(snapshot.val().reviews);
+                keys.forEach((key) => {
+                    reviews_list.push(snapshot.val().reviews[key]);
+                });
+            }
+
+            reviews_list.push({
+                userId: firebaseApp.auth().currentUser.uid,
+                username: snapshot.val().username,
+                breweryId: this.state.breweryId,
+                hasChangingTables: this.state.hasChangingTables,
+                hasFamilyRestroom: this.state.hasFamilyRestroom,
+                isWheelchairAccessible: this.state.isWheelchairAccessible,
+                seatingArrangements: this.state.seatingArrangements,
+                kidFriendly: this.state.kidFriendly,
+                safety: this.state.safety,
+                petFriendly: this.state.petFriendly,
+                foodOptionDiversity: this.state.foodOptionDiversity,
+                nonAlcoholicOptions: this.state.nonAlcoholicOptions,
+                soundLevel: this.state.soundLevel,
+                isSmokingPermitted: this.state.isSmokingPermitted,
+                strollerKids: this.state.strollerKids,
+                kThroughSix: this.state.kThroughSix,
+                teenagers: this.state.teenagers,
+                overallRating: this.state.overallRating,
+                revId: this.state.revId,
+                breweryName: this.state.breweryName,
+                photo: this.state.photo,
+                latitude: this.state.lat,
+                longitude: this.state.long,
+                comments: this.state.comments,
+            });
+
+            users_ref.update({
+                reviews: reviews_list
+            });
+
             firebaseApp.database().ref("Reviews/" + this.state.revId).set({
             userId: firebaseApp.auth().currentUser.uid,
             username: snapshot.val().username,

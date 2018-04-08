@@ -20,27 +20,34 @@
 */
 
 import React from 'react';
-import { StyleSheet, View, Text, Image, TouchableHighlight } from 'react-native';
-import { Footer, Container } from 'native-base';
+import { StyleSheet, View, Text, Image, TouchableHighlight, TextInput } from 'react-native';
+import { Footer, Container, Icon } from 'native-base';
 import firebaseApp from '../firebase';
 import { ImagePicker } from 'expo';
+import FAB from 'react-native-fab';
 console.disableYellowBox = true;
 
 export class ProfileScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            edit_mode: false,
             user: null,
+            old_vals: null,
             image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Default_profile_picture_%28male%29_on_Facebook.jpg/600px-Default_profile_picture_%28male%29_on_Facebook.jpg",
             imageBase64: null,
+            
         }
         id = firebaseApp.auth().currentUser.uid;
         firebaseApp.database().ref("/Users/" + id).once('value').then((snapshot) => {
-            this.setState({user: snapshot.val()});
+            this.state.user = snapshot.val();
+            this.state.old_vals = Object.assign({}, this.state.user);
+            this.setState({});
         });
     }
 
     render() {
+
         if (this.state.user == null) {
             return (
                 <Container>
@@ -52,31 +59,118 @@ export class ProfileScreen extends React.Component {
                 </Footer>
                 </Container>
             );
+        } else if (!this.state.edit_mode) {
+            return (
+                <Container style={{width: '100%'}}>
+                    {this.renderContent()}
+                </Container>
+            )
         } else {
             return (
-                <Container>
-                    <View style={{flex: 1, backgroundColor: '#fff'}}>
-                        <View style={{alignItems: 'center', marginTop: 30}}>
-                            <TouchableHighlight onPress={this.pickImage.bind(this)}>
-                                <View>
-                                        <Image source={{ uri:  'data:image/png;base64,' + this.state.user.profile_picture}} style={styles.image_style} />
-                                </View>
-                            </TouchableHighlight>
-                            
-                            <Text style={styles.title_style}>{this.state.user.username}</Text>
-                        </View>
-                        <View style={{width: '100%', padding: 10}}>
-                            <Text style={[styles.subtitle_style, {marginTop: 10}]}>Bio</Text>
-                            <Text>{this.state.user.description}</Text>
-                        </View>
+                <Container style={{width: '100%'}}>
+                    {this.renderEditContent()}
+                </Container>
+            )
+        }
+    }
+
+    renderContent() {
+        return (
+            <Container>
+                <View style={{flex: 1, backgroundColor: '#fff'}}>
+                    <View style={{alignItems: 'center', marginTop: 30}}>
+                        <TouchableHighlight>
+                            <View>
+                                    <Image source={{ uri:  'data:image/png;base64,' + this.state.user.profile_picture}} style={styles.image_style} />
+                            </View>
+                        </TouchableHighlight>
+                        
+                        <Text style={styles.title_style}>{this.state.user.username}</Text>
+                    </View>
+                    <View style={{width: '100%', padding: 10}}>
+                        <Text style={[styles.subtitle_style, {marginTop: 10}]}>Bio</Text>
+                        <Text>{this.state.user.description}</Text>
+                    </View>
+                    <View style={{width: '100%', padding: 10}}>
+                        <Text style={[styles.subtitle_style, {marginTop: 10}]}>Age: {this.state.user.age == -1 ? "None" : this.state.user.age}</Text>
+                    </View>
+                    <View style={{width: '100%', padding: 10}}>
+                        <Text style={[styles.subtitle_style, {marginTop: 10}]}>Number of kids: {this.state.user.num_children}</Text>
                     </View>
 
-                    <Footer style={styles.footer_style}>
-                        {this.props.renderTabs()}
-                    </Footer>
-                </Container>
-            );
-        }
+                    <FAB 
+                        buttonColor="green"
+                        iconTextColor="#FFFFFF"
+                        onClickAction={() => this.setState({edit_mode: true})}
+                        visible={true}
+                        iconTextComponent={<Icon name="md-create"/>} />
+                </View>
+
+                <Footer style={styles.footer_style}>
+                    {this.props.renderTabs()}
+                </Footer>
+            </Container>
+        );
+    }
+
+    renderEditContent() {
+        return (
+            <Container>
+                <View style={{flex: 1, backgroundColor: '#fff'}}>
+                    <View style={{alignItems: 'center', marginTop: 30}}>
+                        <TouchableHighlight onPress={this.pickImage.bind(this)}>
+                            <View>
+                                    <Image source={{ uri:  'data:image/png;base64,' + this.state.user.profile_picture}} style={styles.image_style} />
+                            </View>
+                        </TouchableHighlight>
+                        
+                        <Text style={styles.title_style}>{this.state.user.username}</Text>
+                    </View>
+                    <View style={{width: '100%', padding: 10}}>
+                        <Text style={[styles.subtitle_style, {marginTop: 10}]}>Bio</Text>
+                        <TextInput value={this.state.user.description} onChangeText={(description) => {this.state.user.description = description; this.setState({user: this.state.user})}}></TextInput>
+                    </View>
+                    <View style={{width: '100%', padding: 10}}>
+                        <Text style={[styles.subtitle_style, {marginTop: 10}]}>Age: </Text>
+                        <TextInput keyboardType='numeric' value={this.state.user.age + ""} onChangeText={(age) => {this.state.user.age = age; this.setState({user: this.state.user})}}></TextInput>
+                    </View>
+                    <View style={{width: '100%', padding: 10}}>
+                        <Text style={[styles.subtitle_style, {marginTop: 10}]}>Number of kids: </Text>
+                        <TextInput keyboardType='numeric' value={this.state.user.num_children + ""} onChangeText={(num_children) => {this.state.user.num_children = num_children; this.setState({user: this.state.user})}}></TextInput>
+                    </View>
+                    <Container style={{marginBottom: 50}}>
+                    <FAB 
+                        buttonColor="green"
+                        iconTextColor="#FFFFFF"
+                        onClickAction={this.confirmEdits.bind(this)}
+                        visible={true}
+                        iconTextComponent={<Icon name="md-checkmark"/>} />
+                    </Container>
+                    <Container>
+                    <FAB 
+                        buttonColor="red"
+                        iconTextColor="#FFFFFF"
+                        onClickAction={() => this.setState({user: Object.assign({}, this.state.old_vals), edit_mode: false})}
+                        visible={true}
+                        iconTextComponent={<Icon name="md-close"/>} />
+                    </Container>
+
+
+
+                </View>
+
+                <Footer style={styles.footer_style}>
+                    {this.props.renderTabs()}
+                </Footer>
+            </Container>
+        );
+    }
+
+    confirmEdits() {
+        this.state.edit_mode = false;
+        this.state.old_vals = Object.assign({}, this.state.user);
+        firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid).set(this.state.user);
+        this.setState({});
     }
 
     async pickImage() {
