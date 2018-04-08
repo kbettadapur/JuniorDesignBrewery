@@ -19,7 +19,7 @@
 * SOFTWARE IS DISCLAIMED.
 */
 import React from 'react';
-import { StyleSheet, View, Text, TextInput, Button, Image, ScrollView } from 'react-native';
+import { StyleSheet, View, Text, TextInput, Button, Image, ScrollView, TouchableOpacity } from 'react-native';
 import { Footer, Container, Icon, List, ListItem } from 'native-base';
 import _ from 'lodash';
 import Brewery from '../models/Brewery';
@@ -41,11 +41,19 @@ export class ReviewScreen extends React.Component {
         super(props);
         this.state = {
             review: this.props.navigation.state.params.review,
+            photo: null,
+            didMount: false,
         }
-        console.log(this.state.review.userId)
-        console.log(firebaseApp.auth().currentUser.uid)
+        firebaseApp.database().ref("Users/" + this.state.review.userId + "/profile_picture").on('value', (snapshot) => {
+            if(snapshot.val() != null) {
+                this.state.photo = snapshot.val();
+                this.setState({photo: this.state.photo});
+            }
+        });
     }
-
+    componentDidMount() {
+        this.state.didMount = true;
+    }
     render() {
         return (
             <View style={{height: '100%'}}>
@@ -58,7 +66,14 @@ export class ReviewScreen extends React.Component {
 
                 <Text style={styles.title}>{this.state.review.breweryName}</Text>
                 {<View>
-                <Text style={styles.radio_final_title}>Username: {this.state.review.username}</Text>
+                <TouchableOpacity onPress={() => this.props.navigation.navigate("ProfileView", {id: this.state.review.userId})}>
+                    <View style={{display: 'flex', flexDirection: 'row'}}>
+                        {this.state.photo != null && <Image style={styles.image_style} source={{uri: 'data:image/png;base64,' + this.state.photo}}/> }
+                        <Text style={{flex: 4}}>
+                        {this.state.review.username}
+                        </Text>
+                    </View>
+                </TouchableOpacity>
                 <Text style={styles.radio_final_title}>Overall Rating?</Text>
                 <StarRating
                     maxStars={5}
@@ -232,5 +247,10 @@ const styles = StyleSheet.create({
   },
   radio_title: {
     marginTop: 5,
-  }
+  },
+  image_style: {
+    borderRadius: 100,
+    width: 50,
+    height: 50,
+  },
 });

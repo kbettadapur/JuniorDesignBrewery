@@ -27,15 +27,14 @@ import { ImagePicker } from 'expo';
 console.disableYellowBox = true;
 
 export class ProfileScreen extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             user: null,
             image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Default_profile_picture_%28male%29_on_Facebook.jpg/600px-Default_profile_picture_%28male%29_on_Facebook.jpg",
             imageBase64: null,
         }
         id = firebaseApp.auth().currentUser.uid;
-        console.log("ID: " + id);
         firebaseApp.database().ref("/Users/" + id).once('value').then((snapshot) => {
             this.setState({user: snapshot.val()});
         });
