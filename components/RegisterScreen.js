@@ -121,13 +121,18 @@ export class RegisterScreen extends React.Component {
           email: this.state.email.trim(),
           description: "None",
           profile_picture: default_profile_picture,
+          age: -1,
+          num_children: 0,
+          reviews: [],
         });
 
         this.state.user = {
           username: this.state.username.trim(),
           email: this.state.email.trim(),
           description: "None",
-          profile_picture: default_profile_picture
+          profile_picture: default_profile_picture,
+          age: -1,
+          num_children: 0,
         }
         this.state.registerClicked = false;
         this.setState({});

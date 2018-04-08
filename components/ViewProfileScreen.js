@@ -31,6 +31,7 @@ export class ViewProfileScreen extends React.Component {
         super(props);
         this.state = {
             user: null,
+            reviews: null,
             image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Default_profile_picture_%28male%29_on_Facebook.jpg/600px-Default_profile_picture_%28male%29_on_Facebook.jpg",
             imageBase64: null,
         }
@@ -39,6 +40,8 @@ export class ViewProfileScreen extends React.Component {
         firebaseApp.database().ref("/Users/" + id).once('value').then((snapshot) => {
             this.setState({user: snapshot.val()});
         });
+
+        
     }
 
     render() {
@@ -58,9 +61,39 @@ export class ViewProfileScreen extends React.Component {
                         <Text style={[styles.subtitle_style, {marginTop: 10}]}>Bio</Text>
                         <Text>{this.state.user.description}</Text>
                     </View>
+                    <View style={{width: '100%', padding: 10}}>
+                        <Text style={[styles.subtitle_style, {marginTop: 10}]}>Age: {this.state.user.age == -1 ? "None" : this.state.user.age}</Text>
+                    </View>
+                    <View style={{width: '100%', padding: 10}}>
+                        <Text style={[styles.subtitle_style, {marginTop: 10}]}>Number of kids: {this.state.user.num_children}</Text>
+                    </View>
+                    <List>
+                        {this.renderReviewsList()}
+                    </List>
                 </View>
             </Container>
         );
+    }
+
+    renderReviewsList() {
+        /*return _.map(this.state., (fav) => {
+            return (
+                <ListItem key={this.hashCode(fav.id)}>
+                    <TouchableOpacity 
+                        onPress={() => this.props.navigation.navigate("Brewery", {navigation: this.props.navigation, 
+                                                                        brewery: {name: fav.name, placeId: fav.id, photo: fav.photo, latitude: fav.latitude, longitude: fav.longitude},
+                                                                        })}>
+                        <Text style={{width: '100%'}}>{fav.name}</Text>
+                        <Text style={{width:'100%', color:'gray', fontSize:11}}>
+                            Distance:   
+                                {(this.state.location.lat || this.state.location.lng) 
+                                ? ' ' + Number(geolib.getDistance({latitude: this.state.location.lat, longitude: this.state.location.lng}, 
+                                {latitude: fav.latitude, longitude: fav.longitude}) * 0.000621371).toFixed(2) + ' miles': ' location not turned on'}
+                        </Text>                        
+                        </TouchableOpacity>
+                </ListItem>
+            );
+        });*/
     }
 }
 
