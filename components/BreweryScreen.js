@@ -50,6 +50,7 @@ export class BreweryScreen extends React.Component {
         this.state = {
             brewery: this.props.navigation.state.params.brewery,
             reviews: null,
+            pictures: null,
             revsAvg: new Review(),
             rev: null,
             favorited: false,
@@ -68,19 +69,27 @@ export class BreweryScreen extends React.Component {
         });
         firebaseApp.database().ref("Reviews").on('value', (snapshot) => {
             this.state.reviews = [];
+            this.state.pictures = [];
             if (snapshot.val() != null) {
-            var keys = Object.keys(snapshot.val());
-                keys.forEach((key) => {
-                    if (snapshot.val()[key].breweryId == this.state.brewery.placeId) {
-                        this.state.reviews.push(snapshot.val()[key]);
-                        if(snapshot.val()[key].userId === firebaseApp.auth().currentUser.uid) {
-                        this.state.rev = snapshot.val()[key];
+                var keys = Object.keys(snapshot.val());
+                    keys.forEach((key) => {
+                        if (snapshot.val()[key].breweryId == this.state.brewery.placeId) {
+                            this.state.reviews.push(snapshot.val()[key]);
+                            if(snapshot.val()[key].userId === firebaseApp.auth().currentUser.uid) {
+                                this.state.rev = snapshot.val()[key];
+                            }
+
+                            firebaseApp.database().ref("Users/" + snapshot.val()[key].userId).on('value', (data) => {
+                                this.state.pictures.push(data.val().profile_picture);
+                                if (this.state.isMounted)
+                                    this.setState({});
+                            });
+                            // while (this.state.pictures.length != this.state.reviews.length) { }
                         }
-                    }
-                });
-            }
+                    });
+                }
             if(this.state.isMounted)
-                this.setState({reviews: this.state.reviews});
+                this.setState({});
         });
     }
     componentDidMount() {
@@ -297,30 +306,31 @@ export class BreweryScreen extends React.Component {
     }
 
     renderReviewsList() {
-        if (this.state.reviews != null && this.state.reviews.length > 0) {
-        return _.map(this.state.reviews, (rev) => {
-                return (
-                    <ListItem key={new Date().getTime()}>
-                        <TouchableOpacity style={{display: 'flex', flexDirection: 'row'}} onPress={() => this.props.navigation.navigate("ReviewView", {navigation: this.props.navigation, review: rev})}>
-                            {/*<View style={{flex: 1, paddingTop: 7, paddingRight: 10}}>
-                                <Image style={{height: 50, width: 50, borderRadius: 100}} source={{uri:'data:image/png;base64,' + this.state.user.profile_picture}}></Image>
-                            </View>*/}
-                            <View style={{flex: 5}}>
-                                <Text style={styles.list_item_title}>{rev.username}</Text>
-                                <Text style={{width: '100%'}}>"{rev.comments}"</Text>
-                                <StarRating
-                                    disabled={true}
-                                    maxStars={5}
-                                    rating={rev.overallRating}
-                                    fullStarColor={'#eaaa00'}
-                                    starSize={20}
-                                    containerStyle={{width: '25%'}}
-                                />
-                            </View>
-                        </TouchableOpacity>
-                    </ListItem>
-                )
-            })  
+        if (this.state.reviews != null && this.state.reviews.length > 0 && this.state.pictures.length == this.state.reviews.length) {
+            counter = 0;
+            return _.map(this.state.reviews, (rev) => {
+                    return (
+                        <ListItem key={new Date().getTime()}>
+                            <TouchableOpacity style={{display: 'flex', flexDirection: 'row'}} onPress={() => this.props.navigation.navigate("ReviewView", {navigation: this.props.navigation, review: rev})}>
+                                <View style={{flex: 1, paddingTop: 7, paddingRight: 10}}>
+                                    <Image style={{height: 50, width: 50, borderRadius: 100}} source={{uri:'data:image/png;base64,' + this.state.pictures[counter++]}}></Image>
+                                </View>
+                                <View style={{flex: 5}}>
+                                    <Text style={styles.list_item_title}>{rev.username}</Text>
+                                    <Text style={{width: '100%'}}>"{rev.comments}"</Text>
+                                    <StarRating
+                                        disabled={true}
+                                        maxStars={5}
+                                        rating={rev.overallRating}
+                                        fullStarColor={'#eaaa00'}
+                                        starSize={20}
+                                        containerStyle={{width: '25%'}}
+                                    />
+                                </View>
+                            </TouchableOpacity>
+                        </ListItem>
+                    );
+                }); 
         } else if(this.state.reviews != null && !this.state.spinnerVisible) {
             return (
                 <Text style={{textAlign: 'center'}}>No Reviews Yet!</Text>
