@@ -55,9 +55,9 @@ export class FavoritesScreen extends React.Component {
                 keys.forEach((key) => {
                     this.state.favorites.push(snapshot.val()[key])
                 });
+            }
             if(this.state.isMounted)
                 this.setState({favorites: this.state.favorites});
-            }
         });
     }
 
