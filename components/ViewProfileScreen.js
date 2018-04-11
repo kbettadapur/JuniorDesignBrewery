@@ -38,7 +38,7 @@ export class ViewProfileScreen extends React.Component {
         }
         id = this.props.navigation.state.params.id;
         console.log("ID: " + id);
-        firebaseApp.database().ref("/Users/" + id).once('value').then((snapshot) => {
+        firebaseApp.database().ref("/Users/" + id).once('value', (snapshot) => {
             this.setState({user: snapshot.val()});
             if (this.state.user.reviews.length > 3) {
                 this.state.user.reviews = this.state.user.reviews.slice(0,3);
