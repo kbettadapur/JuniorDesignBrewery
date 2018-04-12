@@ -32,9 +32,9 @@ import firebaseApp from '../firebase';
 
 
 const MAP_TAB = "Brewery Map";
-const FAVORITES_TAB = "Favorites";
+const FAVORITES_TAB = "Your Favorites";
 const YOUR_REVIEWS_TAB = "Your Reviews";
-const PROFILE_TAB = "Profile";
+const PROFILE_TAB = "Your Profile";
 
 export class MainScreen extends React.Component {
 
@@ -46,11 +46,12 @@ export class MainScreen extends React.Component {
         headerLeft: null,
         headerRight: 
             (<View style={{width:80, display:'flex', flexDirection:'row'}}>
-                {navigation.state.params.tab === MAP_TAB && 
+
                 <TouchableOpacity style={{flex: 1}}
                     onPress={() => {global.mapVisible = !global.mapVisible; navigation.state.params.parent.setState({}); navigation.setParams({});}}>                 
-                <Icon name={(global.mapVisible) ? "list" : "md-map"} style={{color: 'white'}}/>
-                </TouchableOpacity> }
+                <Icon name={(global.mapVisible) ? "list" : "md-map"} style={{color: [(navigation.state.params.tab == MAP_TAB) ? 'white' : '#2196F3']}}/>
+                </TouchableOpacity>
+
                 <View style={{flex:1, marginRight: 15}}>
                 {(navigation.state.params.tab !== PROFILE_TAB && navigation.state.params.tab !== FAVORITES_TAB) 
                         && <ModalDropdown dropdownStyle = {{flexDirection:'row', height:127}} 

@@ -49,18 +49,6 @@ export class ProfileScreen extends React.Component {
     }
 
     render() {
-
-        // if (this.state.user == null) {
-        //     return (
-        //         <Container>
-        //         <View style={{flex: 1}}>
-        //             <Text>Profile Screen</Text>
-        //         </View>
-        //         <Footer style={{width: '100%'}}>
-        //             {this.props.renderTabs()}
-        //         </Footer>
-        //         </Container>
-        //     );
          if (!this.state.edit_mode) {
             return (
                 <Container style={{width: '100%'}}>
@@ -93,7 +81,7 @@ export class ProfileScreen extends React.Component {
                         </TouchableHighlight>
                         <Text style={styles.title_style}>{this.state.user.username}</Text>
                         {this.state.user.age > 0 && <Text style={[styles.subtitle_style]}>{this.state.user.age == -1 ? "" : this.state.user.age} Years Old</Text>}
-                        <Text style={[styles.subtitle_style]}>Number of kids: {this.state.user.num_children}</Text>
+                        <Text style={[styles.subtitle_style]}>Kids: {this.state.user.num_children}</Text>
                         <View style={{marginBottom: 10}}/>
                         </LinearGradient>
                     </View>
