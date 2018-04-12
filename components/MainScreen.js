@@ -43,8 +43,24 @@ export class MainScreen extends React.Component {
         headerStyle:  { backgroundColor: "#2196F3", },
         headerTitleStyle: { color: "#FFFFFF" },
         headerTintColor: "white",
-         headerRight: 
-            (<View style={{width:80, display:'flex', flexDirection:'row'}}>
+        headerLeft: (
+            <TouchableOpacity onPress={() => {                
+                Alert.alert(
+                'Log Out',
+                'Are you sure you want to log out?',
+                [
+                {text: 'No', style: 'cancel'},
+                {text: 'Yes', onPress: () => {navigation.state.params.parent.signOutUser()}},
+                ],
+                { cancelable: false }
+            ); }}>
+                <View style={{marginLeft: 15}}>
+                    <Icon name='md-arrow-back' style={{color:'white'}}/>
+                </View>
+            </TouchableOpacity>
+        ),
+         headerRight: (
+            <View style={{width:80, display:'flex', flexDirection:'row'}}>
 
                 <TouchableOpacity style={{flex: 1}}
                     onPress={() => {global.mapVisible = !global.mapVisible; navigation.state.params.parent.setState({}); navigation.setParams({});}}>                 
