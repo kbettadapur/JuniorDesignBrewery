@@ -133,7 +133,7 @@ export class MainScreen extends React.Component {
   signOutUser = async () => {
     try {
         await firebaseApp.auth().signOut();
-        this.props.navigation.navigate("Login");
+        this.props.navigation.dispatch(NavigationActions.back());
     } catch (e) {
         console.log(e);
     }
