@@ -56,6 +56,14 @@ export class BreweryScreen extends React.Component {
             favorited: false,
             isMounted: false,
         }
+    }
+    componentDidMount() {
+        // set handler method with setParams
+        this.props.navigation.setParams({ 
+          setFavorite: this._setFavorite.bind(this),
+          fave: this.state.favorited,  
+        });
+        this.state.isMounted = true;
         firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid + "/Favorites/").on('value', (snapshot) => {
             if(snapshot.val() != null) {
                 var keys = Object.keys(snapshot.val());
@@ -91,14 +99,6 @@ export class BreweryScreen extends React.Component {
             if(this.state.isMounted)
                 this.setState({});
         });
-    }
-    componentDidMount() {
-        // set handler method with setParams
-        this.props.navigation.setParams({ 
-          setFavorite: this._setFavorite.bind(this),
-          fave: this.state.favorited,  
-        });
-        this.state.isMounted = true;
     }
     _setFavorite() {
         if(this.state.isMounted) {

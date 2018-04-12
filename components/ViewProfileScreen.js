@@ -49,6 +49,7 @@ export class ViewProfileScreen extends React.Component {
         console.log("ID: " + id);
         firebaseApp.database().ref("/Users/" + id).once('value').then((snapshot) => {
             this.setState({user: snapshot.val()});
+            console.log(this.state.user.reviews.length);
             if (this.state.user.reviews.length > 3) {
                 this.state.user.reviews = this.state.user.reviews.slice(0,3);
                 this.setState({});
@@ -104,7 +105,10 @@ export class ViewProfileScreen extends React.Component {
         return _.map(this.state.user.reviews, (rev) => {
             return (
                 <ListItem key={this.hashCode(rev.revId)}>
-                    <TouchableOpacity> 
+                    <TouchableOpacity 
+                        onPress={() => this.props.navigation.navigate("Brewery", {navigation: this.props.navigation, 
+                            brewery: {name: rev.breweryName, placeId: rev.breweryId, photo: rev.photo, latitude: rev.latitude, longitude: rev.longitude},
+                            })}> 
                         <Text style={{width: '100%'}}>{rev.breweryName}</Text>
                         <StarRating
                             disabled={true}
