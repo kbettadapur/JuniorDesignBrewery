@@ -42,6 +42,8 @@ export class MapScreen extends React.Component {
             breweries: [],
             lat: 0,
             lng: 0,
+            ulat: 0,
+            ulong: 0,
             mapVisible: true,
         }
         if(global.mapVisible == null) {
@@ -50,16 +52,12 @@ export class MapScreen extends React.Component {
         if (global.breweries == null) {
             global.breweries = [];
         }
-        // this._getLocationAsync().then(() => {
-        //     this.searchLocalBreweries();
-        // }) 
         if (global.breweries.length == 0) {
             this.searchLocalBreweries();
         }
     }
 
     componentDidMount() {
-        console.log("HERE")
         this.setState({breweries: global.breweries, lat: global.lat, lng: global.lng});
     }
     
@@ -72,13 +70,14 @@ export class MapScreen extends React.Component {
         let location = await Location.getCurrentPositionAsync({});
         this.state.lat = location.coords.latitude;
         this.state.lng = location.coords.longitude;
+        this.state.ulat = location.coords.latitude;
+        this.state.ulng = location.coords.longitude;        
         global.lat = location.coords.latitude;
         global.lng = location.coords.longitude;
     }
     
 
     render() {
-        console.log("in render");
         return (
             <Container>
             <View style={{flex: 1, backgroundColor:'white'}}>
@@ -144,7 +143,6 @@ export class MapScreen extends React.Component {
         if (this.state.breweries) {
             return (
                 _.map(this.state.breweries, (val) => {
-                   // console.log(val);
                     return (
                         <MapView.Marker
                             coordinate={{latitude: val.latitude, longitude: val.longitude}}
@@ -241,8 +239,8 @@ export class MapScreen extends React.Component {
         }
         else if(this.props.sort === "Distance") {
             this.state.breweries.sort(function(a,b) {
-                var x = t.state.lat;
-                var y = t.state.lng;
+                var x = t.state.ulat;
+                var y = t.state.ulng;
                 var dist1 = geolib.getDistance({latitude: x, longitude: y}, {latitude: a.latitude, longitude: a.longitude});
                 var dist2 = geolib.getDistance({latitude: x, longitude: y}, {latitude: b.latitude, longitude: b.longitude});
                 return (dist1 < dist2) ? -1 : (dist1 > dist2) ? 1 : 0;               
@@ -265,7 +263,7 @@ export class MapScreen extends React.Component {
                     <Text style={{width:'100%', color:'gray', fontSize:11}}>
                         Distance:   
                             {(this.state.lat || this.state.lng) 
-                            ? ' ' + Number(geolib.getDistance({latitude: this.state.lat, longitude: this.state.lng}, 
+                            ? ' ' + Number(geolib.getDistance({latitude: this.state.ulat, longitude: this.state.ulng}, 
                             {latitude: b.latitude, longitude: b.longitude}) * 0.000621371).toFixed(2) + ' miles': ' location not turned on'}
                     </Text>
                     </View>    

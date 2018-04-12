@@ -36,6 +36,7 @@ export class YourReviewsScreen extends React.Component {
                 lat: 0,
                 lng: 0,
             },
+            didMount: false,
         }
         firebaseApp.database().ref("Reviews").on('value', (snapshot) => {
             this.state.reviews = [];
@@ -46,13 +47,15 @@ export class YourReviewsScreen extends React.Component {
                         this.state.reviews.push(snapshot.val()[key]);
                     }
                 });
-                this.setState({reviews: this.state.reviews});
+                if(this.state.didMount)
+                    this.setState({reviews: this.state.reviews});
             }
         });
     }
 
     componentDidMount() {
         this._getLocationAsync()
+        this.state.didMount = true;
     }
     
     _getLocationAsync = async () => {
