@@ -106,9 +106,7 @@ export class ViewProfileScreen extends React.Component {
             return (
                 <ListItem key={this.hashCode(rev.revId)}>
                     <TouchableOpacity 
-                        onPress={() => this.props.navigation.navigate("Brewery", {navigation: this.props.navigation, 
-                            brewery: {name: rev.breweryName, placeId: rev.breweryId, photo: rev.photo, latitude: rev.latitude, longitude: rev.longitude},
-                            })}> 
+                        onPress={() => this.props.navigation.navigate("ReviewView", {navigation: this.props.navigation, review: rev})}> 
                         <Text style={{width: '100%'}}>{rev.breweryName}</Text>
                         <StarRating
                             disabled={true}
