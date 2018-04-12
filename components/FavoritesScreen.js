@@ -21,7 +21,7 @@
 
 import React from 'react';
 import _ from 'lodash';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { Footer, Container, List, ListItem } from 'native-base';
 import firebaseApp from '../firebase';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -100,11 +100,11 @@ export class FavoritesScreen extends React.Component {
 
     renderContent() {
         return (
-            <List style={styles.listStyle}>
+            <ScrollView>
                 <List style={styles.listStyle}>
                     {this.renderFavoritesList()}
                 </List>
-            </List>
+            </ScrollView>
         );
     }
 

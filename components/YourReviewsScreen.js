@@ -20,7 +20,7 @@
 */
 import React from 'react';
 import _ from 'lodash';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { Footer, Container, List, ListItem } from 'native-base';
 import firebaseApp from '../firebase';
 import StarRating from 'react-native-star-rating';
@@ -87,11 +87,11 @@ export class YourReviewsScreen extends React.Component {
 
     renderContent() {
         return (
-            <List style={styles.listStyle}>
+            <ScrollView>
                 <List style={styles.listStyle}>
                     {this.renderFavoritesList()}
                 </List>
-            </List>
+            </ScrollView>
         );
     }
 
