@@ -71,7 +71,7 @@ export class MapScreen extends React.Component {
         this.state.lat = location.coords.latitude;
         this.state.lng = location.coords.longitude;
         this.state.ulat = location.coords.latitude;
-        this.state.ulng = location.coords.longitude;        
+        this.state.ulong = location.coords.longitude;        
         global.lat = location.coords.latitude;
         global.lng = location.coords.longitude;
     }
@@ -263,8 +263,8 @@ export class MapScreen extends React.Component {
                     <Text style={{width:'100%', color:'gray', fontSize:11}}>
                         Distance:   
                             {(this.state.lat || this.state.lng) 
-                            ? ' ' + Number(geolib.getDistance({latitude: this.state.ulat, longitude: this.state.ulng}, 
-                            {latitude: b.latitude, longitude: b.longitude}) * 0.000621371).toFixed(2) + ' miles': ' location not turned on'}
+                            ? ' ' + Number(geolib.getDistance({latitude: this.state.ulat, longitude: this.state.ulong}, 
+                            {latitude: b.latitude, longitude: b.longitude}) * 0.000621371).toFixed(2) + ' miles': ' no location data'}
                     </Text>
                     </View>    
                 </ListItem>
