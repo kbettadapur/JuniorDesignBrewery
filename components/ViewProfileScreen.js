@@ -23,11 +23,20 @@ import React from 'react';
 import { StyleSheet, View, Text, Image, TouchableHighlight, TouchableOpacity, ScrollView } from 'react-native';
 import { Footer, Container, List, ListItem } from 'native-base';
 import firebaseApp from '../firebase';
-import { ImagePicker } from 'expo';
+import { ImagePicker, LinearGradient } from 'expo';
+import Spinner from 'react-native-loading-spinner-overlay';
 import StarRating from 'react-native-star-rating';
 console.disableYellowBox = true;
 
 export class ViewProfileScreen extends React.Component {
+
+    static navigationOptions = ({ navigation }) => ({
+        title: "Profile",
+        headerStyle:  { backgroundColor: "#2196F3", },
+        headerTitleStyle: { color: "#FFFFFF" },
+        headerTintColor: "white", 
+    });
+
     constructor(props) {
         super(props);
         this.state = {
@@ -38,51 +47,49 @@ export class ViewProfileScreen extends React.Component {
         }
         id = this.props.navigation.state.params.id;
         console.log("ID: " + id);
-        firebaseApp.database().ref("/Users/" + id).once('value', (snapshot) => {
+        firebaseApp.database().ref("/Users/" + id).on('value', (snapshot) => {
             this.setState({user: snapshot.val()});
-            if (this.state.user.reviews.length > 3) {
-                this.state.user.reviews = this.state.user.reviews.slice(0,3);
-                this.setState({});
-            }
+            // if (this.state.user.reviews.length > 3) {
+            //     this.state.user.reviews = this.state.user.reviews.slice(0,3);
+            //     this.setState({});
+            // }
+            this.setState({});
         });
 
         
     }
 
     render() {
-        if(this.state.user == null) {
-            return (<Text>Profile Screen</Text>)
-        } 
         return (
             <Container>
-                <ScrollView>
-                <View style={{flex: 1, backgroundColor: '#fff'}}>
-                    <View style={{alignItems: 'center', marginTop: 30}}>
+                <Spinner overlayColor={"rgba(0, 0, 0, 0.3)"} 
+                color={"rgb(66,137,244)"}
+                visible={(this.state.user == null)} 
+                textStyle={{color: '#000000'}} />
+                {this.state.user != null && <View style={{flex: 1, backgroundColor: '#fff'}}>
+                    <View style={{alignItems: 'center'}}>
+                        <LinearGradient colors={['#0066cc', '#2196F3']} style={{width:'100%', alignItems:'center'}}>
+                        <TouchableHighlight>
                             <View>
                                     <Image source={{ uri:  'data:image/png;base64,' + this.state.user.profile_picture}} style={styles.image_style} />
-                            </View>                        
+                            </View>
+                        </TouchableHighlight>
                         <Text style={styles.title_style}>{this.state.user.username}</Text>
+                        {this.state.user.age > 0 && <Text style={[styles.subtitle_style]}>{this.state.user.age == -1 ? "" : this.state.user.age} Years Old</Text>}
+                        <Text style={[styles.subtitle_style]}>Kids: {this.state.user.num_children}</Text>
+                        <View style={{marginBottom: 10}}/>
+                        </LinearGradient>
                     </View>
                     <View style={{width: '100%', padding: 10}}>
-                        <Text style={[styles.subtitle_style, {marginTop: 10}]}>Bio</Text>
-                        <Text>{this.state.user.description}</Text>
+                        <Text style={[styles.subtitle_style2]}>Bio</Text>
+                        <Text style={styles.subtitle_style3}>{this.state.user.description}</Text>
                     </View>
-                    <View style={{width: '100%', padding: 10}}>
-                        <Text style={[styles.subtitle_style, {marginTop: 10}]}>Age: {this.state.user.age == -1 ? "None" : this.state.user.age}</Text>
-                    </View>
-                    <View style={{width: '100%', padding: 10}}>
-                        <Text style={[styles.subtitle_style, {marginTop: 10}]}>Number of kids: {this.state.user.num_children}</Text>
-                    </View>
-                    <View style={{width: '100%', padding: 10}}>
-                        <Text style={[styles.subtitle_style, {marginTop: 10}]}>Reviews:</Text>
-                    </View>
-                        <List>
-                        {this.renderReviewsList()}
-                        </List>
-                    
-                </View>
-                </ScrollView>
-            </Container>
+                </View> }
+                {this.state.user == null && <View style={{flex:1}}/>}
+                {/* <List>
+                    {this.renderReviewsList()}
+                </List> */}
+            </Container>                       
         );
     }
 
@@ -122,30 +129,42 @@ export class ViewProfileScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-  },
-  image_style: {
-    borderRadius: 100,
-    width: 150,
-    height: 150
-  },
-  footer_style: {
-      width: '100%'
-  },
-  title_style: {
-      textAlign: 'center',
-      fontWeight: 'bold',
-      fontSize: 25
-  },
-  subtitle_style: {
-      fontSize: 18,
-      fontWeight: 'bold'
-  }
+    container: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+      },
+      image_style: {
+        borderRadius: 100,
+        width: 150,
+        height: 150,
+        marginTop: 20,
+      },
+      footer_style: {
+          width: '100%'
+      },
+      title_style: {
+          textAlign: 'center',
+          fontSize: 22,
+          fontWeight: 'bold',
+          color: 'rgba(255, 255, 255, 0.95)',
+      },
+      subtitle_style: {
+          fontSize: 15,
+          color: 'rgba(255, 255, 255, 0.95)',
+      },
+      subtitle_style2: {
+        fontSize: 17,
+        color: 'rgba(0, 0, 0, 1)',
+        fontWeight: 'bold',
+        marginTop: 10,
+      },
+      subtitle_style3: {
+        fontSize: 17,
+        color: 'rgba(0, 0, 0, 0.7)',
+      }
 })

@@ -32,9 +32,9 @@ import firebaseApp from '../firebase';
 
 
 const MAP_TAB = "Brewery Map";
-const FAVORITES_TAB = "Favorites";
+const FAVORITES_TAB = "Your Favorites";
 const YOUR_REVIEWS_TAB = "Your Reviews";
-const PROFILE_TAB = "Profile";
+const PROFILE_TAB = "Your Profile";
 
 export class MainScreen extends React.Component {
 
