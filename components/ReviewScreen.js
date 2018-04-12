@@ -66,34 +66,38 @@ export class ReviewScreen extends React.Component {
 
                 <Text style={styles.title}>{this.state.review.breweryName}</Text>
                 {<View>
-                <TouchableOpacity onPress={() => this.props.navigation.navigate("ProfileView", {id: this.state.review.userId})}>
-                    <View style={{display: 'flex', flexDirection: 'row'}}>
-                        {this.state.photo != null && <Image style={styles.image_style} source={{uri: 'data:image/png;base64,' + this.state.photo}}/> }
-                        <Text style={{flex: 4}}>
-                        {this.state.review.username}
-                        </Text>
+                <TouchableOpacity style={{display: 'flex', flexDirection: 'row'}} onPress={() => this.props.navigation.navigate("ProfileView", {id: this.state.review.userId})}>
+                    <View style={{flex: 1, paddingTop: 7, paddingRight: 10}}>
+                        <Image style={{height: 50, width: 50, borderRadius: 100}} 
+                            source={{uri: 'data:image/png;base64,' + this.state.photo}}>
+                        </Image>
+                    </View>
+                    <View style={{flex: 6, display:'flex'}}>
+                        <View style={{flex:2, marginTop: 10}}>
+                            <Text style={{fontWeight:'bold', fontSize: 15}}>{this.state.review.username}</Text>
+                        </View>
+                        <View style={{flex: 2}}>
+                        <StarRating
+                            disabled={true}
+                            maxStars={5}
+                            rating={this.state.review.overallRating}
+                            fullStarColor={'#eaaa00'}
+                            starSize={20}
+                            containerStyle={{width: '25%'}}
+                        />
+                        </View>
                     </View>
                 </TouchableOpacity>
-                <Text style={styles.radio_final_title}>Overall Rating?</Text>
-                <StarRating
-                    maxStars={5}
-                    disabled={true}
-                    rating={this.state.review.overallRating}
-                    fullStarColor={'#eaaa00'}
-                    disabled={true}
-                    starSize={20}
-                    containerStyle={{width: '25%'}}
-                />
                 <Text style={styles.radio_title}>
-                <Text>Enough changing tables?</Text>
+                <Text>Enough changing tables:</Text>
                 <Text style={{fontWeight:'bold'}}> {(this.state.review.hasChangingTables >= .5) ? 'Yes' : 'No'} </Text>
                 </Text>
                 <Text style={styles.radio_title}>
-                <Text>Family restroom available?</Text>
+                <Text>Family restroom availabality:</Text>
                 <Text style={{fontWeight:'bold'}}> {(this.state.review.hasFamilyRestroom >= .5) ? 'Yes' : 'No'}</Text>
                 </Text>
                 <Text style={styles.radio_title}>
-                <Text>Wheelchair accessible?</Text>
+                <Text>Wheelchair accessible:</Text>
                 <Text style={{fontWeight:'bold'}}> {(this.state.review.isWheelchairAccessible >= .5) ? 'Yes' : 'No'}</Text>   
                 </Text>              
                 <Text style={styles.radio_title}>Seating Arrangements?</Text>
