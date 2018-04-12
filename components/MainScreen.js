@@ -20,7 +20,7 @@
 */
 
 import React from 'react';
-import { TouchableOpacity, StyleSheet, Text, TextInput, View } from 'react-native';
+import { TouchableOpacity, StyleSheet, Text, TextInput, View, BackHandler, Alert } from 'react-native';
 import { MapView } from 'expo';
 import { FooterTab, Icon, Button, Footer, Container } from 'native-base';
 import { MapScreen } from './MapScreen';
@@ -42,9 +42,8 @@ export class MainScreen extends React.Component {
         title: navigation.state.params.tab,
         headerStyle:  { backgroundColor: "#2196F3", },
         headerTitleStyle: { color: "#FFFFFF" },
-        headerTintColor: "blue",
-        headerLeft: null,
-        headerRight: 
+        headerTintColor: "white",
+         headerRight: 
             (<View style={{width:80, display:'flex', flexDirection:'row'}}>
 
                 <TouchableOpacity style={{flex: 1}}
@@ -71,7 +70,6 @@ export class MainScreen extends React.Component {
           parent: this,
         });
     }
-
   constructor(props) {
     super(props);
     this.state = {
@@ -81,6 +79,21 @@ export class MainScreen extends React.Component {
     };
   }
 
+  componentWillMount() {
+    t = this;
+    BackHandler.addEventListener('hardwareBackPress', function() {
+        Alert.alert(
+            'Log Out',
+            'Are you sure you want to log out?',
+            [
+              {text: 'Yes', onPress: () => {t.signOutUser()}},
+              {text: 'No', onPress: () => console.log('No'), style: 'cancel'},
+            ],
+            { cancelable: false }
+          );        
+          return true;
+    }.bind(this));
+  }
   _sortClick(index) {
     console.log(index)
     if(index == 0)
@@ -92,6 +105,14 @@ export class MainScreen extends React.Component {
     this.forceUpdate()
   }
 
+  signOutUser = async () => {
+    try {
+        await firebaseApp.auth().signOut();
+        this.props.navigation.navigate("Login");
+    } catch (e) {
+        console.log(e);
+    }
+}
   render() {
     return (
       <View style={styles.container}>

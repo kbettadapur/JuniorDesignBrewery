@@ -28,7 +28,7 @@ export class LoginScreen extends React.Component {
         title: "Login",
         headerStyle:  { backgroundColor: "#2196F3", },
         headerTitleStyle: { color: "#FFFFFF" },
-        headerTintColor: "blue",
+        headerLeft: null, 
     });
 
 
