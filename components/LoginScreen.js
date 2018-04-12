@@ -41,6 +41,7 @@ export class LoginScreen extends React.Component {
       loginFailed: false,
       loginClicked: false,
     };
+    global.main = false;
   }
 
   render() {

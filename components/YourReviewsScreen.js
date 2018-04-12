@@ -38,6 +38,7 @@ export class YourReviewsScreen extends React.Component {
             },
             didMount: false,
         }
+        global.main = true;
         firebaseApp.database().ref("Reviews").on('value', (snapshot) => {
             this.state.reviews = [];
             if(snapshot.val() != null) {
@@ -68,7 +69,6 @@ export class YourReviewsScreen extends React.Component {
         this.state.location.lat = location.coords.latitude;
         this.state.location.lng = location.coords.longitude;
         this.setState({});
-        console.log(this.state.location);
     }
 
     render() {

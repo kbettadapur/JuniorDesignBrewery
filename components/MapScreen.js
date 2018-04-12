@@ -46,6 +46,7 @@ export class MapScreen extends React.Component {
             ulong: 0,
             mapVisible: true,
         }
+        global.main = true;
         if(global.mapVisible == null) {
             global.mapVisible = true;
         }

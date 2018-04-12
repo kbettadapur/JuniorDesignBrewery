@@ -43,6 +43,7 @@ export class AddReviewScreen extends React.Component {
 
     constructor(props) {
         super(props);
+        global.main = false;
         this.state = {
             spinnerVisible: false,
             brewery: this.props.navigation.state.params.brewery,

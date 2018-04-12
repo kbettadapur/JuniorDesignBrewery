@@ -56,6 +56,7 @@ export class BreweryScreen extends React.Component {
             favorited: false,
             isMounted: false,
         }
+        global.main = false;
         firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid + "/Favorites/").on('value', (snapshot) => {
             if(snapshot.val() != null) {
                 var keys = Object.keys(snapshot.val());

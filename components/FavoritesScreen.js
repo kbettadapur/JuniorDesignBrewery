@@ -48,6 +48,7 @@ export class FavoritesScreen extends React.Component {
                 lat: 0,
             },
         }
+        global.main = true;
         firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid + "/Favorites/").on('value', (snapshot) => {
             this.state.favorites = [];
             if(snapshot.val() != null) {
@@ -66,6 +67,7 @@ export class FavoritesScreen extends React.Component {
     }
 
     componentWillMount() {
+        console.log("Mount");
         this._getLocationAsync()
     }
     

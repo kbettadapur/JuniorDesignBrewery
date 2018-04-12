@@ -44,6 +44,7 @@ export class ReviewScreen extends React.Component {
             photo: null,
             didMount: false,
         }
+        global.main = false;
         firebaseApp.database().ref("Users/" + this.state.review.userId + "/profile_picture").on('value', (snapshot) => {
             if(snapshot.val() != null) {
                 this.state.photo = snapshot.val();

@@ -20,7 +20,7 @@
 */
 
 import React from 'react';
-import { TouchableOpacity, StyleSheet, Text, TextInput, View, BackHandler, Alert } from 'react-native';
+import { Platform, TouchableOpacity, StyleSheet, Text, TextInput, View, BackHandler, Alert } from 'react-native';
 import { MapView } from 'expo';
 import { FooterTab, Icon, Button, Footer, Container } from 'native-base';
 import { MapScreen } from './MapScreen';
@@ -29,7 +29,7 @@ import { YourReviewsScreen } from './YourReviewsScreen';
 import { ProfileScreen } from './ProfileScreen';
 import ModalDropdown from 'react-native-modal-dropdown';
 import firebaseApp from '../firebase';
-
+import { NavigationActions } from 'react-navigation';
 
 const MAP_TAB = "Brewery Map";
 const FAVORITES_TAB = "Your Favorites";
@@ -69,6 +69,7 @@ export class MainScreen extends React.Component {
           tab: this.state.selectedTab,
           parent: this,
         });
+        global.main = true;
     }
   constructor(props) {
     super(props);
@@ -77,22 +78,30 @@ export class MainScreen extends React.Component {
         title: "Map",
         sort:"Alphabetical",
     };
+    global.main = true;
+
   }
 
   componentWillMount() {
     t = this;
-    BackHandler.addEventListener('hardwareBackPress', function() {
-        Alert.alert(
-            'Log Out',
-            'Are you sure you want to log out?',
-            [
-              {text: 'Yes', onPress: () => {t.signOutUser()}},
-              {text: 'No', onPress: () => console.log('No'), style: 'cancel'},
-            ],
-            { cancelable: false }
-          );        
-          return true;
-    }.bind(this));
+    if(Platform.OS === 'android') {
+        BackHandler.addEventListener('hardwareBackPress', function() {
+            if(global.main) {
+                Alert.alert(
+                    'Log Out',
+                    'Are you sure you want to log out?',
+                    [
+                    {text: 'No', style: 'cancel'},
+                    {text: 'Yes', onPress: () => {t.signOutUser()}},
+                    ],
+                    { cancelable: false }
+                );        
+            } else {
+                t.props.navigation.dispatch(NavigationActions.back());
+            } 
+            return true;
+        }.bind(this));
+    }
   }
   _sortClick(index) {
     console.log(index)

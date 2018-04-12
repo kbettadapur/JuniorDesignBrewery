@@ -45,6 +45,7 @@ export class ViewProfileScreen extends React.Component {
             image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Default_profile_picture_%28male%29_on_Facebook.jpg/600px-Default_profile_picture_%28male%29_on_Facebook.jpg",
             imageBase64: null,
         }
+        global.main = false;
         id = this.props.navigation.state.params.id;
         console.log("ID: " + id);
         firebaseApp.database().ref("/Users/" + id).once('value').then((snapshot) => {
