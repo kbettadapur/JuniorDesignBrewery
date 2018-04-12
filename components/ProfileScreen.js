@@ -23,8 +23,10 @@ import React from 'react';
 import { StyleSheet, View, Text, Image, TouchableHighlight, TextInput } from 'react-native';
 import { Footer, Container, Icon } from 'native-base';
 import firebaseApp from '../firebase';
-import { ImagePicker } from 'expo';
+import { ImagePicker, LinearGradient } from 'expo';
 import FAB from 'react-native-fab';
+import Spinner from 'react-native-loading-spinner-overlay';
+
 console.disableYellowBox = true;
 
 export class ProfileScreen extends React.Component {
@@ -39,7 +41,7 @@ export class ProfileScreen extends React.Component {
             
         }
         id = firebaseApp.auth().currentUser.uid;
-        firebaseApp.database().ref("/Users/" + id).once('value').then((snapshot) => {
+        firebaseApp.database().ref("/Users/" + id).on('value', (snapshot) => {
             this.state.user = snapshot.val();
             this.state.old_vals = Object.assign({}, this.state.user);
             this.setState({});
@@ -48,18 +50,18 @@ export class ProfileScreen extends React.Component {
 
     render() {
 
-        if (this.state.user == null) {
-            return (
-                <Container>
-                <View style={{flex: 1}}>
-                    <Text>Profile Screen</Text>
-                </View>
-                <Footer style={{width: '100%'}}>
-                    {this.props.renderTabs()}
-                </Footer>
-                </Container>
-            );
-        } else if (!this.state.edit_mode) {
+        // if (this.state.user == null) {
+        //     return (
+        //         <Container>
+        //         <View style={{flex: 1}}>
+        //             <Text>Profile Screen</Text>
+        //         </View>
+        //         <Footer style={{width: '100%'}}>
+        //             {this.props.renderTabs()}
+        //         </Footer>
+        //         </Container>
+        //     );
+         if (!this.state.edit_mode) {
             return (
                 <Container style={{width: '100%'}}>
                     {this.renderContent()}
@@ -77,25 +79,27 @@ export class ProfileScreen extends React.Component {
     renderContent() {
         return (
             <Container>
-                <View style={{flex: 1, backgroundColor: '#fff'}}>
-                    <View style={{alignItems: 'center', marginTop: 30}}>
+                <Spinner overlayColor={"rgba(0, 0, 0, 0.3)"} 
+                color={"rgb(66,137,244)"}
+                visible={(this.state.user == null)} 
+                textStyle={{color: '#000000'}} />
+                {this.state.user != null && <View style={{flex: 1, backgroundColor: '#fff'}}>
+                    <View style={{alignItems: 'center'}}>
+                        <LinearGradient colors={['#0066cc', '#2196F3']} style={{width:'100%', alignItems:'center'}}>
                         <TouchableHighlight>
                             <View>
                                     <Image source={{ uri:  'data:image/png;base64,' + this.state.user.profile_picture}} style={styles.image_style} />
                             </View>
                         </TouchableHighlight>
-                        
                         <Text style={styles.title_style}>{this.state.user.username}</Text>
+                        {this.state.user.age > 0 && <Text style={[styles.subtitle_style]}>{this.state.user.age == -1 ? "" : this.state.user.age} Years Old</Text>}
+                        <Text style={[styles.subtitle_style]}>Number of kids: {this.state.user.num_children}</Text>
+                        <View style={{marginBottom: 10}}/>
+                        </LinearGradient>
                     </View>
                     <View style={{width: '100%', padding: 10}}>
-                        <Text style={[styles.subtitle_style, {marginTop: 10}]}>Bio</Text>
-                        <Text>{this.state.user.description}</Text>
-                    </View>
-                    <View style={{width: '100%', padding: 10}}>
-                        <Text style={[styles.subtitle_style, {marginTop: 10}]}>Age: {this.state.user.age == -1 ? "None" : this.state.user.age}</Text>
-                    </View>
-                    <View style={{width: '100%', padding: 10}}>
-                        <Text style={[styles.subtitle_style, {marginTop: 10}]}>Number of kids: {this.state.user.num_children}</Text>
+                        <Text style={[styles.subtitle_style2]}>Bio</Text>
+                        <Text style={styles.subtitle_style3}>{this.state.user.description}</Text>
                     </View>
 
                     <FAB 
@@ -104,8 +108,8 @@ export class ProfileScreen extends React.Component {
                         onClickAction={() => this.setState({edit_mode: true})}
                         visible={true}
                         iconTextComponent={<Icon name="md-create"/>} />
-                </View>
-
+                </View> }
+                {this.state.user == null && <View style={{flex:1}}/>}
                 <Footer style={styles.footer_style}>
                     {this.props.renderTabs()}
                 </Footer>
@@ -135,7 +139,7 @@ export class ProfileScreen extends React.Component {
                         <TextInput keyboardType='numeric' value={this.state.user.age + ""} onChangeText={(age) => {this.state.user.age = age; this.setState({user: this.state.user})}}></TextInput>
                     </View>
                     <View style={{width: '100%', padding: 10}}>
-                        <Text style={[styles.subtitle_style, {marginTop: 10}]}>Number of kids: </Text>
+                        <Text style={[styles.subtitle_style, {marginTop: 10, color:'black'}]}>Number of kids: </Text>
                         <TextInput keyboardType='numeric' value={this.state.user.num_children + ""} onChangeText={(num_children) => {this.state.user.num_children = num_children; this.setState({user: this.state.user})}}></TextInput>
                     </View>
                     <Container style={{marginBottom: 50}}>
@@ -214,18 +218,30 @@ const styles = StyleSheet.create({
   image_style: {
     borderRadius: 100,
     width: 150,
-    height: 150
+    height: 150,
+    marginTop: 20,
   },
   footer_style: {
       width: '100%'
   },
   title_style: {
       textAlign: 'center',
+      fontSize: 22,
       fontWeight: 'bold',
-      fontSize: 25
+      color: 'rgba(255, 255, 255, 0.95)',
   },
   subtitle_style: {
-      fontSize: 18,
-      fontWeight: 'bold'
+      fontSize: 15,
+      color: 'rgba(255, 255, 255, 0.95)',
+  },
+  subtitle_style2: {
+    fontSize: 17,
+    color: 'rgba(0, 0, 0, 1)',
+    fontWeight: 'bold',
+    marginTop: 10,
+  },
+  subtitle_style3: {
+    fontSize: 17,
+    color: 'rgba(0, 0, 0, 0.7)',
   }
 })
