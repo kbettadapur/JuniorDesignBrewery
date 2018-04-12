@@ -61,6 +61,7 @@ export class ViewProfileScreen extends React.Component {
 
     render() {
         return (
+            <ScrollView>
             <Container>
                 <Spinner overlayColor={"rgba(0, 0, 0, 0.3)"} 
                 color={"rgb(66,137,244)"}
@@ -84,17 +85,20 @@ export class ViewProfileScreen extends React.Component {
                         <Text style={[styles.subtitle_style2]}>Bio</Text>
                         <Text style={styles.subtitle_style3}>{this.state.user.description}</Text>
                     </View>
+
+                    <List>
+                        {this.renderReviewsList()}
+                    </List>
                 </View> }
                 {this.state.user == null && <View style={{flex:1}}/>}
-                <List>
-                    {this.renderReviewsList()}
-                </List>
-            </Container>                       
+                
+            </Container>  
+            </ScrollView>                     
         );
     }
 
     renderReviewsList() {
-        if (this.state.user.reviews == null) {
+        if (this.state.user == null || this.state.user.reviews == null) {
             return <Text>No Reviews Yet!</Text>
         }
         return _.map(this.state.user.reviews, (rev) => {
