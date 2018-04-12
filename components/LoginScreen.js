@@ -60,9 +60,11 @@ export class LoginScreen extends React.Component {
         <View style={{flex:1}}>
           <Text style={styles.logo}>Family Friendly Brewery Trackr</Text>
         </View>
+
+
         <KeyboardAvoidingView behavior="padding" style={{flex:4}}>
 
-            <View style={{flex:3, alignItems:'center', paddingTop:50}}>
+            <View style={{flex:3, alignItems:'center', paddingTop:70}}>
 
               <TextInput
                 style={styles.textinput}
@@ -84,7 +86,7 @@ export class LoginScreen extends React.Component {
               </TouchableOpacity>
             </View>
         </KeyboardAvoidingView>
-          <View style={{flex:3}}>
+          <View style={{flex:2}}>
               <View>
                   { this.state.loginFailed && <Text style={{color: "#ff0000", textAlign:'center'}}>{this.state.error}</Text>}
               </View>
@@ -131,16 +133,16 @@ const styles = StyleSheet.create({
   textinput: {
     height: 58,
     fontSize: 18, 
-    minWidth: '85%',
-    maxWidth: '85%', 
+    minWidth: '87%',
+    maxWidth: '87%', 
     marginBottom: 5,
     borderColor: 'gray', 
     borderWidth: 0
   },
   button: { 
     height: 40, 
-    width:'85%', 
-    marginVertical: 10, 
+    width:'87%', 
+    marginVertical: 25, 
     backgroundColor:"#2196F3", 
     borderRadius:3, 
     alignItems:'center', 

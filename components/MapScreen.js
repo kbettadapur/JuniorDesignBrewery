@@ -150,6 +150,7 @@ export class MapScreen extends React.Component {
                             coordinate={{latitude: val.latitude, longitude: val.longitude}}
                             key={val.latitude + val.longitude}
                             name={val.name}
+                            pinColor={'#2196F3'}
                             onCalloutPress={() => this.props.navigation.navigate("Brewery", {navigation: this.props.navigation, brewery: val})}
                         >
                             <MapView.Callout>
