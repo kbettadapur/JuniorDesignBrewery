@@ -47,10 +47,20 @@ export class MapScreen extends React.Component {
         if(global.mapVisible == null) {
             global.mapVisible = true;
         }
+        if (global.breweries == null) {
+            global.breweries = [];
+        }
         // this._getLocationAsync().then(() => {
         //     this.searchLocalBreweries();
         // }) 
-        this.searchLocalBreweries();
+        if (global.breweries.length == 0) {
+            this.searchLocalBreweries();
+        }
+    }
+
+    componentDidMount() {
+        console.log("HERE")
+        this.setState({breweries: global.breweries, lat: global.lat, lng: global.lng});
     }
     
     _getLocationAsync = async () => {
@@ -62,14 +72,17 @@ export class MapScreen extends React.Component {
         let location = await Location.getCurrentPositionAsync({});
         this.state.lat = location.coords.latitude;
         this.state.lng = location.coords.longitude;
+        global.lat = location.coords.latitude;
+        global.lng = location.coords.longitude;
     }
     
 
     render() {
+        console.log("in render");
         return (
             <Container>
             <View style={{flex: 1, backgroundColor:'white'}}>
-                {global.mapVisible && this.state.lat != 0 && <MapView 
+                {global.mapVisible && this.state.lat != null && this.state.lng != null && this.state.lat != 0 && <MapView 
                     style={styles.map}
 
                     region={{latitude: this.state.lat,
@@ -164,11 +177,12 @@ export class MapScreen extends React.Component {
         fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + this.state.query + '&key=AIzaSyDiooLoAXwvs42CPdgVKhqRwjqiUHok8gs')
             .then((r) => r.json().then((d) => {
                 location = {};
-                location.lat = d.results[0].geometry.location.lat;
-                location.lng = d.results[0].geometry.location.lng;
-                this.setState({location});
+                this.state.lat = d.results[0].geometry.location.lat;
+                this.state.lng = d.results[0].geometry.location.lng;
             })).then(() => {
-                this.searchBreweries(location.lat, location.lng)
+                global.lat = this.state.lat;
+                global.lng = this.state.lng;
+                this.searchBreweries(this.state.lat, this.state.lng)
             })
     }
 
@@ -191,6 +205,7 @@ export class MapScreen extends React.Component {
                     b.merge(val);
                     res.push(b);
                 });
+                global.breweries = res;
                 this.setState({breweries: res, lat: lat, lng: lng});
             }));
     }
@@ -208,6 +223,7 @@ export class MapScreen extends React.Component {
                     b.merge(val);
                     res.push(b);
                 });
+                global.breweries = res;
                 this.setState({breweries: res});
             }));
     }

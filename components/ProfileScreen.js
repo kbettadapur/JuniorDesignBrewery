@@ -132,7 +132,7 @@ export class ProfileScreen extends React.Component {
                     </View>
                     <View style={{width: '100%', padding: 10}}>
                         <Text style={[styles.subtitle_style, {marginTop: 10}]}>Age: </Text>
-                        <TextInput keyboardType='numeric' value={this.state.user.age + ""} onChangeText={(age) => {this.state.user.age = age; this.setState({user: this.state.user})}}></TextInput>
+                        <TextInput keyboardType='numeric' value={this.state.user.age == -1 ? "": this.state.user.age + ""} onChangeText={(age) => {this.state.user.age = age; this.setState({user: this.state.user})}}></TextInput>
                     </View>
                     <View style={{width: '100%', padding: 10}}>
                         <Text style={[styles.subtitle_style, {marginTop: 10}]}>Number of kids: </Text>
