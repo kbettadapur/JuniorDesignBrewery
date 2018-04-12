@@ -49,10 +49,10 @@ export class ViewProfileScreen extends React.Component {
         console.log("ID: " + id);
         firebaseApp.database().ref("/Users/" + id).once('value').then((snapshot) => {
             this.setState({user: snapshot.val()});
-            // if (this.state.user.reviews.length > 3) {
-            //     this.state.user.reviews = this.state.user.reviews.slice(0,3);
-            //     this.setState({});
-            // }
+            if (this.state.user.reviews.length > 3) {
+                this.state.user.reviews = this.state.user.reviews.slice(0,3);
+                this.setState({});
+            }
             this.setState({});
         });
 
@@ -86,9 +86,9 @@ export class ViewProfileScreen extends React.Component {
                     </View>
                 </View> }
                 {this.state.user == null && <View style={{flex:1}}/>}
-                {/* <List>
+                <List>
                     {this.renderReviewsList()}
-                </List> */}
+                </List>
             </Container>                       
         );
     }
