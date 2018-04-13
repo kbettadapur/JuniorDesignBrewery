@@ -86,6 +86,14 @@ export class MainScreen extends React.Component {
           parent: this,
         });
         global.main = true;
+        firebaseApp.auth().onAuthStateChanged(function(user) {
+            console.log("Auth change");
+            if (user) {
+                global.main = true;
+            } else {
+                global.main = false;
+            }
+          });  
     }
   constructor(props) {
     super(props);
@@ -101,8 +109,8 @@ export class MainScreen extends React.Component {
   componentWillMount() {
     t = this;
     if(Platform.OS === 'android') {
-        BackHandler.addEventListener('hardwareBackPress', function() {
-            if(global.main) {
+        BackHandler.addEventListener('hardwareBackPress', function() {          
+              if(global.main) {
                 Alert.alert(
                     'Log Out',
                     'Are you sure you want to log out?',
