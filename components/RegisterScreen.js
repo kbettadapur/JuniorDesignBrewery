@@ -75,7 +75,10 @@ export class RegisterScreen extends React.Component {
             style={styles.textinput}
             onChangeText={(email) => this.setState({email})}
             value={this.state.email} 
-            placeholder="Email" />
+            keyboardType={'email-address'}
+            placeholder="Email" 
+            autoCapitalize={'none'}
+            />
           <TextInput
             style={styles.textinput}
             onChangeText={(password) => this.setState({password})}
@@ -115,7 +118,7 @@ export class RegisterScreen extends React.Component {
         return;
       }
       this.setState({registerClicked: true, registerFailed: false});      
-      var s = firebaseApp.auth().createUserWithEmailAndPassword(this.state.email, this.state.password).then(() => {
+      var s = firebaseApp.auth().createUserWithEmailAndPassword(this.state.email.trim(), this.state.password).then(() => {
         currentUser = firebaseApp.auth().currentUser;
         firebaseApp.database().ref("Users/" + currentUser.uid).set({
           username: this.state.username.trim(),

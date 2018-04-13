@@ -89,6 +89,14 @@ export class YourReviewsScreen extends React.Component {
     }
 
     renderContent() {
+        if(this.state.reviews != null && this.state.reviews.length == 0 && !this.state.spinnerVisible) {
+            return(
+                <View style={{height:'100%', width:'100%', alignContent:'center', alignItems:'center', backgroundColor:'white', display:'flex'}}>
+                <View style={{flex:1}}/>                
+                <Text style={{textAlign: 'center', flex:1}}>No Reviews Yet!</Text>
+                </View>
+            )
+        }
         return (
             <ScrollView>
                 <List style={styles.listStyle}>
@@ -100,11 +108,6 @@ export class YourReviewsScreen extends React.Component {
 
     renderFavoritesList() {
         if(this.state.reviews != null) {
-            if(this.state.reviews.length == 0 && !this.state.spinnerVisible) {
-                return(                
-                    <Text style={{textAlign: 'center'}}>No Reviews Yet!</Text>
-                )
-            }
             var t = this;
             if(this.props.sort === "Alphabetical") {
                 this.state.reviews.sort(function(a, b){

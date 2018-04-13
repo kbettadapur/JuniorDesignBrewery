@@ -101,6 +101,14 @@ export class FavoritesScreen extends React.Component {
     }
 
     renderContent() {
+        if(this.state.favorites != null && this.state.favorites.length == 0) {
+            return(
+                <View style={{height:'100%', width:'100%', alignContent:'center', alignItems:'center', backgroundColor:'white', display:'flex'}}>
+                <View style={{flex:1}}/>                
+                <Text style={{textAlign: 'center', flex:1}}>No Favorites Yet!</Text>
+                </View>
+            )
+        }
         return (
             <ScrollView>
                 <List style={styles.listStyle}>
@@ -120,11 +128,6 @@ export class FavoritesScreen extends React.Component {
             })
         } else {
             return;
-        }
-        if(this.state.favorites != null && this.state.favorites.length == 0) {
-            return(                
-                <Text style={{textAlign: 'center'}}>No Favorites Yet!</Text>
-            )
         }
         return _.map(this.state.favorites, (fav) => {
                 return (

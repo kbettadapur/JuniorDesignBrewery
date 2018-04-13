@@ -71,7 +71,10 @@ export class LoginScreen extends React.Component {
                 style={styles.textinput}
                 onChangeText={(email) => this.setState({email})}
                 value={this.state.email}
-                placeholder="Email" />
+                placeholder="Email" 
+                keyboardType={'email-address'}
+                autoCapitalize={'none'}
+                />
 
               <TextInput
                 style={styles.textinput}
