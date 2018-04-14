@@ -20,7 +20,7 @@
 */
 
 import React from 'react';
-import { ScrollView, StyleSheet, View, Text, Image, TouchableHighlight, TextInput } from 'react-native';
+import { ScrollView, StyleSheet, View, Text, Image, TouchableOpacity, TextInput } from 'react-native';
 import { Footer, Container, Icon, Fab } from 'native-base';
 import firebaseApp from '../firebase';
 import { ImagePicker, LinearGradient } from 'expo';
@@ -73,11 +73,11 @@ export class ProfileScreen extends React.Component {
                 {this.state.user != null && <View style={{flex: 1, backgroundColor: '#fff'}}>
                     <View style={{alignItems: 'center'}}>
                         <LinearGradient colors={['#0066cc', '#2196F3']} style={{width:'100%', alignItems:'center'}}>
-                        <TouchableHighlight>
+                        <TouchableOpacity>
                             <View>
                                     <Image source={{ uri:  'data:image/png;base64,' + this.state.user.profile_picture}} style={styles.image_style} />
                             </View>
-                        </TouchableHighlight>
+                        </TouchableOpacity>
                         <Text style={styles.title_style}>{this.state.user.username}</Text>
                             {this.state.user.age > 0 && <Text style={[styles.subtitle_style]}>
                             {this.state.user.age == -1 ? "" : this.state.user.age} Years Old
@@ -116,11 +116,11 @@ export class ProfileScreen extends React.Component {
             <ScrollView>
                 <View style={{backgroundColor: '#fff', flex: 1}}>
                     <View style={{alignItems: 'center', marginTop: 30}}>
-                        <TouchableHighlight onPress={this.pickImage.bind(this)}>
+                        <TouchableOpacity onPress={this.pickImage.bind(this)}>
                             <View>
                                     <Image source={{ uri:  'data:image/png;base64,' + this.state.user.profile_picture}} style={styles.image_style} />
                             </View>
-                        </TouchableHighlight>
+                        </TouchableOpacity>
                         
                         <Text style={styles.title_style}>{this.state.user.username}</Text>
                     </View>
@@ -164,8 +164,15 @@ export class ProfileScreen extends React.Component {
     confirmEdits() {
         this.state.edit_mode = false;
         this.state.old_vals = Object.assign({}, this.state.user);
+        console.log(this.state.user.profile_picture.length)
         firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid).set(this.state.user);
         this.setState({});
+    }
+
+    lengthInUtf8Bytes(str) {
+        // Matches only the 10.. bytes that are non-initial characters in a multi-byte sequence.
+        var m = encodeURIComponent(str).match("/%[89ABab]/g");
+        return str.length + (m ? m.length : 0);
     }
 
     async pickImage() {
