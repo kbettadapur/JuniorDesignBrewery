@@ -20,11 +20,10 @@
 */
 
 import React from 'react';
-import { StyleSheet, View, Text, Image, TouchableHighlight, TextInput } from 'react-native';
-import { Footer, Container, Icon } from 'native-base';
+import { ScrollView, StyleSheet, View, Text, Image, TouchableHighlight, TextInput } from 'react-native';
+import { Footer, Container, Icon, Fab } from 'native-base';
 import firebaseApp from '../firebase';
 import { ImagePicker, LinearGradient } from 'expo';
-import FAB from 'react-native-fab';
 import Spinner from 'react-native-loading-spinner-overlay';
 
 console.disableYellowBox = true;
@@ -94,12 +93,14 @@ export class ProfileScreen extends React.Component {
                         <Text style={styles.subtitle_style3}>{this.state.user.description}</Text>
                     </View>
 
-                    <FAB 
-                        buttonColor="green"
-                        iconTextColor="#FFFFFF"
-                        onClickAction={() => this.setState({edit_mode: true})}
-                        visible={true}
-                        iconTextComponent={<Icon name="md-create"/>} />
+                    <Fab
+                        direction="up"
+                        position="bottomRight"
+                        style={{ backgroundColor: 'green'}}
+                        onPress={() => this.setState({edit_mode: true})}
+                    >
+                        <Icon name="md-create" />
+                    </Fab>
                 </View> }
                 {this.state.user == null && <View style={{flex:1}}/>}
                 <Footer style={styles.footer_style}>
@@ -111,8 +112,9 @@ export class ProfileScreen extends React.Component {
 
     renderEditContent() {
         return (
-            <Container>
-                <View style={{flex: 1, backgroundColor: '#fff'}}>
+            <Container style={{backgroundColor: '#fff'}}>
+            <ScrollView>
+                <View style={{backgroundColor: '#fff', flex: 1}}>
                     <View style={{alignItems: 'center', marginTop: 30}}>
                         <TouchableHighlight onPress={this.pickImage.bind(this)}>
                             <View>
@@ -123,38 +125,55 @@ export class ProfileScreen extends React.Component {
                         <Text style={styles.title_style}>{this.state.user.username}</Text>
                     </View>
                     <View style={{width: '100%', padding: 10}}>
-                        <Text style={[styles.subtitle_style, {marginTop: 10}]}>Bio</Text>
-                        <TextInput value={this.state.user.description} onChangeText={(description) => {this.state.user.description = description; this.setState({user: this.state.user})}}></TextInput>
+                        <Text style={[styles.subtitle_style, {marginTop: 10}]}>Bio:</Text>
+                        <TextInput style={{paddingBottom: 10}}multiline={true} value={this.state.user.description} onChangeText={(description) => {this.state.user.description = description; this.setState({user: this.state.user})}}></TextInput>
                     </View>
-                    <View style={{width: '100%', padding: 10}}>
-                        <Text style={[styles.subtitle_style, {marginTop: 10}]}>Age: </Text>
-                        <TextInput keyboardType='numeric' value={this.state.user.age == -1 ? "": this.state.user.age + ""} onChangeText={(age) => {this.state.user.age = age; this.setState({user: this.state.user})}}></TextInput>
+                    <View style={{width: '100%', paddingLeft: 10, display: 'flex', flexDirection: 'row'}}>
+                        <Text style={[styles.subtitle_style, {marginTop: 3, flex: 1}]}>Age: </Text>
+                        <TextInput style={{flex: 1, paddingBottom: 5, paddingLeft: 5}} keyboardType='numeric' value={this.state.user.age == -1 ? "": this.state.user.age + ""} onChangeText={(age) => {this.state.user.age = age; this.setState({user: this.state.user})}}></TextInput>
+                        <View style={{flex: 9}}></View>
                     </View>
-                    <View style={{width: '100%', padding: 10}}>
-                        <Text style={[styles.subtitle_style, {marginTop: 10, color:'black'}]}>Number of kids: </Text>
-                        <TextInput keyboardType='numeric' value={this.state.user.num_children + ""} onChangeText={(num_children) => {this.state.user.num_children = num_children; this.setState({user: this.state.user})}}></TextInput>
+                    <View style={{width: '100%', paddingLeft: 10, display: 'flex', flexDirection: 'row'}}>
+                        <Text style={[styles.subtitle_style, {marginTop: 3, color:'black', flex: 5}]}>Number of kids: </Text>
+                        <TextInput style={{flex: 1, paddingBottom: 5, paddingLeft: 5}} keyboardType='numeric' value={this.state.user.num_children + ""} onChangeText={(num_children) => {this.state.user.num_children = num_children; this.setState({user: this.state.user})}}></TextInput>
+                        <View style={{flex: 9}}></View>
                     </View>
-                    <Container style={{marginBottom: 50}}>
-                    <FAB 
+                    {/*<FAB 
                         buttonColor="green"
                         iconTextColor="#FFFFFF"
                         onClickAction={this.confirmEdits.bind(this)}
                         visible={true}
                         iconTextComponent={<Icon name="md-checkmark"/>} />
-                    </Container>
-                    <Container>
+                    </View>
+                    <View style={{position: 'absolute', bottom: 150}}>
                     <FAB 
                         buttonColor="red"
                         iconTextColor="#FFFFFF"
                         onClickAction={() => this.setState({user: Object.assign({}, this.state.old_vals), edit_mode: false})}
                         visible={true}
-                        iconTextComponent={<Icon name="md-close"/>} />
-                    </Container>
+                        iconTextComponent={<Icon name="md-close"/>} />*/}
+                    
 
 
 
                 </View>
-
+                </ScrollView>
+                <Fab
+                        direction="up"
+                        position="bottomRight"
+                        style={{ backgroundColor: 'green', bottom: 110}}
+                        onPress={this.confirmEdits.bind(this)}
+                    >
+                        <Icon name="md-checkmark" />
+                    </Fab>
+                    <Fab
+                        direction="up"
+                        position="bottomRight"
+                        style={{ backgroundColor: 'red', bottom: 50}}
+                        onPress={() => this.setState({user: Object.assign({}, this.state.old_vals), edit_mode: false})}
+                    >
+                        <Icon name="md-close" />
+                    </Fab>
                 <Footer style={styles.footer_style}>
                     {this.props.renderTabs()}
                 </Footer>
@@ -180,19 +199,9 @@ export class ProfileScreen extends React.Component {
 
     handleImage(result) {
         if (!result.cancelled) {
-            firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid).set({
-                userId: firebaseApp.auth().currentUser.uid,
-                username: this.state.user.username,
-                description: this.state.user.description,
-                email: this.state.user.email,
-                profile_picture: result.base64
-            }).then(() => {
-                this.state.user.profile_picture = result.base64;
-                this.state.image = result.uri;
-                this.setState({});                
-            }).catch((err) => {
-                console.log(err);
-            });
+            this.state.user.profile_picture = result.base64;
+            this.state.image = result.uri;
+            this.setState({});                
         }
     }
 }
@@ -220,15 +229,15 @@ const styles = StyleSheet.create({
       textAlign: 'center',
       fontSize: 22,
       fontWeight: 'bold',
-      color: 'rgba(255, 255, 255, 0.95)',
+      color: 'rgba(0, 0, 0, 0.95)',
   },
   subtitle_style: {
       fontSize: 15,
-      color: 'rgba(255, 255, 255, 0.95)',
+      color: 'rgba(0, 0, 0, 0.95)',
   },
   subtitle_style2: {
     fontSize: 17,
-    color: 'rgba(0, 0, 0, 1)',
+    color: 'rgb(0, 0, 0)',
     fontWeight: 'bold',
     marginTop: 10,
   },
