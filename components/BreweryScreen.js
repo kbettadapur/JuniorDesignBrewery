@@ -81,7 +81,7 @@ export class BreweryScreen extends React.Component {
                             }
 
                             firebaseApp.database().ref("Users/" + snapshot.val()[key].userId).on('value', (data) => {
-                                this.state.pictures.push(data.val().profile_picture);
+                                this.state.pictures.push(data.val().avatar);
                                 if (this.state.isMounted)
                                     this.setState({});
                             });
@@ -314,7 +314,7 @@ export class BreweryScreen extends React.Component {
                         <ListItem key={new Date().getTime()}>
                             <TouchableOpacity style={{display: 'flex', flexDirection: 'row'}} onPress={() => this.props.navigation.navigate("ReviewView", {navigation: this.props.navigation, review: rev})}>
                                 <View style={{flex: 1, paddingTop: 7, paddingRight: 10}}>
-                                    <Image style={{height: 50, width: 50, borderRadius: 100}} source={{uri:'data:image/png;base64,' + this.state.pictures[counter++]}}></Image>
+                                    <Image style={{height: 50, width: 50, borderRadius: 100}} source={{uri:'data:image/png;base64,' + this.state.pictures[counter++].join('')}}></Image>
                                 </View>
                                 <View style={{flex: 5}}>
                                     <Text style={styles.list_item_title}>{rev.username}</Text>

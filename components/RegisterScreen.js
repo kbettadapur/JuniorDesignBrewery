@@ -120,21 +120,23 @@ export class RegisterScreen extends React.Component {
       this.setState({registerClicked: true, registerFailed: false});      
       var s = firebaseApp.auth().createUserWithEmailAndPassword(this.state.email.trim(), this.state.password).then(() => {
         currentUser = firebaseApp.auth().currentUser;
+        av = []
+        av.push(default_profile_picture);
         firebaseApp.database().ref("Users/" + currentUser.uid).set({
           username: this.state.username.trim(),
           email: this.state.email.trim(),
           description: "None",
-          profile_picture: default_profile_picture,
+          avatar: av,
           age: -1,
           num_children: 0,
           reviews: [],
         });
-
+        
         this.state.user = {
           username: this.state.username.trim(),
           email: this.state.email.trim(),
           description: "None",
-          profile_picture: default_profile_picture,
+          avatar: av,
           age: -1,
           num_children: 0,
         }

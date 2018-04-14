@@ -36,8 +36,7 @@ export class ProfileScreen extends React.Component {
             user: null,
             old_vals: null,
             image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Default_profile_picture_%28male%29_on_Facebook.jpg/600px-Default_profile_picture_%28male%29_on_Facebook.jpg",
-            imageBase64: null,
-            
+            imageBase64: null,            
         }
         id = firebaseApp.auth().currentUser.uid;
         firebaseApp.database().ref("/Users/" + id).on('value', (snapshot) => {
@@ -73,11 +72,11 @@ export class ProfileScreen extends React.Component {
                 {this.state.user != null && <View style={{flex: 1, backgroundColor: '#fff'}}>
                     <View style={{alignItems: 'center'}}>
                         <LinearGradient colors={['#0066cc', '#2196F3']} style={{width:'100%', alignItems:'center'}}>
-                        <TouchableOpacity>
+                        {this.state.user.avatar != null && <TouchableOpacity>
                             <View>
-                                    <Image source={{ uri:  'data:image/png;base64,' + this.state.user.profile_picture}} style={styles.image_style} />
+                                    <Image source={{ uri:  'data:image/png;base64,' + this.state.user.avatar.join('')}} style={styles.image_style} />
                             </View>
-                        </TouchableOpacity>
+                        </TouchableOpacity>}
                         <Text style={styles.title_style}>{this.state.user.username}</Text>
                             {this.state.user.age > 0 && <Text style={[styles.subtitle_style]}>
                             {this.state.user.age == -1 ? "" : this.state.user.age} Years Old
@@ -116,11 +115,11 @@ export class ProfileScreen extends React.Component {
             <ScrollView>
                 <View style={{backgroundColor: '#fff', flex: 1}}>
                     <View style={{alignItems: 'center', marginTop: 30}}>
-                        <TouchableOpacity onPress={this.pickImage.bind(this)}>
+                        {this.state.user.avatar != null && <TouchableOpacity onPress={this.pickImage.bind(this)}>
                             <View>
-                                    <Image source={{ uri:  'data:image/png;base64,' + this.state.user.profile_picture}} style={styles.image_style} />
+                                <Image source={{ uri:  'data:image/png;base64,' + (typeof this.state.user.avatar == 'string' ? this.state.user.avatar : this.state.user.avatar.join(''))}} style={styles.image_style} />
                             </View>
-                        </TouchableOpacity>
+                        </TouchableOpacity>}
                         
                         <Text style={styles.title_style}>{this.state.user.username}</Text>
                     </View>
@@ -163,10 +162,32 @@ export class ProfileScreen extends React.Component {
 
     confirmEdits() {
         this.state.edit_mode = false;
+        
+        avatar = [];
+        if (this.state.user.avatar.length > 1048576) {
+            for (i = 0; i <= this.state.user.avatar.length / 1048576; i++) {
+                if ((i + 1) * 1048576 > this.state.user.avatar.length) {
+                    end = this.state.user.avatar.length;
+                } else {
+                    end = (i + 1) * 1048576;
+                }
+                avatar.push(this.state.user.avatar.substring(i * 1048576, end));
+            }
+        } else {
+            avatar.push(this.state.user.avatar);
+        }
+        this.state.user.avatar = avatar;
         this.state.old_vals = Object.assign({}, this.state.user);
-        console.log(this.state.user.profile_picture.length)
-        firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid).set(this.state.user);
-        this.setState({});
+        firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid).set({
+            age: this.state.user.age,
+            description: this.state.user.description,
+            email: this.state.user.email,
+            num_children: this.state.user.num_children,
+            username: this.state.user.username,
+            avatar: this.state.user.avatar,
+        }).then(() => {
+            this.setState({});
+        });
     }
 
     lengthInUtf8Bytes(str) {
@@ -186,7 +207,7 @@ export class ProfileScreen extends React.Component {
 
     handleImage(result) {
         if (!result.cancelled) {
-            this.state.user.profile_picture = result.base64;
+            this.state.user.avatar = result.base64;
             this.state.image = result.uri;
             this.setState({});                
         }
