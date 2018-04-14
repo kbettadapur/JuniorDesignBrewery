@@ -282,21 +282,10 @@ export class AddReviewScreen extends React.Component {
             this.state.revId = this.newGuid();
         console.log(this.state.revId)
         }
-       
-        users_ref = firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid);
-        
-        users_ref.on("value", (snapshot) => {
-            users_ref.off("value");
-
-            reviews_list = [];
-            if (snapshot.val().reviews != null) {
-                var keys = Object.keys(snapshot.val().reviews);
-                keys.forEach((key) => {
-                    reviews_list.push(snapshot.val().reviews[key]);
-                });
-            }
-
-            reviews_list.push({
+        var ref = firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid);
+        ref.on("value", (snapshot) => {
+            ref.off('value');
+            firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid).child("reviews/" + this.state.revId).set({
                 userId: firebaseApp.auth().currentUser.uid,
                 username: snapshot.val().username,
                 breweryId: this.state.breweryId,
@@ -321,10 +310,6 @@ export class AddReviewScreen extends React.Component {
                 latitude: this.state.lat,
                 longitude: this.state.long,
                 comments: this.state.comments,
-            });
-
-            users_ref.update({
-                reviews: reviews_list
             });
 
             firebaseApp.database().ref("Reviews/" + this.state.revId).set({
@@ -359,7 +344,6 @@ export class AddReviewScreen extends React.Component {
                   this.props.navigation.dispatch(backAction);                
             });
         });
-        /**/
     }
 
     newGuid() { // Public Domain/MIT
