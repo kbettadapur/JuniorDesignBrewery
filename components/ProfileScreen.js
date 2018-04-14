@@ -137,43 +137,23 @@ export class ProfileScreen extends React.Component {
                         <Text style={[styles.subtitle_style, {marginTop: 3, color:'black', flex: 5}]}>Number of kids: </Text>
                         <TextInput style={{flex: 1, paddingBottom: 5, paddingLeft: 5}} keyboardType='numeric' value={this.state.user.num_children + ""} onChangeText={(num_children) => {this.state.user.num_children = num_children; this.setState({user: this.state.user})}}></TextInput>
                         <View style={{flex: 9}}></View>
-                    </View>
-                    {/*<FAB 
-                        buttonColor="green"
-                        iconTextColor="#FFFFFF"
-                        onClickAction={this.confirmEdits.bind(this)}
-                        visible={true}
-                        iconTextComponent={<Icon name="md-checkmark"/>} />
-                    </View>
-                    <View style={{position: 'absolute', bottom: 150}}>
-                    <FAB 
-                        buttonColor="red"
-                        iconTextColor="#FFFFFF"
-                        onClickAction={() => this.setState({user: Object.assign({}, this.state.old_vals), edit_mode: false})}
-                        visible={true}
-                        iconTextComponent={<Icon name="md-close"/>} />*/}
-                    
-
-
-
+                    </View>              
                 </View>
                 </ScrollView>
                 <Fab
                         direction="up"
                         position="bottomRight"
                         style={{ backgroundColor: 'green', bottom: 110}}
-                        onPress={this.confirmEdits.bind(this)}
-                    >
-                        <Icon name="md-checkmark" />
-                    </Fab>
-                    <Fab
-                        direction="up"
-                        position="bottomRight"
-                        style={{ backgroundColor: 'red', bottom: 50}}
-                        onPress={() => this.setState({user: Object.assign({}, this.state.old_vals), edit_mode: false})}
-                    >
-                        <Icon name="md-close" />
-                    </Fab>
+                        onPress={this.confirmEdits.bind(this)}>
+                    <Icon name="md-checkmark" />
+                </Fab>
+                <Fab
+                    direction="up"
+                    position="bottomRight"
+                    style={{ backgroundColor: 'red', bottom: 50}}
+                    onPress={() => this.setState({user: Object.assign({}, this.state.old_vals), edit_mode: false})}>
+                    <Icon name="md-close" />
+                </Fab>
                 <Footer style={styles.footer_style}>
                     {this.props.renderTabs()}
                 </Footer>
