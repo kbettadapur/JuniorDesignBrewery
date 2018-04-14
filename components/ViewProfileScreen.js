@@ -74,7 +74,7 @@ export class ViewProfileScreen extends React.Component {
                         <LinearGradient colors={['#0066cc', '#2196F3']} style={{width:'100%', alignItems:'center'}}>
                         <TouchableHighlight>
                             <View>
-                                    <Image source={{ uri:  'data:image/png;base64,' + this.state.user.profile_picture}} style={styles.image_style} />
+                                    <Image source={{ uri:  'data:image/png;base64,' + this.state.user.avatar.join('')}} style={styles.image_style} />
                             </View>
                         </TouchableHighlight>
                         <Text style={styles.title_style}>{this.state.user.username}</Text>

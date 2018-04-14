@@ -45,7 +45,7 @@ export class ReviewScreen extends React.Component {
             didMount: false,
         }
         global.main = false;
-        firebaseApp.database().ref("Users/" + this.state.review.userId + "/profile_picture").on('value', (snapshot) => {
+        firebaseApp.database().ref("Users/" + this.state.review.userId + "/avatar").on('value', (snapshot) => {
             if(snapshot.val() != null) {
                 this.state.photo = snapshot.val();
                 if(this.state.didMount)
@@ -71,7 +71,7 @@ export class ReviewScreen extends React.Component {
                 <TouchableOpacity style={{display: 'flex', flexDirection: 'row'}} onPress={() => this.props.navigation.navigate("ProfileView", {id: this.state.review.userId})}>
                     <View style={{flex: 1, paddingTop: 7, paddingRight: 10}}>
                         <Image style={{height: 50, width: 50, borderRadius: 100}} 
-                            source={{uri: 'data:image/png;base64,' + this.state.photo}}>
+                            source={{uri: 'data:image/png;base64,' + this.state.photo.join('')}}>
                         </Image>
                     </View>
                     <View style={{flex: 6, display:'flex'}}>
