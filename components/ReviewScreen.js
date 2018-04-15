@@ -79,7 +79,13 @@ export class ReviewScreen extends React.Component {
                             <Text style={{fontWeight:'bold', fontSize: 15}}>{this.state.review.username}</Text>
                         </View>
                         <View style={{flex: 2}}>
-                        <StarRating
+                            <Text style={{color:'gray'}}>{this.state.review.date}</Text>
+                        </View>
+                    </View>
+                </TouchableOpacity>
+
+                <Text style={styles.radio_title}>Overall Rating</Text>
+                <StarRating
                             disabled={true}
                             maxStars={5}
                             rating={this.state.review.overallRating}
@@ -87,9 +93,6 @@ export class ReviewScreen extends React.Component {
                             starSize={20}
                             containerStyle={{width: '25%'}}
                         />
-                        </View>
-                    </View>
-                </TouchableOpacity>
                 <Text style={styles.radio_title}>
                 <Text>Enough changing tables:</Text>
                 <Text style={{fontWeight:'bold'}}> {(this.state.review.hasChangingTables >= .5) ? 'Yes' : 'No'} </Text>

@@ -355,12 +355,14 @@ export class AddReviewScreen extends React.Component {
             this.state.revId = this.newGuid();
         }
         var ref = firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid);
+        var timestamp = (new Date().getMonth() + 1) + "/" + new Date().getDate() + "/" + new Date().getFullYear();
+        console.log(timestamp);
         ref.on("value", (snapshot) => {
             ref.off('value');
             firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid).child("reviews/" + this.state.revId).set({
                 userId: firebaseApp.auth().currentUser.uid,
                 username: snapshot.val().username,
-                date: new Date(),
+                date: timestamp,
                 environment: this.state.environment,
                 overallFood: this.state.overallFood,
                 cleanliness: this.state.cleanliness,
@@ -392,7 +394,7 @@ export class AddReviewScreen extends React.Component {
             firebaseApp.database().ref("Reviews/" + this.state.revId).set({
                 userId: firebaseApp.auth().currentUser.uid,
                 username: snapshot.val().username,
-                date: new Date(),
+                date: timestamp,
                 environment: this.state.environment,
                 overallFood: this.state.overallFood,
                 cleanliness: this.state.cleanliness,
