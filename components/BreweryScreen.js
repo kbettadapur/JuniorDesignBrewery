@@ -55,6 +55,7 @@ export class BreweryScreen extends React.Component {
             rev: null,
             favorited: false,
             isMounted: false,
+            count: 0,
         }
         global.main = false;
         firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid + "/Favorites/").on('value', (snapshot) => {
@@ -69,8 +70,9 @@ export class BreweryScreen extends React.Component {
             }
         });
         firebaseApp.database().ref("Reviews").on('value', (snapshot) => {
+            console.log("asdf")
             this.state.reviews = [];
-            this.state.pictures = [];
+            this.state.pictures = {};
             if (snapshot.val() != null) {
                 var keys = Object.keys(snapshot.val());
                     keys.forEach((key) => {
@@ -81,13 +83,15 @@ export class BreweryScreen extends React.Component {
                             }
 
                             firebaseApp.database().ref("Users/" + snapshot.val()[key].userId).on('value', (data) => {
-                                this.state.pictures.push(data.val().avatar);
+                                this.state.pictures[snapshot.val()[key].userId] = data.val().avatar; 
                                 if (this.state.isMounted)
+                                    
                                     this.setState({});
                             });
                         }
                     });
                 }
+                this.state.count = this.state.reviews.length < 3 ? this.state.reviews : 3;
             if(this.state.isMounted)
                 this.setState({});
         });
@@ -314,7 +318,7 @@ export class BreweryScreen extends React.Component {
                     <Text style={{fontWeight:'bold'}}> {(this.state.revsAvg.hasChangingTables >= .5) ? 'Yes' : 'No'} </Text>
                     </Text>
                     <Text style={styles.radio_title}>
-                    <Text>Family restroom availabality:</Text>
+                    <Text>Family restroom availability:</Text>
                     <Text style={{fontWeight:'bold'}}> {(this.state.revsAvg.hasFamilyRestroom >= .5) ? 'Yes' : 'No'}</Text>
                     </Text>
                     <Text style={styles.radio_title}>
@@ -323,6 +327,10 @@ export class BreweryScreen extends React.Component {
                     </Text>
                     <Text style={styles.radio_title_top}>Reviews:</Text>
                     <View>{this.renderContent()}</View>
+                    {Object.keys(this.state.pictures).length > 3 && this.state.count != Object.keys(this.state.pictures).length 
+                        && <View style={{width: '100%', alignItems: 'center'}}>
+                    <Text onPress={this.viewMore.bind(this)} style={{padding: 10, color: '#0000ff'}}>View More</Text>
+                    </View>}
                     </View>
                 }                
             </View>
@@ -344,6 +352,7 @@ export class BreweryScreen extends React.Component {
                 visible={true}
                 iconTextComponent={<Icon name="md-create"/>} />
             </View>}
+            
             </View>  
         )
     }
@@ -358,14 +367,14 @@ export class BreweryScreen extends React.Component {
     }
 
     renderReviewsList() {
-        if (this.state.reviews != null && this.state.reviews.length > 0 && this.state.pictures.length == this.state.reviews.length) {
-            counter = 0;
-            return _.map(this.state.reviews, (rev) => {
+        if (this.state.reviews != null && this.state.reviews.length > 0 && this.state.pictures != null && Object.keys(this.state.pictures).length == this.state.reviews.length) {
+            var revs = this.state.reviews.slice(0, this.state.count);
+            return _.map(revs, (rev) => {
                     return (
                         <ListItem key={new Date().getTime()}>
                             <TouchableOpacity style={{display: 'flex', flexDirection: 'row'}} onPress={() => this.props.navigation.navigate("ReviewView", {navigation: this.props.navigation, review: rev})}>
                                 <View style={{flex: 1, paddingTop: 7, paddingRight: 10}}>
-                                    <Image style={{height: 50, width: 50, borderRadius: 100}} source={{uri:'data:image/png;base64,' + this.state.pictures[counter++].join('')}}></Image>
+                                    <Image style={{height: 50, width: 50, borderRadius: 100}} source={{uri:'data:image/png;base64,' + this.state.pictures[rev.userId].join('')}}></Image>
                                 </View>
                                 <View style={{flex: 5}}>
                                     <Text style={styles.list_item_title}>{rev.username}</Text>
@@ -388,6 +397,15 @@ export class BreweryScreen extends React.Component {
                 <Text style={{textAlign: 'center'}}>No Reviews Yet!</Text>
             )
         }
+    }
+
+    viewMore() {
+        if (this.state.count + 3 > Object.keys(this.state.pictures).length) {
+            this.state.count = Object.keys(this.state.pictures).length;
+        } else {
+            this.state.count += 3;
+        }
+        this.setState({});
     }
 
     calcAvg(revs) {
