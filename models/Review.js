@@ -22,21 +22,30 @@
 export default class Review {
     username;
     overallRating = 0;
-    hasChangingTables = 0;
-    hasFamilyRestroom = 0;
-    isWheelchairAccessible = 0;
-    seatingArrangements = 0;
+
     kidFriendly = 0;
-    safety = 0;
-    petFriendly = 0;
-    foodOptionDiversity = 0;
-    nonAlcoholicOptions = 0;
-    soundLevel = 0 ;
-    isSmokingPermitted = 0;
     strollerKids = 0;
     kThroughSix = 0;
     teenagers = 0;
+
+    environment = 0;
+    safety = 0;
+    petFriendly = 0;
+    soundLevel = 0 ;
+    isSmokingPermitted = 0;
+    seatingArrangements = 0;
+    cleanliness = 0;
+
+    overallFood = 0;
+    foodOptionDiversity = 0;
+    nonAlcoholicOptions = 0;
+
+    hasChangingTables = 0;
+    hasFamilyRestroom = 0;
+    isWheelchairAccessible = 0;
+
     comments;
+    parking;
     breweryId;
     breweryName;    
     latitude = 0;

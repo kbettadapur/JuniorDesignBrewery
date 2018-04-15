@@ -135,143 +135,196 @@ export class BreweryScreen extends React.Component {
                     source={{uri: 'https://maps.googleapis.com/maps/api/place/photo?maxwidth=1000&key=AIzaSyDiooLoAXwvs42CPdgVKhqRwjqiUHok8gs&photoreference=' + this.state.brewery.photo}}
                 />
             <View style={styles.container}>
-                
                 <Text style={styles.title}>{this.state.brewery.name}</Text>
-                { (this.state.reviews != null && this.state.reviews.length > 0) && <View>
-                <Text style={styles.radio_final_title}>Overall Rating?</Text>
-                <StarRating
-                    disabled={true}
-                    maxStars={5}
-                    rating={this.state.revsAvg.overallRating}
-                    fullStarColor={'#eaaa00'}
-                    disabled={true}
-                    starSize={20}
-                    containerStyle={{width: '25%'}}
-                />
-                <Text style={styles.radio_title}>
-                <Text>Enough changing tables?</Text>
-                <Text style={{fontWeight:'bold'}}> {(this.state.revsAvg.hasChangingTables >= .5) ? 'Yes' : 'No'} </Text>
-                </Text>
-                <Text style={styles.radio_title}>
-                <Text>Family restroom available?</Text>
-                <Text style={{fontWeight:'bold'}}> {(this.state.revsAvg.hasFamilyRestroom >= .5) ? 'Yes' : 'No'}</Text>
-                </Text>
-                <Text style={styles.radio_title}>
-                <Text>Wheelchair accessible?</Text>
-                <Text style={{fontWeight:'bold'}}> {(this.state.revsAvg.isWheelchairAccessible >= .5) ? 'Yes' : 'No'}</Text>   
-                </Text>             
-                <Text style={styles.radio_title}>Seating Arrangements?</Text>
-                <StarRating
-                    disabled={true}
-                    maxStars={5}
-                    rating={this.state.revsAvg.seatingArrangements}
-                    fullStarColor={'#eaaa00'}
-                    starSize={20}
-                    containerStyle={{width: '25%'}}
-                />
-
-                <Text style={styles.radio_title}>Kid Friendly?</Text>
-                <StarRating
-                    disabled={true}
-                    maxStars={5}
-                    rating={this.state.revsAvg.kidFriendly}
-                    fullStarColor={'#eaaa00'}
-                    starSize={20}
-                    containerStyle={{width: '25%'}}
-                />
-                
-                <Text style={styles.radio_title}>Safety?</Text>
-                <StarRating
-                    disabled={true}
-                    maxStars={5}
-                    rating={this.state.revsAvg.safety}
-                    fullStarColor={'#eaaa00'}
-                    starSize={20}
-                    containerStyle={{width: '25%'}}
-                />
-                
-                <Text style={styles.radio_title}>Pet Friendly?</Text>
-                <StarRating
-                    disabled={true}
-                    maxStars={5}
-                    rating={this.state.revsAvg.petFriendly}
-                    fullStarColor={'#eaaa00'}
-                    starSize={20}
-                    containerStyle={{width: '25%'}}
-                />
-                
-                <Text style={styles.radio_title}>Food Option Diversity?</Text>
-                <StarRating
-                    disabled={true}
-                    maxStars={5}
-                    rating={this.state.revsAvg.foodOptionDiversity}
-                    fullStarColor={'#eaaa00'}
-                    starSize={20}
-                    containerStyle={{width: '25%'}}
-                />
-                
-                <Text style={styles.radio_title}>Non Alcoholic Options?</Text>
-                <StarRating
-                    disabled={true}
-                    maxStars={5}
-                    rating={this.state.revsAvg.nonAlcoholicOptions}
-                    fullStarColor={'#eaaa00'}
-                    starSize={20}
-                    containerStyle={{width: '25%'}}
-                />
-
-                <Text style={styles.radio_title}>Sound Level?</Text>
-                <StarRating
-                    disabled={true}
-                    maxStars={5}
-                    rating={this.state.revsAvg.soundLevel}
-                    fullStarColor={'#eaaa00'}
-                    starSize={20}
-                    containerStyle={{width: '25%'}}
-                />
-                
-                <Text style={styles.radio_title}>Smoking (1) restricted (5) prevalent</Text>
-                <StarRating
-                    disabled={true}
-                    maxStars={5}
-                    rating={this.state.revsAvg.isSmokingPermitted}
-                    fullStarColor={'#eaaa00'}
-                    starSize={20}
-                    containerStyle={{width: '25%'}}
-                />
-                
-                <Text style={styles.radio_title}>How good is it for stroller kids?</Text>
-                <StarRating
-                    disabled={true}
-                    maxStars={5}
-                    rating={this.state.revsAvg.strollerKids}
-                    fullStarColor={'#eaaa00'}
-                    starSize={20}
-                    containerStyle={{width: '25%'}}
-                />
-                
-                <Text style={styles.radio_title}>How good is it for K-6 kids?</Text>
-                <StarRating
-                    disabled={true}
-                    maxStars={5}
-                    rating={this.state.revsAvg.kThroughSix}
-                    fullStarColor={'#eaaa00'}
-                    starSize={20}
-                    containerStyle={{width: '25%'}}
-                />
-                
-                <Text style={styles.radio_title}>How good is it for teenagers?</Text>
-                <StarRating
-                    disabled={true}
-                    maxStars={5}
-                    rating={this.state.revsAvg.teenagers}
-                    fullStarColor={'#eaaa00'}
-                    starSize={20}
-                    containerStyle={{width: '25%'}}
-                />
-                <Text style={styles.subtitle}>Reviews</Text>
-                </View>
-            }
+                {!!(this.state.reviews != null && this.state.reviews.length > 0) && <View>
+                    <Text style={styles.radio_title_top}>{'\n'}Overall Rating</Text>
+                    <StarRating
+                                disabled={true}
+                                maxStars={5}
+                                rating={this.state.revsAvg.overallRating}
+                                fullStarColor={'#eaaa00'}
+                                starSize={20}
+                                containerStyle={{width: '25%'}}
+                            />            
+    
+                    <Text style={styles.radio_title_top}>{'\n'}Overall Kid Friendliness</Text>
+                    <StarRating
+                        disabled={true}
+                        maxStars={5}
+                        rating={this.state.revsAvg.kidFriendly}
+                        fullStarColor={'#eaaa00'}
+                        starSize={20}
+                        containerStyle={{width: '25%'}}
+                    />
+                    <View style={{marginLeft: 10}}>
+                        
+                    {!!this.state.revsAvg.strollerKids &&
+                    <View>
+                    <Text style={styles.radio_title}>Stroller Kids</Text>
+                    <StarRating
+                        disabled={true}
+                        maxStars={5}
+                        rating={this.state.revsAvg.strollerKids}
+                        fullStarColor={'#eaaa00'}
+                        starSize={20}
+                        containerStyle={{width: '25%'}}
+                    /></View>}
+                    
+                    {!!this.state.revsAvg.kThroughSix &&
+                    <View>
+                    <Text style={styles.radio_title}>K-6</Text>
+                    <StarRating
+                        disabled={true}
+                        maxStars={5}
+                        rating={this.state.revsAvg.kThroughSix}
+                        fullStarColor={'#eaaa00'}
+                        starSize={20}
+                        containerStyle={{width: '25%'}}
+                    /></View>}
+                    
+                    {!!this.state.revsAvg.kThroughSix &&
+                    <View>
+                    <Text style={styles.radio_title}>Teenagers</Text>
+                    <StarRating
+                        disabled={true}
+                        maxStars={5}
+                        rating={this.state.revsAvg.teenagers}
+                        fullStarColor={'#eaaa00'}
+                        starSize={20}
+                        containerStyle={{width: '25%'}}
+                    /></View>}
+    
+                    </View>
+                    <Text style={styles.radio_title_top}>{'\n'}Overall Environment Quality</Text>
+                    <StarRating
+                        disabled={true}
+                        maxStars={5}
+                        rating={this.state.revsAvg.environment}
+                        fullStarColor={'#eaaa00'}
+                        starSize={20}
+                        containerStyle={{width: '25%'}}
+                    />
+                    <View style={{marginLeft: 10}}>
+                    {!!this.state.revsAvg.isSmokingPermitted &&
+                    <View>
+                    <Text style={styles.radio_title}>Smoking (1) restricted (5) prevalent</Text>
+                    <StarRating
+                        disabled={true}
+                        maxStars={5}
+                        rating={this.state.revsAvg.isSmokingPermitted}
+                        fullStarColor={'#eaaa00'}
+                        starSize={20}
+                        containerStyle={{width: '25%'}}
+                    /></View>}
+                    {!!this.state.revsAvg.seatingArrangements && 
+                    <View>
+                    <Text style={styles.radio_title}>Seating Arrangements</Text>
+                    <StarRating
+                        disabled={true}
+                        maxStars={5}
+                        rating={this.state.revsAvg.seatingArrangements}
+                        fullStarColor={'#eaaa00'}
+                        starSize={20}
+                        containerStyle={{width: '25%'}}
+                    /></View>}
+                    
+                    {!!this.state.revsAvg.safety &&
+                    <View>
+                    <Text style={styles.radio_title}>Safety</Text>
+                    <StarRating
+                        disabled={true}
+                        maxStars={5}
+                        rating={this.state.revsAvg.safety}
+                        fullStarColor={'#eaaa00'}
+                        starSize={20}
+                        containerStyle={{width: '25%'}}
+                    /></View>}
+                    
+                    {!!this.state.revsAvg.petFriendly &&
+                    <View>
+                    <Text style={styles.radio_title}>Pet Friendliness</Text>
+                    <StarRating
+                        disabled={true}
+                        maxStars={5}
+                        rating={this.state.revsAvg.petFriendly}
+                        fullStarColor={'#eaaa00'}
+                        starSize={20}
+                        containerStyle={{width: '25%'}}
+                    /></View>}
+                    
+                    {!!this.state.revsAvg.cleanliness &&
+                    <View>
+                    <Text style={styles.radio_title}>Cleanliness</Text>
+                    <StarRating
+                        disabled={true}
+                        maxStars={5}
+                        rating={this.state.revsAvg.cleanliness}
+                        fullStarColor={'#eaaa00'}
+                        starSize={20}
+                        containerStyle={{width: '25%'}}
+                    /></View>}
+    
+                    {!!this.state.revsAvg.soundLevel &&
+                    <View>
+                    <Text style={styles.radio_title}>Sound Level</Text>
+                    <StarRating
+                        disabled={true}
+                        maxStars={5}
+                        rating={this.state.revsAvg.soundLevel}
+                        fullStarColor={'#eaaa00'}
+                        starSize={20}
+                        containerStyle={{width: '25%'}}
+                    /></View>}
+                    </View>
+                    <Text style={styles.radio_title_top}>{'\n'}Overall Food Quality</Text>
+                    <StarRating
+                        disabled={true}
+                        maxStars={5}
+                        rating={this.state.revsAvg.overallFood}
+                        fullStarColor={'#eaaa00'}
+                        starSize={20}
+                        containerStyle={{width: '25%'}}
+                    />
+                    <View style={{marginLeft: 10}}>
+                    {!!this.state.revsAvg.foodOptionDiversity &&
+                    <View>
+                    <Text style={styles.radio_title}>Food Option Diversity</Text>
+                    <StarRating
+                        disabled={true}
+                        maxStars={5}
+                        rating={this.state.revsAvg.foodOptionDiversity}
+                        fullStarColor={'#eaaa00'}
+                        starSize={20}
+                        containerStyle={{width: '25%'}}
+                    /></View>}
+                    {!!this.state.revsAvg.nonAlcoholicOptions &&
+                    <View>
+                    <Text style={styles.radio_title}>Non Alcoholic Options</Text>
+                    <StarRating
+                        disabled={true}
+                        maxStars={5}
+                        rating={this.state.revsAvg.nonAlcoholicOptions}
+                        fullStarColor={'#eaaa00'}
+                        starSize={20}
+                        containerStyle={{width: '25%'}}
+                    /></View>}
+                    </View>
+                    <Text style={styles.radio_title_top}>{'\n'}Logistics</Text>
+                    <Text style={styles.radio_title}>
+                    <Text>Enough changing tables:</Text>
+                    <Text style={{fontWeight:'bold'}}> {(this.state.revsAvg.hasChangingTables >= .5) ? 'Yes' : 'No'} </Text>
+                    </Text>
+                    <Text style={styles.radio_title}>
+                    <Text>Family restroom availabality:</Text>
+                    <Text style={{fontWeight:'bold'}}> {(this.state.revsAvg.hasFamilyRestroom >= .5) ? 'Yes' : 'No'}</Text>
+                    </Text>
+                    <Text style={styles.radio_title}>
+                    <Text>Wheelchair accessible:</Text>
+                    <Text style={{fontWeight:'bold'}}> {(this.state.revsAvg.isWheelchairAccessible >= .5) ? 'Yes' : 'No'}</Text>   
+                    </Text>
+                    <Text style={styles.radio_title_top}>Reviews:</Text>
+                    </View>
+                }
                 {this.renderContent()}
                 
             </View>
@@ -340,42 +393,51 @@ export class BreweryScreen extends React.Component {
     }
 
     calcAvg(revs) {
-
-        revs.forEach((rev) => {
-            
-           this.state.revsAvg.hasChangingTables += parseInt(rev.hasChangingTables);
-           this.state.revsAvg.hasFamilyRestroom += parseInt(rev.hasFamilyRestroom);
-           this.state.revsAvg.isWheelchairAccessible += parseInt(rev.isWheelchairAccessible);
-           this.state.revsAvg.overallRating += parseInt(rev.overallRating);
-           this.state.revsAvg.seatingArrangements += rev.seatingArrangements;
-           this.state.revsAvg.kidFriendly += rev.seatingArrangements;
-           this.state.revsAvg.safety += rev.safety;
-           this.state.revsAvg.petFriendly += rev.petFriendly;
-           this.state.revsAvg.foodOptionDiversity += rev.foodOptionDiversity;
-           this.state.revsAvg.nonAlcoholicOptions += rev.nonAlcoholicOptions;
-           this.state.revsAvg.soundLevel += rev.soundLevel;
-           this.state.revsAvg.isSmokingPermitted += rev.soundLevel;
-           this.state.revsAvg.strollerKids += rev.strollerKids;
-           this.state.revsAvg.kThroughSix += rev.kThroughSix;
-           this.state.revsAvg.teenagers += rev.teenagers;
-        }) 
-       this.state.revsAvg.hasChangingTables /= revs.length;
-       this.state.revsAvg.hasFamilyRestroom /= revs.length;
-       this.state.revsAvg.isWheelchairAccessible /= revs.length;
-       this.state.revsAvg.overallRating  /= revs.length;
-       this.state.revsAvg.seatingArrangements /= revs.length;
-       this.state.revsAvg.kidFriendly  /= revs.length;
-       this.state.revsAvg.safety  /= revs.length;
-       this.state.revsAvg.petFriendly  /= revs.length;
-       this.state.revsAvg.foodOptionDiversity  /= revs.length;
-       this.state.revsAvg.nonAlcoholicOptions  /= revs.length;
-       this.state.revsAvg.soundLevel  /= revs.length;
-       this.state.revsAvg.isSmokingPermitted  /= revs.length;
-       this.state.revsAvg.strollerKids  /= revs.length;
-       this.state.revsAvg.kThroughSix  /= revs.length;
-       this.state.revsAvg.teenagers  /= revs.length;
+        this.state.revsAvg.overallRating = this.avg(revs, "overallRating");
+        this.state.revsAvg.kidFriendly = this.avg(revs,"kidFriendly");
+        this.state.revsAvg.strollerKids = this.avg(revs, "strollerKids");
+        this.state.revsAvg.kThroughSix = this.avg(revs, "kThroughSix");
+        this.state.revsAvg.teenagers = this.avg(revs, "teenagers");
+        this.state.revsAvg.environment = this.avg(revs, "environment");
+        this.state.revsAvg.isSmokingPermitted = this.avg(revs, "isSmokingPermitted");
+        this.state.revsAvg.seatingArrangements = this.avg(revs, "seatingArrangements");
+        this.state.revsAvg.safety = this.avg(revs, "safety");
+        this.state.revsAvg.petFriendly = this.avg(revs, "petFriendly");
+        this.state.revsAvg.cleanliness = this.avg(revs,"cleanliness");
+        this.state.revsAvg.soundLevel = this.avg(revs, "soundLevel");
+        this.state.revsAvg.overallFood = this.avg(revs, "overallFood");
+        this.state.revsAvg.foodOptionDiversity = this.avg(revs, "foodOptionDiversity");
+        this.state.revsAvg.nonAlcoholicOptions = this.avg(revs, "nonAlcoholicOptions");
+        this.state.revsAvg.hasChangingTables = this.avg2(revs, "hasChangingTables");
+        this.state.revsAvg.hasFamilyRestroom = this.avg2(revs, "hasFamilyRestroom");
+        this.state.revsAvg.isWheelchairAccessible = this.avg2(revs, "isWheelchairAccessible");        
     }
-}
+
+    avg(revs, prop) {
+        cntr = 0;
+        sum = 0;
+        revs.forEach((rev) =>{
+            if(parseInt(rev[prop])) {
+                cntr++;
+                sum += parseInt(rev[prop])
+            }
+        })
+        if(cntr)
+            return sum / cntr;
+        return null;
+    }
+
+    avg2(revs, prop) {
+        cntr = 0;
+        sum = 0;
+        revs.forEach((rev) =>{
+            cntr++;
+            sum += parseInt(rev[prop])
+        })
+        if(cntr)
+            return sum / cntr;
+        return null;
+    }}
 
 const styles = StyleSheet.create({
   container: {
@@ -399,5 +461,9 @@ const styles = StyleSheet.create({
   },
   radio_title: {
     marginTop: 5,
+  },
+  radio_title_top: {
+    marginTop: 5,
+    fontWeight: 'bold',
   }
 });

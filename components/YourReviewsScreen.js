@@ -48,9 +48,9 @@ export class YourReviewsScreen extends React.Component {
                         this.state.reviews.push(snapshot.val()[key]);
                     }
                 });
-                if(this.state.didMount)
-                    this.setState({reviews: this.state.reviews});
             }
+            if(this.state.didMount)
+                this.setState({reviews: this.state.reviews});
         });
     }
 
