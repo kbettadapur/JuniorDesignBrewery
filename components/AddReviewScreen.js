@@ -145,7 +145,8 @@ export class AddReviewScreen extends React.Component {
                     rating={this.state.overallRating}
                     selectedStar={(rating) => this.setState({overallRating: rating})}
                     fullStarColor={'#eaaa00'}
-                    containerStyle={{width: '65%', marginBottom: 25 }}
+                    containerStyle={{width: '30%'}}
+                    starSize={30}
                 />
 
 
@@ -155,17 +156,18 @@ export class AddReviewScreen extends React.Component {
                     rating={this.state.kidFriendly}
                     selectedStar={(rating) => this.setState({kidFriendly: rating})}
                     fullStarColor={'#eaaa00'}
-                    containerStyle={{width: '65%'}}
+                    containerStyle={{width: '30%'}}
+                    starSize={30}
                 />
-                <View style={{marginLeft: 20}}>
+                <View style={{marginLeft: 10}}>
                 <Text style={styles.radio_title}>Stroller kids</Text>
                 <StarRating
                     maxStars={5}
                     rating={this.state.strollerKids}
                     selectedStar={(rating) => this.setState({strollerKids: rating})}
                     fullStarColor={'#eaaa00'}
-                    containerStyle={{width: '65%'}}
-                />
+                    containerStyle={{width: '30%'}}
+                    starSize={30}                    />
                 
                 <Text style={styles.radio_title}>K-6</Text>
                 <StarRating
@@ -173,8 +175,8 @@ export class AddReviewScreen extends React.Component {
                     rating={this.state.kThroughSix}
                     selectedStar={(rating) => this.setState({kThroughSix: rating})}
                     fullStarColor={'#eaaa00'}
-                    containerStyle={{width: '65%'}}
-                />
+                    containerStyle={{width: '30%'}}
+                    starSize={30}                    />
                 
                 <Text style={styles.radio_title}>Teenagers</Text>
                 <StarRating
@@ -182,8 +184,8 @@ export class AddReviewScreen extends React.Component {
                     rating={this.state.teenagers}
                     selectedStar={(rating) => this.setState({teenagers: rating})}
                     fullStarColor={'#eaaa00'}
-                    containerStyle={{width: '65%'}}
-                />
+                    containerStyle={{width: '30%'}}
+                    starSize={30}                    />
                 </View>
 
                 <Text style={styles.radio_final_title}>{"\n"}*Overall Environment Quality</Text>
@@ -192,33 +194,33 @@ export class AddReviewScreen extends React.Component {
                     rating={this.state.environment}
                     selectedStar={(rating) => this.setState({environment: rating})}
                     fullStarColor={'#eaaa00'}
-                    containerStyle={{width: '65%'}}
-                />
-                <View style={{marginLeft: 20}}>
+                    containerStyle={{width: '30%'}}
+                    starSize={30}                    />
+                <View style={{marginLeft: 10}}>
                 <Text style={styles.radio_title}>Smoking (1) restricted (5) prevalent</Text>
                 <StarRating
                     maxStars={5}
                     rating={this.state.isSmokingPermitted}
                     selectedStar={(rating) => this.setState({isSmokingPermitted: rating})}
                     fullStarColor={'#eaaa00'}
-                    containerStyle={{width: '65%'}}
-                />
+                    containerStyle={{width: '30%'}}
+                    starSize={30}                    />
                 <Text style={styles.radio_title}>Seating Arrangements</Text>
                 <StarRating
                     maxStars={5}
                     rating={this.state.seatingArrangements}
                     selectedStar={(rating) => this.setState({seatingArrangements: rating})}
                     fullStarColor={'#eaaa00'}
-                    containerStyle={{width: '65%'}}
-                />
+                    containerStyle={{width: '30%'}}
+                    starSize={30}                    />
                 <Text style={styles.radio_title}>Safety</Text>
                 <StarRating
                     maxStars={5}
                     rating={this.state.safety}
                     selectedStar={(rating) => this.setState({safety: rating})}
                     fullStarColor={'#eaaa00'}
-                    containerStyle={{width: '65%'}}
-                />
+                    containerStyle={{width: '30%'}}
+                    starSize={30}                    />
                 
                 <Text style={styles.radio_title}>Pet Friendly</Text>
                 <StarRating
@@ -226,8 +228,8 @@ export class AddReviewScreen extends React.Component {
                     rating={this.state.petFriendly}
                     selectedStar={(rating) => this.setState({petFriendly: rating})}
                     fullStarColor={'#eaaa00'}
-                    containerStyle={{width: '65%'}}
-                />
+                    containerStyle={{width: '30%'}}
+                    starSize={30}                    />
                 
                 <Text style={styles.radio_title}>Cleanliness</Text>
                 <StarRating
@@ -235,8 +237,8 @@ export class AddReviewScreen extends React.Component {
                     rating={this.state.cleanliness}
                     selectedStar={(rating) => this.setState({cleanliness: rating})}
                     fullStarColor={'#eaaa00'}
-                    containerStyle={{width: '65%'}}
-                />
+                    containerStyle={{width: '30%'}}
+                    starSize={30}                    />
 
                 <Text style={styles.radio_title}>Sound Level</Text>
                 <StarRating
@@ -244,8 +246,8 @@ export class AddReviewScreen extends React.Component {
                     rating={this.state.soundLevel}
                     selectedStar={(rating) => this.setState({soundLevel: rating})}
                     fullStarColor={'#eaaa00'}
-                    containerStyle={{width: '65%'}}
-                />
+                    containerStyle={{width: '30%'}}
+                    starSize={30}                    />
                 </View>
 
                 <Text style={styles.radio_final_title}>{"\n"}*Overall Food Quality</Text>
@@ -254,17 +256,17 @@ export class AddReviewScreen extends React.Component {
                     rating={this.state.overallFood}
                     selectedStar={(rating) => this.setState({overallFood: rating})}
                     fullStarColor={'#eaaa00'}
-                    containerStyle={{width: '65%'}}
-                />                
-                <View style={{marginLeft: 20}}>
+                    containerStyle={{width: '30%'}}
+                    starSize={30}                    />                
+                <View style={{marginLeft: 10}}>
                 <Text style={styles.radio_title}>Food Option Diversity</Text>
                 <StarRating
                     maxStars={5}
                     rating={this.state.foodOptionDiversity}
                     selectedStar={(rating) => this.setState({foodOptionDiversity: rating})}
                     fullStarColor={'#eaaa00'}
-                    containerStyle={{width: '65%'}}
-                />
+                    containerStyle={{width: '30%'}}
+                    starSize={30}                    />
                 
                 <Text style={styles.radio_title}>Non Alcoholic Options</Text>
                 <StarRating
@@ -272,12 +274,12 @@ export class AddReviewScreen extends React.Component {
                     rating={this.state.nonAlcoholicOptions}
                     selectedStar={(rating) => this.setState({nonAlcoholicOptions: rating})}
                     fullStarColor={'#eaaa00'}
-                    containerStyle={{width: '65%'}}
-                />               
+                    containerStyle={{width: '30%'}}
+                    starSize={30}                    />               
                 </View>
                 <Text style={styles.radio_final_title}>{'\n'}Logistics</Text>
 
-                <View style={{marginLeft: 20}}>
+                <View style={{marginLeft: 10}}>
                 <Text style={styles.radio_title}>Sufficient Changing Tables</Text>
                 <RadioGroup
                     selectedIndex = {(this.state.hasChangingTables == 0) ? 1 : 0}
@@ -317,7 +319,7 @@ export class AddReviewScreen extends React.Component {
                     </RadioButton>
                 </RadioGroup>
                 </View>
-                <Text style={styles.radio_title}>Parking Comments:</Text>
+                <Text style={styles.radio_title}>Parking:</Text>
                 <TextInput
                     style={styles.textinput}
                     onChangeText={(parking) => this.setState({parking})}

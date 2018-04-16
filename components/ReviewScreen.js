@@ -70,9 +70,9 @@ export class ReviewScreen extends React.Component {
                 {<View>
                 <TouchableOpacity style={{display: 'flex', flexDirection: 'row'}} onPress={() => this.props.navigation.navigate("ProfileView", {id: this.state.review.userId})}>
                     <View style={{flex: 1, paddingTop: 7, paddingRight: 10}}>
-                        <Image style={{height: 50, width: 50, borderRadius: 100}} 
+                        {this.state.photo && <Image style={{height: 50, width: 50, borderRadius: 100}} 
                             source={{uri: 'data:image/png;base64,' + this.state.photo.join('')}}>
-                        </Image>
+                        </Image>}
                     </View>
                     <View style={{flex: 6, display:'flex'}}>
                         <View style={{flex:2, marginTop: 10}}>
@@ -84,7 +84,7 @@ export class ReviewScreen extends React.Component {
                     </View>
                 </TouchableOpacity>
 
-                <Text style={styles.radio_title}>Overall Rating</Text>
+                <Text style={styles.radio_title_top}>{'\n'}Overall Rating</Text>
                 <StarRating
                             disabled={true}
                             maxStars={5}
@@ -92,7 +92,148 @@ export class ReviewScreen extends React.Component {
                             fullStarColor={'#eaaa00'}
                             starSize={20}
                             containerStyle={{width: '25%'}}
-                        />
+                        />            
+
+                <Text style={styles.radio_title_top}>{'\n'}Overall Kid Friendliness</Text>
+                <StarRating
+                    disabled={true}
+                    maxStars={5}
+                    rating={this.state.review.kidFriendly}
+                    fullStarColor={'#eaaa00'}
+                    starSize={20}
+                    containerStyle={{width: '25%'}}
+                />
+                <View style={{marginLeft: 10}}>
+                <Text style={styles.radio_title}>Stroller Kids</Text>
+                <StarRating
+                    disabled={true}
+                    maxStars={5}
+                    rating={this.state.review.strollerKids}
+                    fullStarColor={'#eaaa00'}
+                    starSize={20}
+                    containerStyle={{width: '25%'}}
+                />
+                
+                <Text style={styles.radio_title}>K-6</Text>
+                <StarRating
+                    disabled={true}
+                    maxStars={5}
+                    rating={this.state.review.kThroughSix}
+                    fullStarColor={'#eaaa00'}
+                    starSize={20}
+                    containerStyle={{width: '25%'}}
+                />
+                
+                <Text style={styles.radio_title}>Teenagers</Text>
+                <StarRating
+                    disabled={true}
+                    maxStars={5}
+                    rating={this.state.review.teenagers}
+                    fullStarColor={'#eaaa00'}
+                    starSize={20}
+                    containerStyle={{width: '25%'}}
+                />
+                </View>
+                <Text style={styles.radio_title_top}>{'\n'}Overall Environment Quality</Text>
+                <StarRating
+                    disabled={true}
+                    maxStars={5}
+                    rating={this.state.review.environment}
+                    fullStarColor={'#eaaa00'}
+                    starSize={20}
+                    containerStyle={{width: '25%'}}
+                />
+                <View style={{marginLeft: 10}}>
+                <Text style={styles.radio_title}>Smoking (1) restricted (5) prevalent</Text>
+                <StarRating
+                    disabled={true}
+                    maxStars={5}
+                    rating={this.state.review.isSmokingPermitted}
+                    fullStarColor={'#eaaa00'}
+                    starSize={20}
+                    containerStyle={{width: '25%'}}
+                />
+                <Text style={styles.radio_title}>Seating Arrangements</Text>
+                <StarRating
+                    disabled={true}
+                    maxStars={5}
+                    rating={this.state.review.seatingArrangements}
+                    fullStarColor={'#eaaa00'}
+                    starSize={20}
+                    containerStyle={{width: '25%'}}
+                />
+                
+                <Text style={styles.radio_title}>Safety</Text>
+                <StarRating
+                    disabled={true}
+                    maxStars={5}
+                    rating={this.state.review.safety}
+                    fullStarColor={'#eaaa00'}
+                    starSize={20}
+                    containerStyle={{width: '25%'}}
+                />
+                
+                <Text style={styles.radio_title}>Pet Friendliness</Text>
+                <StarRating
+                    disabled={true}
+                    maxStars={5}
+                    rating={this.state.review.petFriendly}
+                    fullStarColor={'#eaaa00'}
+                    starSize={20}
+                    containerStyle={{width: '25%'}}
+                />
+
+                <Text style={styles.radio_title}>Cleanliness</Text>
+                <StarRating
+                    disabled={true}
+                    maxStars={5}
+                    rating={this.state.review.cleanliness}
+                    fullStarColor={'#eaaa00'}
+                    starSize={20}
+                    containerStyle={{width: '25%'}}
+                />
+                <Text style={styles.radio_title}>Sound Level</Text>
+                <StarRating
+                    disabled={true}
+                    maxStars={5}
+                    rating={this.state.review.soundLevel}
+                    fullStarColor={'#eaaa00'}
+                    starSize={20}
+                    containerStyle={{width: '25%'}}
+                />
+                </View>
+                <Text style={styles.radio_title_top}>{'\n'}Overall Food Quality</Text>
+                <StarRating
+                    disabled={true}
+                    maxStars={5}
+                    rating={this.state.review.overallFood}
+                    fullStarColor={'#eaaa00'}
+                    starSize={20}
+                    containerStyle={{width: '25%'}}
+                />
+                <View style={{marginLeft: 10}}>
+                <Text style={styles.radio_title}>Food Option Diversity</Text>
+                <StarRating
+                    disabled={true}
+                    maxStars={5}
+                    rating={this.state.review.foodOptionDiversity}
+                    fullStarColor={'#eaaa00'}
+                    starSize={20}
+                    containerStyle={{width: '25%'}}
+                />
+                <Text style={styles.radio_title}>Non Alcoholic Options</Text>
+                <StarRating
+                    disabled={true}
+                    maxStars={5}
+                    rating={this.state.review.nonAlcoholicOptions}
+                    fullStarColor={'#eaaa00'}
+                    starSize={20}
+                    containerStyle={{width: '25%'}}
+                />
+                </View>
+                
+                </View>}
+                <Text style={styles.radio_title_top}>{'\n'}Logistics</Text>
                 <Text style={styles.radio_title}>
                 <Text>Enough changing tables:</Text>
                 <Text style={{fontWeight:'bold'}}> {(this.state.review.hasChangingTables >= .5) ? 'Yes' : 'No'} </Text>
@@ -104,118 +245,11 @@ export class ReviewScreen extends React.Component {
                 <Text style={styles.radio_title}>
                 <Text>Wheelchair accessible:</Text>
                 <Text style={{fontWeight:'bold'}}> {(this.state.review.isWheelchairAccessible >= .5) ? 'Yes' : 'No'}</Text>   
-                </Text>              
-                <Text style={styles.radio_title}>Seating Arrangements?</Text>
-                <StarRating
-                    disabled={true}
-                    maxStars={5}
-                    rating={this.state.review.seatingArrangements}
-                    fullStarColor={'#eaaa00'}
-                    starSize={20}
-                    containerStyle={{width: '25%'}}
-                />
-
-                <Text style={styles.radio_title}>Kid Friendly?</Text>
-                <StarRating
-                    disabled={true}
-                    maxStars={5}
-                    rating={this.state.review.kidFriendly}
-                    fullStarColor={'#eaaa00'}
-                    starSize={20}
-                    containerStyle={{width: '25%'}}
-                />
-                
-                <Text style={styles.radio_title}>Safety?</Text>
-                <StarRating
-                    disabled={true}
-                    maxStars={5}
-                    rating={this.state.review.safety}
-                    fullStarColor={'#eaaa00'}
-                    starSize={20}
-                    containerStyle={{width: '25%'}}
-                />
-                
-                <Text style={styles.radio_title}>Pet Friendly?</Text>
-                <StarRating
-                    disabled={true}
-                    maxStars={5}
-                    rating={this.state.review.petFriendly}
-                    fullStarColor={'#eaaa00'}
-                    starSize={20}
-                    containerStyle={{width: '25%'}}
-                />
-                
-                <Text style={styles.radio_title}>Food Option Diversity?</Text>
-                <StarRating
-                    disabled={true}
-                    maxStars={5}
-                    rating={this.state.review.foodOptionDiversity}
-                    fullStarColor={'#eaaa00'}
-                    starSize={20}
-                    containerStyle={{width: '25%'}}
-                />
-                
-                <Text style={styles.radio_title}>Non Alcoholic Options?</Text>
-                <StarRating
-                    disabled={true}
-                    maxStars={5}
-                    rating={this.state.review.nonAlcoholicOptions}
-                    fullStarColor={'#eaaa00'}
-                    starSize={20}
-                    containerStyle={{width: '25%'}}
-                />
-
-                <Text style={styles.radio_title}>Sound Level?</Text>
-                <StarRating
-                    disabled={true}
-                    maxStars={5}
-                    rating={this.state.review.soundLevel}
-                    fullStarColor={'#eaaa00'}
-                    starSize={20}
-                    containerStyle={{width: '25%'}}
-                />
-                
-                <Text style={styles.radio_title}>Smoking (1) restricted (5) prevalent</Text>
-                <StarRating
-                    disabled={true}
-                    maxStars={5}
-                    rating={this.state.review.isSmokingPermitted}
-                    fullStarColor={'#eaaa00'}
-                    starSize={20}
-                    containerStyle={{width: '25%'}}
-                />
-                
-                <Text style={styles.radio_title}>How good is it for stroller kids?</Text>
-                <StarRating
-                    disabled={true}
-                    maxStars={5}
-                    rating={this.state.review.strollerKids}
-                    fullStarColor={'#eaaa00'}
-                    starSize={20}
-                    containerStyle={{width: '25%'}}
-                />
-                
-                <Text style={styles.radio_title}>How good is it for K-6 kids?</Text>
-                <StarRating
-                    disabled={true}
-                    maxStars={5}
-                    rating={this.state.review.kThroughSix}
-                    fullStarColor={'#eaaa00'}
-                    starSize={20}
-                    containerStyle={{width: '25%'}}
-                />
-                
-                <Text style={styles.radio_title}>How good is it for teenagers?</Text>
-                <StarRating
-                    disabled={true}
-                    maxStars={5}
-                    rating={this.state.review.teenagers}
-                    fullStarColor={'#eaaa00'}
-                    starSize={20}
-                    containerStyle={{width: '25%'}}
-                />
-                </View>}
-                <Text style={{width: '100%'}}>Comments:</Text>
+                </Text>  
+                <Text style={[styles.radio_title, {width: '100%'}]}>Parking:                 
+                <Text>{" " + this.state.review.parking}</Text>
+                </Text>
+                <Text style={{width: '100%'}}>{'\n'}Comments:</Text>
                 <Text style={{width: '100%'}}>"{this.state.review.comments}"</Text>
             </View>
             </ScrollView>
@@ -256,6 +290,10 @@ const styles = StyleSheet.create({
   },
   radio_title: {
     marginTop: 5,
+  },
+  radio_title_top: {
+    marginTop: 5,
+    fontWeight:'bold'
   },
   image_style: {
     borderRadius: 100,
