@@ -49,10 +49,6 @@ export class ViewProfileScreen extends React.Component {
         id = this.props.navigation.state.params.id;
         firebaseApp.database().ref("/Users/" + id).once('value').then((snapshot) => {
             this.setState({user: snapshot.val()});
-            if (this.state.user.reviews.length > 3) {
-                this.state.user.reviews = this.state.user.reviews.slice(0,3);
-                this.setState({});
-            }
             this.setState({});
         });
 
@@ -87,10 +83,6 @@ export class ViewProfileScreen extends React.Component {
                         <Text style={[styles.subtitle_style2]}>Bio</Text>
                         <Text style={styles.subtitle_style3}>{this.state.user.description}</Text>
                     </View>
-
-                    <List>
-                        {this.renderReviewsList()}
-                    </List>
                 </View> }
                 {this.state.user == null && <View style={{flex:1}}/>}
                 
@@ -98,41 +90,6 @@ export class ViewProfileScreen extends React.Component {
             </ScrollView>                     
         );
     }
-
-    renderReviewsList() {
-        if (this.state.user == null || this.state.user.reviews == null) {
-            return <Text>No Reviews Yet!</Text>
-        }
-        return _.map(this.state.user.reviews, (rev) => {
-            return (
-                <ListItem key={this.hashCode(rev.breweryName)}>
-                    <TouchableOpacity 
-                        onPress={() => this.props.navigation.navigate("ReviewView", {navigation: this.props.navigation, review: rev})}> 
-                        <Text style={{width: '100%'}}>{rev.breweryName}</Text>
-                        <StarRating
-                            disabled={true}
-                            maxStars={5}
-                            rating={rev.overallRating}
-                            fullStarColor={'#eaaa00'}
-                            starSize={20}
-                            containerStyle={{width: '25%'}}
-                        />
-                        <Text style={{width:'100%', fontSize:11}}>
-                            {rev.comments}
-                        </Text>                        
-                        </TouchableOpacity>
-                </ListItem>
-            );
-        });
-    }
-
-    hashCode(s) {
-        var h = 0, l = s.length, i = 0;
-        if ( l > 0 )
-            while (i < l)
-            h = (h << 5) - h + s.charCodeAt(i++) | 0;
-        return h;
-    };
 }
 
 const styles = StyleSheet.create({

@@ -359,37 +359,6 @@ export class AddReviewScreen extends React.Component {
         var timestamp = (new Date().getMonth() + 1) + "/" + new Date().getDate() + "/" + new Date().getFullYear();
         ref.on("value", (snapshot) => {
             ref.off('value');
-            firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid).child("reviews/" + this.state.revId).set({
-                userId: firebaseApp.auth().currentUser.uid,
-                username: snapshot.val().username,
-                date: timestamp,
-                environment: this.state.environment,
-                overallFood: this.state.overallFood,
-                cleanliness: this.state.cleanliness,
-                parking: this.state.parking,
-                breweryId: this.state.breweryId,
-                hasChangingTables: this.state.hasChangingTables,
-                hasFamilyRestroom: this.state.hasFamilyRestroom,
-                isWheelchairAccessible: this.state.isWheelchairAccessible,
-                seatingArrangements: this.state.seatingArrangements,
-                kidFriendly: this.state.kidFriendly,
-                safety: this.state.safety,
-                petFriendly: this.state.petFriendly,
-                foodOptionDiversity: this.state.foodOptionDiversity,
-                nonAlcoholicOptions: this.state.nonAlcoholicOptions,
-                soundLevel: this.state.soundLevel,
-                isSmokingPermitted: this.state.isSmokingPermitted,
-                strollerKids: this.state.strollerKids,
-                kThroughSix: this.state.kThroughSix,
-                teenagers: this.state.teenagers,
-                overallRating: this.state.overallRating,
-                revId: this.state.revId,
-                breweryName: this.state.breweryName,
-                photo: this.state.photo,
-                latitude: this.state.lat,
-                longitude: this.state.long,
-                comments: this.state.comments,
-            });
 
             firebaseApp.database().ref("Reviews/" + this.state.revId).set({
                 userId: firebaseApp.auth().currentUser.uid,

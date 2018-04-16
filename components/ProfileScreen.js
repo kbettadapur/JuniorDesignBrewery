@@ -72,11 +72,11 @@ export class ProfileScreen extends React.Component {
                 {this.state.user != null && <View style={{flex: 1, backgroundColor: '#fff'}}>
                     <View style={{alignItems: 'center'}}>
                         <LinearGradient colors={['#0066cc', '#2196F3']} style={{width:'100%', alignItems:'center'}}>
-                        {this.state.user.avatar != null && <TouchableOpacity>
+                        {this.state.user.avatar != null && 
                             <View>
                                     <Image source={{ uri:  'data:image/png;base64,' + this.state.user.avatar.join('')}} style={styles.image_style} />
                             </View>
-                        </TouchableOpacity>}
+                        }
                         <Text style={styles.title_style}>{this.state.user.username}</Text>
                             {this.state.user.age > 0 && <Text style={[styles.subtitle_style]}>
                             {this.state.user.age == -1 ? "" : this.state.user.age} Years Old
