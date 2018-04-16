@@ -104,6 +104,9 @@ export class ReviewScreen extends React.Component {
                     containerStyle={{width: '25%'}}
                 />
                 <View style={{marginLeft: 10}}>
+                    
+                {!!this.state.review.strollerKids &&
+                <View>
                 <Text style={styles.radio_title}>Stroller Kids</Text>
                 <StarRating
                     disabled={true}
@@ -112,8 +115,10 @@ export class ReviewScreen extends React.Component {
                     fullStarColor={'#eaaa00'}
                     starSize={20}
                     containerStyle={{width: '25%'}}
-                />
+                /></View>}
                 
+                {!!this.state.review.kThroughSix &&
+                <View>
                 <Text style={styles.radio_title}>K-6</Text>
                 <StarRating
                     disabled={true}
@@ -122,8 +127,10 @@ export class ReviewScreen extends React.Component {
                     fullStarColor={'#eaaa00'}
                     starSize={20}
                     containerStyle={{width: '25%'}}
-                />
+                /></View>}
                 
+                {!!this.state.review.kThroughSix &&
+                <View>
                 <Text style={styles.radio_title}>Teenagers</Text>
                 <StarRating
                     disabled={true}
@@ -132,7 +139,8 @@ export class ReviewScreen extends React.Component {
                     fullStarColor={'#eaaa00'}
                     starSize={20}
                     containerStyle={{width: '25%'}}
-                />
+                /></View>}
+
                 </View>
                 <Text style={styles.radio_title_top}>{'\n'}Overall Environment Quality</Text>
                 <StarRating
@@ -144,6 +152,8 @@ export class ReviewScreen extends React.Component {
                     containerStyle={{width: '25%'}}
                 />
                 <View style={{marginLeft: 10}}>
+                {!!this.state.review.isSmokingPermitted &&
+                <View>
                 <Text style={styles.radio_title}>Smoking (1) restricted (5) prevalent</Text>
                 <StarRating
                     disabled={true}
@@ -152,7 +162,9 @@ export class ReviewScreen extends React.Component {
                     fullStarColor={'#eaaa00'}
                     starSize={20}
                     containerStyle={{width: '25%'}}
-                />
+                /></View>}
+                {!!this.state.review.seatingArrangements && 
+                <View>
                 <Text style={styles.radio_title}>Seating Arrangements</Text>
                 <StarRating
                     disabled={true}
@@ -161,8 +173,10 @@ export class ReviewScreen extends React.Component {
                     fullStarColor={'#eaaa00'}
                     starSize={20}
                     containerStyle={{width: '25%'}}
-                />
+                /></View>}
                 
+                {!!this.state.review.safety &&
+                <View>
                 <Text style={styles.radio_title}>Safety</Text>
                 <StarRating
                     disabled={true}
@@ -171,8 +185,10 @@ export class ReviewScreen extends React.Component {
                     fullStarColor={'#eaaa00'}
                     starSize={20}
                     containerStyle={{width: '25%'}}
-                />
+                /></View>}
                 
+                {!!this.state.review.petFriendly &&
+                <View>
                 <Text style={styles.radio_title}>Pet Friendliness</Text>
                 <StarRating
                     disabled={true}
@@ -181,8 +197,10 @@ export class ReviewScreen extends React.Component {
                     fullStarColor={'#eaaa00'}
                     starSize={20}
                     containerStyle={{width: '25%'}}
-                />
-
+                /></View>}
+                
+                {!!this.state.review.cleanliness &&
+                <View>
                 <Text style={styles.radio_title}>Cleanliness</Text>
                 <StarRating
                     disabled={true}
@@ -191,7 +209,10 @@ export class ReviewScreen extends React.Component {
                     fullStarColor={'#eaaa00'}
                     starSize={20}
                     containerStyle={{width: '25%'}}
-                />
+                /></View>}
+
+                {!!this.state.review.soundLevel &&
+                <View>
                 <Text style={styles.radio_title}>Sound Level</Text>
                 <StarRating
                     disabled={true}
@@ -200,7 +221,7 @@ export class ReviewScreen extends React.Component {
                     fullStarColor={'#eaaa00'}
                     starSize={20}
                     containerStyle={{width: '25%'}}
-                />
+                /></View>}
                 </View>
                 <Text style={styles.radio_title_top}>{'\n'}Overall Food Quality</Text>
                 <StarRating
@@ -212,6 +233,8 @@ export class ReviewScreen extends React.Component {
                     containerStyle={{width: '25%'}}
                 />
                 <View style={{marginLeft: 10}}>
+                {!!this.state.review.foodOptionDiversity &&
+                <View>
                 <Text style={styles.radio_title}>Food Option Diversity</Text>
                 <StarRating
                     disabled={true}
@@ -220,7 +243,9 @@ export class ReviewScreen extends React.Component {
                     fullStarColor={'#eaaa00'}
                     starSize={20}
                     containerStyle={{width: '25%'}}
-                />
+                /></View>}
+                {!!this.state.review.nonAlcoholicOptions &&
+                <View>
                 <Text style={styles.radio_title}>Non Alcoholic Options</Text>
                 <StarRating
                     disabled={true}
@@ -229,23 +254,26 @@ export class ReviewScreen extends React.Component {
                     fullStarColor={'#eaaa00'}
                     starSize={20}
                     containerStyle={{width: '25%'}}
-                />
+                /></View>}
                 </View>
                 
                 </View>}
                 <Text style={styles.radio_title_top}>{'\n'}Logistics</Text>
+                {!!this.state.review.hasChangingTables &&
                 <Text style={styles.radio_title}>
                 <Text>Enough changing tables:</Text>
                 <Text style={{fontWeight:'bold'}}> {(this.state.review.hasChangingTables >= .5) ? 'Yes' : 'No'} </Text>
-                </Text>
+                </Text>}
+                {!!this.state.review.hasFamilyRestroom &&
                 <Text style={styles.radio_title}>
                 <Text>Family restroom availabality:</Text>
                 <Text style={{fontWeight:'bold'}}> {(this.state.review.hasFamilyRestroom >= .5) ? 'Yes' : 'No'}</Text>
-                </Text>
+                </Text>}
+                {!!this.state.review.isWheelchairAccessible &&
                 <Text style={styles.radio_title}>
                 <Text>Wheelchair accessible:</Text>
                 <Text style={{fontWeight:'bold'}}> {(this.state.review.isWheelchairAccessible >= .5) ? 'Yes' : 'No'}</Text>   
-                </Text>  
+                </Text>}  
                 <Text style={[styles.radio_title, {width: '100%'}]}>Parking:                 
                 <Text>{" " + this.state.review.parking}</Text>
                 </Text>
