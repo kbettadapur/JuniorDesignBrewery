@@ -129,7 +129,7 @@ export class ReviewScreen extends React.Component {
                     containerStyle={{width: '25%'}}
                 /></View>}
                 
-                {!!this.state.review.kThroughSix &&
+                {!!this.state.review.teenagers &&
                 <View>
                 <Text style={styles.radio_title}>Teenagers</Text>
                 <StarRating

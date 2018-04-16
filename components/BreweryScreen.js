@@ -181,7 +181,7 @@ export class BreweryScreen extends React.Component {
                         containerStyle={{width: '25%'}}
                     /></View>}
                     
-                    {!!this.state.revsAvg.kThroughSix &&
+                    {!!this.state.revsAvg.teenagers &&
                     <View>
                     <Text style={styles.radio_title}>Teenagers</Text>
                     <StarRating
