@@ -55,7 +55,7 @@ export class BreweryScreen extends React.Component {
             rev: null,
             favorited: false,
             isMounted: false,
-            count: 0,
+            //count: 0,
         }
         global.main = false;
         firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid + "/Favorites/").on('value', (snapshot) => {
@@ -91,7 +91,7 @@ export class BreweryScreen extends React.Component {
                         }
                     });
                 }
-                this.state.count = this.state.reviews.length < 3 ? this.state.reviews : 3;
+                //this.state.count = this.state.reviews.length < 3 ? this.state.reviews : 3;
             if(this.state.isMounted)
                 this.setState({});
         });
@@ -368,8 +368,8 @@ export class BreweryScreen extends React.Component {
 
     renderReviewsList() {
         if (this.state.reviews != null && this.state.reviews.length > 0 && this.state.pictures != null && Object.keys(this.state.pictures).length == this.state.reviews.length) {
-            var revs = this.state.reviews.slice(0, this.state.count);
-            return _.map(revs, (rev) => {
+            //var revs = this.state.reviews.slice(0, this.state.count);
+            return _.map(this.state.reviews, (rev) => {
                     return (
                         <ListItem key={new Date().getTime()}>
                             <TouchableOpacity style={{display: 'flex', flexDirection: 'row'}} onPress={() => this.props.navigation.navigate("ReviewView", {navigation: this.props.navigation, review: rev})}>

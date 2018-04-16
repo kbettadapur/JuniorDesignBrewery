@@ -1,13 +1,20 @@
 {
   "expo": {
-    "sdkVersion": "23.0.0"
-  },
-  "android": {
-     "config": {
-       "googleMaps": {
-         "apiKey": "AIzaSyDE8Y3M0sRuUWo9le6Cv6-R-MH68G2cLTM"
-       }
-     },
-     "package": "com.juniordesign.familyfriendlybrewerytrackr"
+    "name": "FFBT",
+    "sdkVersion": "23.0.0",
+    "version": "1.0.0",
+    "slug": "native-component-list",
+    "icon": "./current_location.png",
+    "android": {
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyDE8Y3M0sRuUWo9le6Cv6-R-MH68G2cLTM"
+        }
+      },
+      "package": "com.juniordesign.familyfriendlybrewerytrackr"
+    },
+    "ios": {
+      "bundleIdentifier": "com.juniordesign.familyfriendlybrewerytrackr"
+    }
   }
 }
