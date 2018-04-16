@@ -237,7 +237,7 @@ export class MapScreen extends React.Component {
         else if(this.props.sort === "Distance") {
             this.state.breweries.sort(function(a,b) {
                 var x = t.state.ulat;
-                var y = t.state.ulng;
+                var y = t.state.ulong;
                 var dist1 = geolib.getDistance({latitude: x, longitude: y}, {latitude: a.latitude, longitude: a.longitude});
                 var dist2 = geolib.getDistance({latitude: x, longitude: y}, {latitude: b.latitude, longitude: b.longitude});
                 return (dist1 < dist2) ? -1 : (dist1 > dist2) ? 1 : 0;               
