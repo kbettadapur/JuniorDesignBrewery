@@ -323,10 +323,9 @@ export class BreweryScreen extends React.Component {
                     <Text style={{fontWeight:'bold'}}> {(this.state.revsAvg.isWheelchairAccessible >= .5) ? 'Yes' : 'No'}</Text>   
                     </Text>
                     <Text style={styles.radio_title_top}>Reviews:</Text>
+                    <View>{this.renderContent()}</View>
                     </View>
-                }
-                {this.renderContent()}
-                
+                }                
             </View>
             </ScrollView>
 
@@ -385,7 +384,7 @@ export class BreweryScreen extends React.Component {
                         </ListItem>
                     );
                 }); 
-        } else if(this.state.reviews != null && !this.state.spinnerVisible) {
+        } else if(this.state.reviews != null && this.state.reviews.length == 0 && !this.state.spinnerVisible) {
             return (
                 <Text style={{textAlign: 'center'}}>No Reviews Yet!</Text>
             )

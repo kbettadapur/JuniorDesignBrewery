@@ -67,15 +67,11 @@ export class FavoritesScreen extends React.Component {
     }
 
     componentWillMount() {
-        console.log("Mount");
         this._getLocationAsync()
     }
     
     _getLocationAsync = async () => {
         let { status } = await Permissions.askAsync(Permissions.LOCATION);
-        if (status !== 'granted') {
-            console.log("Denied");
-        }
 
         let location = await Location.getCurrentPositionAsync({});
         this.state.location.lat = location.coords.latitude;
@@ -90,7 +86,7 @@ export class FavoritesScreen extends React.Component {
                         color={"rgb(66,137,244)"}
                         visible={(this.state.favorites == null)} 
                         textStyle={{color: '#000000'}} />
-            <View style={{flex: 1}}>
+            <View style={{flex: 1, backgroundColor:'white'}}>
                 {this.renderContent()}
             </View>
             <Footer style={{width: '100%'}}>

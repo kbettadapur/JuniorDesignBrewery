@@ -78,7 +78,7 @@ export class YourReviewsScreen extends React.Component {
                         color={"rgb(66,137,244)"}
                         visible={this.state.reviews == null} 
                         textStyle={{color: '#000000'}} />
-            <View style={{flex: 1}}>
+            <View style={{flex: 1, backgroundColor:'white'}}>
                 {this.renderContent()}
             </View>
             <Footer style={{width: '100%'}}>
