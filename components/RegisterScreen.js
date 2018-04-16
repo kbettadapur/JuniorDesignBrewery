@@ -144,8 +144,6 @@ export class RegisterScreen extends React.Component {
         this.setState({});
         this.props.navigation.navigate("Main", {navigation: this.props.navigation});
       }).catch((error) => {
-          console.log("REGISTRATION FAILED");
-          console.log(error)
           this.setState({registerClicked: false});
           this.setState({registerFailed: true});
           this.setState({errorMessage: error.message})

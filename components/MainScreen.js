@@ -87,7 +87,6 @@ export class MainScreen extends React.Component {
         });
         global.main = true;
         firebaseApp.auth().onAuthStateChanged(function(user) {
-            console.log("Auth change");
             if (user) {
                 global.main = true;
             } else {
@@ -128,7 +127,6 @@ export class MainScreen extends React.Component {
     }
   }
   _sortClick(index) {
-    console.log(index)
     if(index == 0)
         this.setState({sort:"Distance"})
     else if(index == 1)
@@ -143,7 +141,6 @@ export class MainScreen extends React.Component {
         await firebaseApp.auth().signOut();
         this.props.navigation.dispatch(NavigationActions.back());
     } catch (e) {
-        console.log(e);
     }
 }
   render() {
@@ -205,7 +202,6 @@ export class MainScreen extends React.Component {
   }
 
   renderTabs() {
-   // console.log(global.mapVisible);
     return (
       <Container>
         <Footer>

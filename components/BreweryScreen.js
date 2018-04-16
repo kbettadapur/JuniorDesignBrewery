@@ -85,7 +85,6 @@ export class BreweryScreen extends React.Component {
                                 if (this.state.isMounted)
                                     this.setState({});
                             });
-                            // while (this.state.pictures.length != this.state.reviews.length) { }
                         }
                     });
                 }

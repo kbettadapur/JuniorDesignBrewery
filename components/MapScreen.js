@@ -64,9 +64,6 @@ export class MapScreen extends React.Component {
     
     _getLocationAsync = async () => {
         let { status } = await Permissions.askAsync(Permissions.LOCATION);
-        if (status !== 'granted') {
-            console.log("Denied");
-        }
 
         let location = await Location.getCurrentPositionAsync({});
         this.state.lat = location.coords.latitude;
@@ -172,7 +169,6 @@ export class MapScreen extends React.Component {
     }
 
     search() {
-        //console.log(this.state.query);
         
         fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + this.state.query + '&key=AIzaSyDiooLoAXwvs42CPdgVKhqRwjqiUHok8gs')
             .then((r) => r.json().then((d) => {
@@ -276,7 +272,6 @@ export class MapScreen extends React.Component {
     mapToggle() {
         this.setState({mapVisible: !this.state.mapVisible});
         global.mapVisible = !global.mapVisible; 
-        console.log(global.mapVisible)
     }
 }
 

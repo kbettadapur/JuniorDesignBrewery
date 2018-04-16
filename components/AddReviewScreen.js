@@ -349,7 +349,6 @@ export class AddReviewScreen extends React.Component {
     submitReview() {
         if(!this.state.overallRating || !this.state.kidFriendly || !this.state.environment || !this.state.overallFood) {
             this.setState({error: true});
-            console.log(this.state.error);
             return;
         }
         this.setState({spinnerVisible: true})
@@ -358,7 +357,6 @@ export class AddReviewScreen extends React.Component {
         }
         var ref = firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid);
         var timestamp = (new Date().getMonth() + 1) + "/" + new Date().getDate() + "/" + new Date().getFullYear();
-        console.log(timestamp);
         ref.on("value", (snapshot) => {
             ref.off('value');
             firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid).child("reviews/" + this.state.revId).set({
@@ -427,7 +425,6 @@ export class AddReviewScreen extends React.Component {
                 const backAction = NavigationActions.back({
                     key: null
                   }) 
-                  console.log("Back!");
                   this.props.navigation.dispatch(backAction);                
             });
         });

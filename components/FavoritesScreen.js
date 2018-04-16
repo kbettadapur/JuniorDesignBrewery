@@ -77,7 +77,6 @@ export class FavoritesScreen extends React.Component {
         this.state.location.lat = location.coords.latitude;
         this.state.location.lng = location.coords.longitude;
         this.setState({});
-        console.log(this.state.location);
     }
     render() {
         return (

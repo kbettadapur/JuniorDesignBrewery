@@ -116,7 +116,6 @@ export class LoginScreen extends React.Component {
         this.props.navigation.navigate("Main", {navigation: this.props.navigation});
       })
       .catch((error) => {
-        console.log("LOGIN FAILED");
         var errorCode = error.code;
         var errorMessage = error.message;
         this.setState({error: errorMessage, loginFailed: true, loginClicked: false});

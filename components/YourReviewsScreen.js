@@ -61,9 +61,6 @@ export class YourReviewsScreen extends React.Component {
     
     _getLocationAsync = async () => {
         let { status } = await Permissions.askAsync(Permissions.LOCATION);
-        if (status !== 'granted') {
-            console.log("Denied");
-        }
 
         let location = await Location.getCurrentPositionAsync({});
         this.state.location.lat = location.coords.latitude;
