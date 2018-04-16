@@ -453,7 +453,6 @@ const styles = StyleSheet.create({
   },
   radio_title: {
     fontSize: 14,
-    fontWeight: 'bold',
     marginTop: 5,
   },
   radio_final_title: {

@@ -259,26 +259,29 @@ export class ReviewScreen extends React.Component {
                 
                 </View>}
                 <Text style={styles.radio_title_top}>{'\n'}Logistics</Text>
-                {!!this.state.review.hasChangingTables &&
                 <Text style={styles.radio_title}>
                 <Text>Enough changing tables:</Text>
                 <Text style={{fontWeight:'bold'}}> {(this.state.review.hasChangingTables >= .5) ? 'Yes' : 'No'} </Text>
-                </Text>}
-                {!!this.state.review.hasFamilyRestroom &&
+                </Text>
                 <Text style={styles.radio_title}>
                 <Text>Family restroom availabality:</Text>
                 <Text style={{fontWeight:'bold'}}> {(this.state.review.hasFamilyRestroom >= .5) ? 'Yes' : 'No'}</Text>
-                </Text>}
-                {!!this.state.review.isWheelchairAccessible &&
+                </Text>
                 <Text style={styles.radio_title}>
                 <Text>Wheelchair accessible:</Text>
                 <Text style={{fontWeight:'bold'}}> {(this.state.review.isWheelchairAccessible >= .5) ? 'Yes' : 'No'}</Text>   
-                </Text>}  
-                <Text style={[styles.radio_title, {width: '100%'}]}>Parking:                 
-                <Text>{" " + this.state.review.parking}</Text>
                 </Text>
+                {!!this.state.review.parking &&
+                <View>
+                <Text style={[styles.radio_title, {width: '100%'}]}>Parking:                 
+                </Text>
+                <Text>"{this.state.review.parking}"</Text>
+                </View>}
+                {!!this.state.review.comments &&
+                <View>
                 <Text style={{width: '100%'}}>{'\n'}Comments:</Text>
-                <Text style={{width: '100%'}}>"{this.state.review.comments}"</Text>
+                <Text style={{width: '100%'}}>"{this.state.review.comments}"</Text> 
+                </View>}
             </View>
             </ScrollView>
 
