@@ -111,7 +111,7 @@ export class LoginScreen extends React.Component {
 
   login() {
     this.setState({loginClicked: true, loginFailed: false});
-    var s = firebaseApp.auth().signInWithEmailAndPassword(this.state.email == "" ? "ricky@gmail.com" : this.state.email.trim(), this.state.password == "" ? "ricky123" : this.state.password)
+    var s = firebaseApp.auth().signInWithEmailAndPassword(this.state.email.trim(), this.state.password)
       .then(() => {
         this.props.navigation.navigate("Main", {navigation: this.props.navigation});
       })

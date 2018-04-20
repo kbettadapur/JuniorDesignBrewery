@@ -90,7 +90,6 @@ export class BreweryScreen extends React.Component {
                         }
                     });
                 }
-                //this.state.count = this.state.reviews.length < 3 ? this.state.reviews : 3;
             if(this.state.isMounted)
                 this.setState({});
         });
