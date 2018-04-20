@@ -135,7 +135,7 @@ export class BreweryScreen extends React.Component {
             <ScrollView style={{backgroundColor: '#fff'}}>
             <Image
                     style={{width: '100%', height: 200}}
-                    source={{uri: 'https://maps.googleapis.com/maps/api/place/photo?maxwidth=1000&key=AIzaSyDiooLoAXwvs42CPdgVKhqRwjqiUHok8gs&photoreference=' + this.state.brewery.photo}}
+                    source={{uri: 'https://maps.googleapis.com/maps/api/place/photo?maxwidth=1000&key=AIzaSyBCDrIwmnP8wy528KFOz7I7NhVE7DeV_cI&photoreference=' + this.state.brewery.photo}}
                 />
             <View style={styles.container}>
                 <Text style={styles.title}>{this.state.brewery.name}</Text>
