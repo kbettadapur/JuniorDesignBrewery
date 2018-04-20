@@ -27,7 +27,7 @@ Release Notes:
 
 Installation/Build Guide:
 1. Install npm https://www.npmjs.com/
-2. Download or clone the repository https://github.com/FFBreweryTrackr/FFBT.git
+2. Download or clone the repository https://github.com/FFBreweryTrackr/JuniorDesignBrewery.git
 3. Navigate to the folder containing the repository and run "npm install" - this will take a while and install all necessary libraries.
 4. Install expo (https://docs.expo.io/versions/latest/introduction/installation) 
 5. Obtain a Firebase key by going to console.firebase.google.com, signing in, and going to "Project Settings" (click the gear icon next to "Project Overview" and clicking "add firebase to your web app." Create a file called "firebase.js" and copy/paste the following into it. Then, copy over the values for each field in "config". 
