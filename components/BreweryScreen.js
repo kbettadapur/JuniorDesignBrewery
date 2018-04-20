@@ -326,13 +326,9 @@ export class BreweryScreen extends React.Component {
                     <Text style={{fontWeight:'bold'}}> {(this.state.revsAvg.isWheelchairAccessible >= .5) ? 'Yes' : 'No'}</Text>   
                     </Text>
                     <Text style={styles.radio_title_top}>Reviews:</Text>
-                    <View>{this.renderContent()}</View>
-                    {Object.keys(this.state.pictures).length > 3 && this.state.count != Object.keys(this.state.pictures).length 
-                        && <View style={{width: '100%', alignItems: 'center'}}>
-                    <Text onPress={this.viewMore.bind(this)} style={{padding: 10, color: '#0000ff'}}>View More</Text>
-                    </View>}
                     </View>
                 }                
+                <View>{this.renderContent()}</View>
             </View>
             </ScrollView>
 
@@ -368,7 +364,6 @@ export class BreweryScreen extends React.Component {
 
     renderReviewsList() {
         if (this.state.reviews != null && this.state.reviews.length > 0 && this.state.pictures != null && Object.keys(this.state.pictures).length == this.state.reviews.length) {
-            //var revs = this.state.reviews.slice(0, this.state.count);
             return _.map(this.state.reviews, (rev) => {
                     return (
                         <ListItem key={new Date().getTime()}>
@@ -393,6 +388,7 @@ export class BreweryScreen extends React.Component {
                     );
                 }); 
         } else if(this.state.reviews != null && this.state.reviews.length == 0 && !this.state.spinnerVisible) {
+            console.log("no review");
             return (
                 <Text style={{textAlign: 'center'}}>No Reviews Yet!</Text>
             )

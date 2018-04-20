@@ -4,7 +4,7 @@
     "sdkVersion": "23.0.0",
     "version": "1.0.0",
     "slug": "native-component-list",
-    "icon": "./current_location.png",
+    "icon": "./icon.png",
     "android": {
       "config": {
         "googleMaps": {

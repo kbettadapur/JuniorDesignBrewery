@@ -31,7 +31,7 @@ import ModalDropdown from 'react-native-modal-dropdown';
 import firebaseApp from '../firebase';
 import { NavigationActions } from 'react-navigation';
 
-const MAP_TAB = "Brewery Map";
+const MAP_TAB = "Breweries";
 const FAVORITES_TAB = "Your Favorites";
 const YOUR_REVIEWS_TAB = "Your Reviews";
 const PROFILE_TAB = "Your Profile";

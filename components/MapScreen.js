@@ -42,9 +42,11 @@ export class MapScreen extends React.Component {
             breweries: [],
             lat: 0,
             lng: 0,
-            ulat: 0,
-            ulong: 0,
             mapVisible: true,
+        }
+        if(global.ulat == null || global.ulong == null) {
+            global.ulat = 0;
+            global.ulong = 0;
         }
         global.main = true;
         if(global.mapVisible == null) {
@@ -68,8 +70,8 @@ export class MapScreen extends React.Component {
         let location = await Location.getCurrentPositionAsync({});
         this.state.lat = location.coords.latitude;
         this.state.lng = location.coords.longitude;
-        this.state.ulat = location.coords.latitude;
-        this.state.ulong = location.coords.longitude;        
+        global.ulat = location.coords.latitude;
+        global.ulong = location.coords.longitude;        
         global.lat = location.coords.latitude;
         global.lng = location.coords.longitude;
     }
@@ -226,7 +228,6 @@ export class MapScreen extends React.Component {
 
     renderListView() {
         counter = 0;
-        var t = this;
         if(this.props.sort === "Alphabetical") {
             this.state.breweries.sort(function(a, b){
                 var textA = a.name.toUpperCase();
@@ -236,8 +237,8 @@ export class MapScreen extends React.Component {
         }
         else if(this.props.sort === "Distance") {
             this.state.breweries.sort(function(a,b) {
-                var x = t.state.ulat;
-                var y = t.state.ulong;
+                var x = global.ulat;
+                var y = global.ulong;
                 var dist1 = geolib.getDistance({latitude: x, longitude: y}, {latitude: a.latitude, longitude: a.longitude});
                 var dist2 = geolib.getDistance({latitude: x, longitude: y}, {latitude: b.latitude, longitude: b.longitude});
                 return (dist1 < dist2) ? -1 : (dist1 > dist2) ? 1 : 0;               
@@ -260,7 +261,7 @@ export class MapScreen extends React.Component {
                     <Text style={{width:'100%', color:'gray', fontSize:11}}>
                         Distance:   
                             {(this.state.lat || this.state.lng) 
-                            ? ' ' + Number(geolib.getDistance({latitude: this.state.ulat, longitude: this.state.ulong}, 
+                            ? ' ' + Number(geolib.getDistance({latitude: global.ulat, longitude: global.ulong}, 
                             {latitude: b.latitude, longitude: b.longitude}) * 0.000621371).toFixed(2) + ' miles': ' no location data'}
                     </Text>
                     </View>    
