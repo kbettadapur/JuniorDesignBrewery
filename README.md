@@ -25,13 +25,13 @@ Release Notes:
 
 Installation/Build Guide:
 1. Install npm https://www.npmjs.com/
-2. Download or clone the repository https://github.com/FFBreweryTrackr/FFBT
-3. Navigate to the folder containing the repository and run "npm install" - this will take a while
+2. Download or clone the repository https://github.com/FFBreweryTrackr/FFBT.git
+3. Navigate to the folder containing the repository and run "npm install" - this will take a while and install all necessary libraries.
 4. Install expo (https://docs.expo.io/versions/latest/introduction/installation) 
 5. Obtain a Firebase key by going to console.firebase.google.com, signing in, and going to "settings" and clicking "add firebase to your web app." Copy the values between the curly braces into their corresponding fields in the "firebase.js" file. 
 6. Open expo, create an account, and sign in
 7. Click "Open Existing Project" and open the folder containing the repository
-8. After the build completes in expo, click "share" and scan the barcode from the mobile application
+8. After the build completes in expo, click "share" and scan the barcode from the mobile application. If you run into an error while loading the app, try clicking the "restart" button - if this still doesn't fix the issue, close and reopen expo on your phone and computer. The app will take a while to load the first time it's loaded from your computer to your phone. 
 9. To build standalone android/ios app, follow the instructions found here: 
   https://docs.expo.io/versions/latest/distribution/building-standalone-apps - App can be pushed to the ios app store from here
   
