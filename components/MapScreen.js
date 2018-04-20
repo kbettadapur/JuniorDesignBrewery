@@ -93,7 +93,7 @@ export class MapScreen extends React.Component {
                     {this.renderMapViewMarkers()}
 
                     <MapView.Marker
-                            coordinate={{latitude: this.state.lat, longitude: this.state.lng}}
+                            coordinate={{latitude: global.lat, longitude: global.lng}}
                             name={"Your Location"}
                             image={current_location}
                         ></MapView.Marker>
@@ -178,8 +178,6 @@ export class MapScreen extends React.Component {
                 this.state.lat = d.results[0].geometry.location.lat;
                 this.state.lng = d.results[0].geometry.location.lng;
             })).then(() => {
-                global.lat = this.state.lat;
-                global.lng = this.state.lng;
                 this.searchBreweries(this.state.lat, this.state.lng)
             })
     }
