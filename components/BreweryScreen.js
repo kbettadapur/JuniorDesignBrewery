@@ -70,7 +70,6 @@ export class BreweryScreen extends React.Component {
             }
         });
         firebaseApp.database().ref("Reviews").on('value', (snapshot) => {
-            console.log("asdf")
             this.state.reviews = [];
             this.state.pictures = {};
             if (snapshot.val() != null) {
@@ -105,12 +104,14 @@ export class BreweryScreen extends React.Component {
         this.state.isMounted = true;
     }
     _setFavorite() {
+        var bname = this.state.brewery.name.replace(".", "").replace("$", "");
+        console.log(bname);
         if(this.state.isMounted) {
             this.state.favorited = !this.state.favorited;
             this.props.navigation.setParams({fave: this.state.favorited})
-        }
+        } 
         if(this.state.favorited) {
-            firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid + "/Favorites/" + this.state.brewery.name).set({
+            firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid + "/Favorites/" + bname).set({
                 name: this.state.brewery.name,
                 id: this.state.brewery.placeId,
                 latitude: this.state.brewery.latitude,
@@ -118,7 +119,7 @@ export class BreweryScreen extends React.Component {
                 photo: this.state.brewery.photo,
             })
         } else {
-            firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid + "/Favorites/" + this.state.brewery.name).remove();        
+            firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid + "/Favorites/" + bname).remove();        
         }
     }
     render() {
@@ -388,21 +389,12 @@ export class BreweryScreen extends React.Component {
                     );
                 }); 
         } else if(this.state.reviews != null && this.state.reviews.length == 0 && !this.state.spinnerVisible) {
-            console.log("no review");
             return (
                 <Text style={{textAlign: 'center'}}>No Reviews Yet!</Text>
             )
         }
     }
 
-    viewMore() {
-        if (this.state.count + 3 > Object.keys(this.state.pictures).length) {
-            this.state.count = Object.keys(this.state.pictures).length;
-        } else {
-            this.state.count += 3;
-        }
-        this.setState({});
-    }
 
     calcAvg(revs) {
         this.state.revsAvg.overallRating = this.avg(revs, "overallRating");
