@@ -172,12 +172,15 @@ export class MapScreen extends React.Component {
 
     search() {
         
-        fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + this.state.query + '&key=AIzaSyDiooLoAXwvs42CPdgVKhqRwjqiUHok8gs')
+        fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + this.state.query + '&key=AIzaSyBCDrIwmnP8wy528KFOz7I7NhVE7DeV_cI')
             .then((r) => r.json().then((d) => {
                 location = {};
+
                 this.state.lat = d.results[0].geometry.location.lat;
                 this.state.lng = d.results[0].geometry.location.lng;
+                console.log(this.state.lat, this.state.lng);
             })).then(() => {
+                console.log("then");
                 this.searchBreweries(this.state.lat, this.state.lng)
             })
     }
@@ -189,8 +192,12 @@ export class MapScreen extends React.Component {
     }
 
     searchBreweriesOnPress(lat, lng) {
+        console.log('https://maps.googleapis.com/maps/api/place/nearbysearch/'
+        + 'json?key=AIzaSyBCDrIwmnP8wy528KFOz7I7NhVE7DeV_cI'
+        + '&location=' + `${lat}` + ',' + `${lng}`
+        + '&radius=50000&name=brewery&keyword=brewery');
         fetch('https://maps.googleapis.com/maps/api/place/nearbysearch/'
-                    + 'json?key=AIzaSyDiooLoAXwvs42CPdgVKhqRwjqiUHok8gs'
+                    + 'json?key=AIzaSyBCDrIwmnP8wy528KFOz7I7NhVE7DeV_cI'
                     + '&location=' + `${lat}` + ',' + `${lng}`
                     + '&radius=50000&name=brewery&keyword=brewery')
             .then((response) => response.json().then(data => {
@@ -198,17 +205,19 @@ export class MapScreen extends React.Component {
                 var results = JSON.parse(JSON.stringify(data)).results;
                 results.forEach((val) => {
                     var b = new Brewery();
+                    
                     b.merge(val);
                     res.push(b);
                 });
                 global.breweries = res;
+                console.log(res);
                 this.setState({breweries: res, lat: lat, lng: lng});
             }));
     }
 
     searchBreweries(lat, lng) {
         fetch('https://maps.googleapis.com/maps/api/place/nearbysearch/'
-                    + 'json?key=AIzaSyDiooLoAXwvs42CPdgVKhqRwjqiUHok8gs'
+                    + 'json?key=AIzaSyBCDrIwmnP8wy528KFOz7I7NhVE7DeV_cI'
                     + '&location=' + `${lat}` + ',' + `${lng}`
                     + '&radius=50000&name=brewery&keyword=brewery')
             .then((response) => response.json().then(data => {
