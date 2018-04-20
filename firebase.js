@@ -22,7 +22,7 @@
 import * as firebase from 'firebase';
 
 var config = {
-  apiKey: "",
+  apiKey: "asdfasdf",
   authDomain: "",
   databaseURL: "",
   projectId: "",
