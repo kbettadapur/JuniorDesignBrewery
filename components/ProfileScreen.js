@@ -129,12 +129,12 @@ export class ProfileScreen extends React.Component {
                     </View>
                     <View style={{width: '100%', paddingLeft: 10, display: 'flex', flexDirection: 'row'}}>
                         <Text style={[styles.subtitle_style, {marginTop: 3, flex: 1}]}>Age: </Text>
-                        <TextInput style={{flex: 1, paddingBottom: 5, paddingLeft: 5}} keyboardType='numeric' value={this.state.user.age == -1 ? "": this.state.user.age + ""} onChangeText={(age) => {this.state.user.age = age; this.setState({user: this.state.user})}}></TextInput>
+                        <TextInput style={{flex: 1, paddingBottom: 5, paddingLeft: 5}} keyboardType='numeric' value={this.state.user.age == -1 ? "": this.state.user.age + ""} onChangeText={(age) => {this.state.user.age = age.replace(/[^0-9]/g, ''); this.setState({user: this.state.user})}}></TextInput>
                         <View style={{flex: 9}}></View>
                     </View>
                     <View style={{width: '100%', paddingLeft: 10, display: 'flex', flexDirection: 'row'}}>
                         <Text style={[styles.subtitle_style, {marginTop: 3, color:'black', flex: 5}]}>Number of kids: </Text>
-                        <TextInput style={{flex: 1, paddingBottom: 5, paddingLeft: 5}} keyboardType='numeric' value={this.state.user.num_children + ""} onChangeText={(num_children) => {this.state.user.num_children = num_children; this.setState({user: this.state.user})}}></TextInput>
+                        <TextInput style={{flex: 1, paddingBottom: 5, paddingLeft: 5}} keyboardType='numeric' value={this.state.user.num_children + ""} onChangeText={(num_children) => {this.state.user.num_children = num_children.replace(/[^0-9]/g, ''); this.setState({user: this.state.user})}}></TextInput>
                         <View style={{flex: 9}}></View>
                     </View>              
                 </View>
