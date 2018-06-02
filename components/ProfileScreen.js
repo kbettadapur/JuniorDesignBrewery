@@ -179,10 +179,10 @@ export class ProfileScreen extends React.Component {
         this.state.user.avatar = avatar;
         this.state.old_vals = Object.assign({}, this.state.user);
         firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid).set({
-            age: this.state.user.age,
+            age: Number(this.state.user.age),
             description: this.state.user.description,
             email: this.state.user.email,
-            num_children: this.state.user.num_children,
+            num_children: Number(this.state.user.num_children),
             username: this.state.user.username,
             avatar: this.state.user.avatar,
         }).then(() => {
