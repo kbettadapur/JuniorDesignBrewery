@@ -28,6 +28,7 @@ import FAB from 'react-native-fab';
 import StarRating from 'react-native-star-rating';
 import Review from '../models/Review';
 import Spinner from 'react-native-loading-spinner-overlay';
+import admin from '../lib/admin';
 
 export class BreweryScreen extends React.Component {
 
@@ -93,6 +94,11 @@ export class BreweryScreen extends React.Component {
             if(this.state.isMounted)
                 this.setState({});
         });
+
+        // Set admin status from firebase
+        firebaseApp.database().ref("admins/").child(firebaseApp.auth().currentUser.uid).on('value', function(snapshot) {
+	        global.isAdmin = snapshot.val();
+	    });
     }
     componentDidMount() {
         // set handler method with setParams
@@ -365,6 +371,9 @@ export class BreweryScreen extends React.Component {
     renderReviewsList() {
         if (this.state.reviews != null && this.state.reviews.length > 0 && this.state.pictures != null && Object.keys(this.state.pictures).length == this.state.reviews.length) {
             return _.map(this.state.reviews, (rev) => {
+
+            	// Check to see if review is set to visible
+            	if (rev.visible) {
                     return (
                         <ListItem key={new Date().getTime()}>
                             <TouchableOpacity style={{display: 'flex', flexDirection: 'row'}} onPress={() => this.props.navigation.navigate("ReviewView", {navigation: this.props.navigation, review: rev})}>
@@ -382,17 +391,41 @@ export class BreweryScreen extends React.Component {
                                         starSize={20}
                                         containerStyle={{width: '25%'}}
                                     />
+                                    <View>
+								        {isAdmin ? (
+								          	<Button
+									    	style={{fontSize: 20, color: 'green'}}
+										    styleDisabled={{color: 'red'}}
+										    title="Delete Review"
+										    onPress={this.deleteReview.bind(this, rev)}
+										    >
+											Delete
+											</Button>
+								      	) : (
+								        	null
+								      	)}
+								    </View>
                                 </View>
                             </TouchableOpacity>
                         </ListItem>
                     );
-                }); 
+                }
+            }); 
         } else if(this.state.reviews != null && this.state.reviews.length == 0 && !this.state.spinnerVisible) {
             return (
                 <Text style={{textAlign: 'center'}}>No Reviews Yet!</Text>
             )
         }
     }
+
+    // Delete button listener
+    deleteReview(rev, e) {
+	    e.preventDefault();
+	    firebaseApp.database().ref("Reviews/").child(rev.revId).update({
+	    	visible:false
+	    });
+	}
+
 
 
     calcAvg(revs) {

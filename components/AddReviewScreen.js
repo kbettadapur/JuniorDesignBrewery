@@ -86,9 +86,11 @@ export class AddReviewScreen extends React.Component {
             lat: 0,
             long: 0,
             date: new Date(),
+            visible: true
         }
         if(this.state.review != null) {
             this.state.overallRating = this.state.review.overallRating;
+            this.state.visible = this.state.visible;
             
             //logistics
             this.state.hasChangingTables = this.state.review.hasChangingTables;
@@ -390,6 +392,7 @@ export class AddReviewScreen extends React.Component {
                 latitude: this.state.lat,
                 longitude: this.state.long,
                 comments: this.state.comments,
+                visible: this.state.visible
             }).then(() => {
                 const backAction = NavigationActions.back({
                     key: null
