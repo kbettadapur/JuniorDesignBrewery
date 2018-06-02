@@ -28,6 +28,7 @@ import FAB from 'react-native-fab';
 import StarRating from 'react-native-star-rating';
 import Review from '../models/Review';
 import Spinner from 'react-native-loading-spinner-overlay';
+import admin from '../lib/admin';
 
 export class BreweryScreen extends React.Component {
 
@@ -55,6 +56,7 @@ export class BreweryScreen extends React.Component {
             rev: null,
             favorited: false,
             isMounted: false,
+            isAdmin: null,
             //count: 0,
         }
         global.main = false;
@@ -93,6 +95,12 @@ export class BreweryScreen extends React.Component {
             if(this.state.isMounted)
                 this.setState({});
         });
+
+        firebaseApp.database().ref("admins/").child(firebaseApp.auth().currentUser.uid).on('value', function(snapshot) {
+	        global.isAdmin = snapshot.val();
+	    });
+
+	    // global.isAdmin = admin.isAdmin(firebaseApp.auth().currentUser.uid);
     }
     componentDidMount() {
         // set handler method with setParams
@@ -364,7 +372,10 @@ export class BreweryScreen extends React.Component {
 
     renderReviewsList() {
         if (this.state.reviews != null && this.state.reviews.length > 0 && this.state.pictures != null && Object.keys(this.state.pictures).length == this.state.reviews.length) {
+        	// Check firebase for admin status
+
             return _.map(this.state.reviews, (rev) => {
+
                     return (
                         <ListItem key={new Date().getTime()}>
                             <TouchableOpacity style={{display: 'flex', flexDirection: 'row'}} onPress={() => this.props.navigation.navigate("ReviewView", {navigation: this.props.navigation, review: rev})}>
@@ -382,6 +393,20 @@ export class BreweryScreen extends React.Component {
                                         starSize={20}
                                         containerStyle={{width: '25%'}}
                                     />
+                                    <View>
+								      {isAdmin ? (
+								        <Button
+									    style={{fontSize: 20, color: 'green'}}
+									    styleDisabled={{color: 'red'}}
+									    title="Delete Review"
+									    onPress={this.deleteReview.bind(this, rev)}
+										>
+										Delete
+										</Button>
+								      ) : (
+								        null
+								      )}
+								    </View>
                                 </View>
                             </TouchableOpacity>
                         </ListItem>
@@ -393,6 +418,15 @@ export class BreweryScreen extends React.Component {
             )
         }
     }
+
+    deleteReview(rev, e) {
+	    e.preventDefault();
+	    console.log(rev);
+	    firebaseApp.database().ref("Reviews/").child(rev).set({
+	    	visible:false
+	    });
+	}
+
 
 
     calcAvg(revs) {
