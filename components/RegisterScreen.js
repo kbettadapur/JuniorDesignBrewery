@@ -122,16 +122,23 @@ export class RegisterScreen extends React.Component {
         currentUser = firebaseApp.auth().currentUser;
         av = []
         av.push(default_profile_picture);
+
         firebaseApp.database().ref("Users/" + currentUser.uid).set({
-          username: this.state.username.trim(),
-          email: this.state.email.trim(),
-          description: "None",
-          avatar: av,
-          age: -1,
-          num_children: 0,
-          reviews: [],
+          metadata:{
+            viewable: true
+          },
+          publicData:{
+            age: -1,
+            avatar: av,
+            description: "None",
+            num_children: 0,
+            username: this.state.username.trim()
+          },
+          privateData:{
+            email: this.state.email.trim()
+          }
         });
-        
+
         this.state.user = {
           username: this.state.username.trim(),
           email: this.state.email.trim(),
