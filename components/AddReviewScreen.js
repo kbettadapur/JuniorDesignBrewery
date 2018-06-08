@@ -86,7 +86,7 @@ export class AddReviewScreen extends React.Component {
             lat: 0,
             long: 0,
             date: new Date(),
-            visible: true
+            viewable: true
         }
         if(this.state.review != null) {
             this.state.overallRating = this.state.review.overallRating;
@@ -357,47 +357,52 @@ export class AddReviewScreen extends React.Component {
         if(this.state.revId == 0) {
             this.state.revId = this.newGuid();
         }
-        var ref = firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid);
+        var ref = firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid + "/publicData");
         var timestamp = (new Date().getMonth() + 1) + "/" + new Date().getDate() + "/" + new Date().getFullYear();
         ref.on("value", (snapshot) => {
             ref.off('value');
 
-            firebaseApp.database().ref("Reviews/" + this.state.revId).set({
-                userId: firebaseApp.auth().currentUser.uid,
-                username: snapshot.val().username,
-                date: timestamp,
-                environment: this.state.environment,
-                overallFood: this.state.overallFood,
-                cleanliness: this.state.cleanliness,
-                parking: this.state.parking,
+            firebaseApp.database().ref("Reviews/" + this.state.revId + "/metadata").set({
                 breweryId: this.state.breweryId,
-                hasChangingTables: this.state.hasChangingTables,
-                hasFamilyRestroom: this.state.hasFamilyRestroom,
-                isWheelchairAccessible: this.state.isWheelchairAccessible,
-                seatingArrangements: this.state.seatingArrangements,
-                kidFriendly: this.state.kidFriendly,
-                safety: this.state.safety,
-                petFriendly: this.state.petFriendly,
-                foodOptionDiversity: this.state.foodOptionDiversity,
-                nonAlcoholicOptions: this.state.nonAlcoholicOptions,
-                soundLevel: this.state.soundLevel,
-                isSmokingPermitted: this.state.isSmokingPermitted,
-                strollerKids: this.state.strollerKids,
-                kThroughSix: this.state.kThroughSix,
-                teenagers: this.state.teenagers,
-                overallRating: this.state.overallRating,
-                revId: this.state.revId,
-                breweryName: this.state.breweryName,
-                photo: this.state.photo,
-                latitude: this.state.lat,
-                longitude: this.state.long,
-                comments: this.state.comments,
-                visible: this.state.visible
+                userId: firebaseApp.auth().currentUser.uid,
+                viewable: this.state.viewable
             }).then(() => {
-                const backAction = NavigationActions.back({
-                    key: null
-                  }) 
-                  this.props.navigation.dispatch(backAction);                
+                firebaseApp.database().ref("Reviews/" + this.state.revId + "/data").set({
+                    username: snapshot.val().username,
+                    date: timestamp,
+                    environment: this.state.environment,
+                    overallFood: this.state.overallFood,
+                    cleanliness: this.state.cleanliness,
+                    parking: this.state.parking,
+                    hasChangingTables: this.state.hasChangingTables,
+                    hasFamilyRestroom: this.state.hasFamilyRestroom,
+                    isWheelchairAccessible: this.state.isWheelchairAccessible,
+                    seatingArrangements: this.state.seatingArrangements,
+                    kidFriendly: this.state.kidFriendly,
+                    safety: this.state.safety,
+                    petFriendly: this.state.petFriendly,
+                    foodOptionDiversity: this.state.foodOptionDiversity,
+                    nonAlcoholicOptions: this.state.nonAlcoholicOptions,
+                    soundLevel: this.state.soundLevel,
+                    isSmokingPermitted: this.state.isSmokingPermitted,
+                    strollerKids: this.state.strollerKids,
+                    kThroughSix: this.state.kThroughSix,
+                    teenagers: this.state.teenagers,
+                    overallRating: this.state.overallRating,
+                    revId: this.state.revId,
+                    breweryName: this.state.breweryName,
+                    photo: this.state.photo,
+                    latitude: this.state.lat,
+                    longitude: this.state.long,
+                    comments: this.state.comments
+                }).then(() => {
+                    firebaseApp.
+                    const backAction = NavigationActions.back({
+                        key: null
+                    }) 
+                    this.props.navigation.dispatch(backAction); 
+                });
+                               
             });
         });
     }
