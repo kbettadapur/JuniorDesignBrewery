@@ -47,12 +47,10 @@ export class ViewProfileScreen extends React.Component {
         }
         global.main = false;
         id = this.props.navigation.state.params.id;
-        firebaseApp.database().ref("/Users/" + id).once('value').then((snapshot) => {
+        firebaseApp.database().ref("/Users/" + id + "/publicData").once('value').then((snapshot) => {
             this.setState({user: snapshot.val()});
             this.setState({});
         });
-
-        
     }
 
     render() {
