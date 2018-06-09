@@ -39,18 +39,24 @@ export class YourReviewsScreen extends React.Component {
             didMount: false,
         }
         global.main = true;
-        firebaseApp.database().ref("Reviews").on('value', (snapshot) => {
-            this.state.reviews = [];
-            if(snapshot.val() != null) {
-                var keys = Object.keys(snapshot.val());
-                keys.forEach((key) => {
-                    if(snapshot.val()[key].userId === firebaseApp.auth().currentUser.uid) {
-                        this.state.reviews.push(snapshot.val()[key]);
-                    }
+
+        this.state.reviews = [];
+        firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid + "/privateData/reviews").once("value").then((userReviews) => {
+            if (userReviews.exists()) {
+                var reviewIds = Object.keys(userReviews.val());
+                reviewIds.forEach((reviewId) => {
+                    firebaseApp.database().ref("Reviews/" + reviewId + "/metadata/viewable").once("value").then((viewable) => {
+                        if (viewable.val()) {
+                            firebaseApp.database().ref("Reviews/" + reviewId + "/data").once("value").then((review) => {
+                                this.state.reviews.push(review.val());
+                                if (this.state.didMount) {
+                                    this.setState({});
+                                }
+                            });
+                        }
+                    });
                 });
             }
-            if(this.state.didMount)
-                this.setState({reviews: this.state.reviews});
         });
     }
 

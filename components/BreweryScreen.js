@@ -359,9 +359,7 @@ export class BreweryScreen extends React.Component {
     }
 
     renderReviewsList() {
-        console.log(this.state.reviews)
         if (this.state.reviews != null && this.state.reviews.length > 0 && this.state.pictures != null) {
-            console.log("got there")
             return _.map(this.state.reviews, (rev) => {
 
             	// Check to see if review is set to visible
