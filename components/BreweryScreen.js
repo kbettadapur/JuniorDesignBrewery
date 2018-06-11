@@ -59,44 +59,41 @@ export class BreweryScreen extends React.Component {
             //count: 0,
         }
         global.main = false;
-        firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid + "/Favorites/").on('value', (snapshot) => {
-            if(snapshot.val() != null) {
-                var keys = Object.keys(snapshot.val());
-                keys.forEach((key) => {
-                    if (snapshot.val()[key].id === this.state.brewery.placeId) {
-                        this.props.navigation.setParams({fave: true});
-                        this.state.favorited = true;
-                    }
-                });
-            }
+        firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid + "/privateData/favorites/" + this.state.brewery.placeId).once('value', (snapshot) => {
+            this.state.favorited = snapshot.exists();
+            this.props.navigation.setParams({fave: snapshot.exists()});
         });
-        firebaseApp.database().ref("Reviews").on('value', (snapshot) => {
+        firebaseApp.database().ref("Breweries/" + this.state.brewery.placeId + "/reviews").once("value").then((snapshot) => {
             this.state.reviews = [];
             this.state.pictures = {};
-            if (snapshot.val() != null) {
-                var keys = Object.keys(snapshot.val());
-                    keys.forEach((key) => {
-                        if (snapshot.val()[key].breweryId == this.state.brewery.placeId) {
-                            this.state.reviews.push(snapshot.val()[key]);
-                            if(snapshot.val()[key].userId === firebaseApp.auth().currentUser.uid) {
-                                this.state.rev = snapshot.val()[key];
-                            }
-
-                            firebaseApp.database().ref("Users/" + snapshot.val()[key].userId).on('value', (data) => {
-                                this.state.pictures[snapshot.val()[key].userId] = data.val().avatar; 
-                                if (this.state.isMounted)
-                                    
-                                    this.setState({});
+            if (snapshot.exists()) {
+                var reviewIds = Object.keys(snapshot.val());
+                reviewIds.forEach((reviewId) => {
+                    firebaseApp.database().ref("Reviews/" + reviewId + "/metadata").once("value").then((metadata) => {
+                        if (metadata.val().viewable) {
+                            firebaseApp.database().ref("Reviews/" + reviewId + "/data").once("value").then((reviewData) => {
+                                firebaseApp.database().ref("Users/" + metadata.val().userId + "/publicData/avatar").once("value").then((avatar) => {
+                                    var review = reviewData.val();
+                                    review.userId = metadata.val().userId;
+                                    this.state.reviews.push(review);
+                                    this.state.pictures[metadata.val().userId] = avatar.val()
+                                    if(this.state.isMounted) {
+                                        this.setState({});
+                                    }
+                                });
                             });
+                            
                         }
                     });
-                }
-            if(this.state.isMounted)
+                });
+            }
+            if(this.state.isMounted) {
                 this.setState({});
+            }
         });
 
         // Set admin status from firebase
-        firebaseApp.database().ref("admins/").child(firebaseApp.auth().currentUser.uid).on('value', function(snapshot) {
+        firebaseApp.database().ref("admins/").child(firebaseApp.auth().currentUser.uid).once('value', function(snapshot) {
 	        global.isAdmin = snapshot.val();
 	    });
     }
@@ -110,21 +107,14 @@ export class BreweryScreen extends React.Component {
     }
     _setFavorite() {
         var bname = this.state.brewery.name.replace(".", "").replace("$", "");
-        console.log(bname);
         if(this.state.isMounted) {
             this.state.favorited = !this.state.favorited;
             this.props.navigation.setParams({fave: this.state.favorited})
         } 
         if(this.state.favorited) {
-            firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid + "/Favorites/" + bname).set({
-                name: this.state.brewery.name,
-                id: this.state.brewery.placeId,
-                latitude: this.state.brewery.latitude,
-                longitude: this.state.brewery.longitude,
-                photo: this.state.brewery.photo,
-            })
+            firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid + "/privateData/favorites/" + this.state.brewery.placeId).set(true)
         } else {
-            firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid + "/Favorites/" + bname).remove();        
+            firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid + "/privateData/favorites/" + this.state.brewery.placeId).remove();        
         }
     }
     render() {
@@ -369,47 +359,45 @@ export class BreweryScreen extends React.Component {
     }
 
     renderReviewsList() {
-        if (this.state.reviews != null && this.state.reviews.length > 0 && this.state.pictures != null && Object.keys(this.state.pictures).length == this.state.reviews.length) {
+        if (this.state.reviews != null && this.state.reviews.length > 0 && this.state.pictures != null) {
             return _.map(this.state.reviews, (rev) => {
 
             	// Check to see if review is set to visible
-            	if (rev.visible) {
-                    return (
-                        <ListItem key={new Date().getTime()}>
-                            <TouchableOpacity style={{display: 'flex', flexDirection: 'row'}} onPress={() => this.props.navigation.navigate("ReviewView", {navigation: this.props.navigation, review: rev})}>
-                                <View style={{flex: 1, paddingTop: 7, paddingRight: 10}}>
-                                    <Image style={{height: 50, width: 50, borderRadius: 100}} source={{uri:'data:image/png;base64,' + this.state.pictures[rev.userId].join('')}}></Image>
-                                </View>
-                                <View style={{flex: 5}}>
-                                    <Text style={styles.list_item_title}>{rev.username}</Text>
-                                    <Text style={{width: '100%'}}>"{rev.comments}"</Text>
-                                    <StarRating
-                                        disabled={true}
-                                        maxStars={5}
-                                        rating={rev.overallRating}
-                                        fullStarColor={'#eaaa00'}
-                                        starSize={20}
-                                        containerStyle={{width: '25%'}}
-                                    />
-                                    <View>
-								        {isAdmin ? (
-								          	<Button
-									    	style={{fontSize: 20, color: 'green'}}
-										    styleDisabled={{color: 'red'}}
-										    title="Delete Review"
-										    onPress={this.deleteReview.bind(this, rev)}
-										    >
-											Delete
-											</Button>
-								      	) : (
-								        	null
-								      	)}
-								    </View>
-                                </View>
-                            </TouchableOpacity>
-                        </ListItem>
-                    );
-                }
+                return (
+                    <ListItem key={new Date().getTime()}>
+                        <TouchableOpacity style={{display: 'flex', flexDirection: 'row'}} onPress={() => this.props.navigation.navigate("ReviewView", {navigation: this.props.navigation, review: rev})}>
+                            <View style={{flex: 1, paddingTop: 7, paddingRight: 10}}>
+                                <Image style={{height: 50, width: 50, borderRadius: 100}} source={{uri:'data:image/png;base64,' + this.state.pictures[rev.userId].join('')}}></Image>
+                            </View>
+                            <View style={{flex: 5}}>
+                                <Text style={styles.list_item_title}>{rev.username}</Text>
+                                <Text style={{width: '100%'}}>"{rev.comments}"</Text>
+                                <StarRating
+                                    disabled={true}
+                                    maxStars={5}
+                                    rating={rev.overallRating}
+                                    fullStarColor={'#eaaa00'}
+                                    starSize={20}
+                                    containerStyle={{width: '25%'}}
+                                />
+                                <View>
+							        {isAdmin ? (
+							          	<Button
+								    	style={{fontSize: 20, color: 'green'}}
+									    styleDisabled={{color: 'red'}}
+									    title="Delete Review"
+									    onPress={this.deleteReview.bind(this, rev)}
+									    >
+										Delete
+										</Button>
+							      	) : (
+							        	null
+							      	)}
+							    </View>
+                            </View>
+                        </TouchableOpacity>
+                    </ListItem>
+                );
             }); 
         } else if(this.state.reviews != null && this.state.reviews.length == 0 && !this.state.spinnerVisible) {
             return (
@@ -421,9 +409,9 @@ export class BreweryScreen extends React.Component {
     // Delete button listener
     deleteReview(rev, e) {
 	    e.preventDefault();
-	    firebaseApp.database().ref("Reviews/").child(rev.revId).update({
-	    	visible:false
-	    });
+	    firebaseApp.database().ref("Reviews/" + rev.revId + "/metadata/viewable").set(false);
+        this.state.reviews = this.state.reviews.filter((review) => review != rev);
+        this.setState({});
 	}
 
 

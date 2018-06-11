@@ -86,7 +86,7 @@ export class AddReviewScreen extends React.Component {
             lat: 0,
             long: 0,
             date: new Date(),
-            visible: true
+            viewable: true
         }
         if(this.state.review != null) {
             this.state.overallRating = this.state.review.overallRating;
@@ -357,20 +357,22 @@ export class AddReviewScreen extends React.Component {
         if(this.state.revId == 0) {
             this.state.revId = this.newGuid();
         }
-        var ref = firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid);
+        var userRef = firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid + "/publicData");
         var timestamp = (new Date().getMonth() + 1) + "/" + new Date().getDate() + "/" + new Date().getFullYear();
-        ref.on("value", (snapshot) => {
-            ref.off('value');
-
-            firebaseApp.database().ref("Reviews/" + this.state.revId).set({
+        userRef.once("value", (userData) => {
+            var updates = {};
+            updates["Reviews/" + this.state.revId + "/metadata"] = {
+                breweryId: this.state.breweryId,
                 userId: firebaseApp.auth().currentUser.uid,
-                username: snapshot.val().username,
+                viewable: this.state.viewable
+            };
+            updates["Reviews/" + this.state.revId + "/data"] = {
+                username: userData.val().username,
                 date: timestamp,
                 environment: this.state.environment,
                 overallFood: this.state.overallFood,
                 cleanliness: this.state.cleanliness,
                 parking: this.state.parking,
-                breweryId: this.state.breweryId,
                 hasChangingTables: this.state.hasChangingTables,
                 hasFamilyRestroom: this.state.hasFamilyRestroom,
                 isWheelchairAccessible: this.state.isWheelchairAccessible,
@@ -391,14 +393,17 @@ export class AddReviewScreen extends React.Component {
                 photo: this.state.photo,
                 latitude: this.state.lat,
                 longitude: this.state.long,
-                comments: this.state.comments,
-                visible: this.state.visible
-            }).then(() => {
+                comments: this.state.comments
+            }
+            updates["Users/" + firebaseApp.auth().currentUser.uid + "/privateData/reviews/" + this.state.revId] = true
+            updates["Breweries/" + this.state.breweryId + "/reviews/" + this.state.revId] = true
+            firebaseApp.database().ref().update(updates).then(() => {
                 const backAction = NavigationActions.back({
                     key: null
-                  }) 
-                  this.props.navigation.dispatch(backAction);                
-            });
+                }) 
+                this.props.navigation.dispatch(backAction); 
+            })
+            
         });
     }
 

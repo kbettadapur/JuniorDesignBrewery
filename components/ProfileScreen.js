@@ -39,10 +39,13 @@ export class ProfileScreen extends React.Component {
             imageBase64: null,            
         }
         id = firebaseApp.auth().currentUser.uid;
-        firebaseApp.database().ref("/Users/" + id).on('value', (snapshot) => {
+        firebaseApp.database().ref("/Users/" + id + "/publicData").on('value', (snapshot) => {
             this.state.user = snapshot.val();
-            this.state.old_vals = Object.assign({}, this.state.user);
-            this.setState({});
+            firebaseApp.database().ref("/Users/" + id + "/privateData").on('value', (snapshot) => {
+                this.state.user.email = snapshot.val().email
+                this.state.old_vals = Object.assign({}, this.state.user);
+                this.setState({});
+            });
         });
     }
 
@@ -178,15 +181,18 @@ export class ProfileScreen extends React.Component {
         }
         this.state.user.avatar = avatar;
         this.state.old_vals = Object.assign({}, this.state.user);
-        firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid).set({
+        firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid + "/publicData").set({
             age: Number(this.state.user.age),
             description: this.state.user.description,
-            email: this.state.user.email,
             num_children: Number(this.state.user.num_children),
             username: this.state.user.username,
-            avatar: this.state.user.avatar,
+            avatar: this.state.user.avatar
         }).then(() => {
-            this.setState({});
+            firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid + "/privateData").set({
+                email: this.state.user.email
+            }).then(() => {
+                this.setState({});
+            });
         });
     }
 
