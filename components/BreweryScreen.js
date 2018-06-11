@@ -409,7 +409,9 @@ export class BreweryScreen extends React.Component {
     // Delete button listener
     deleteReview(rev, e) {
 	    e.preventDefault();
-	    firebaseApp.database().ref("Reviews/" + rev.revId + "/metadata/viewable").set(false)
+	    firebaseApp.database().ref("Reviews/" + rev.revId + "/metadata/viewable").set(false);
+        this.state.reviews = this.state.reviews.filter((review) => review != rev);
+        this.setState({});
 	}
 
 
