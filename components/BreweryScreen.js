@@ -396,7 +396,7 @@ export class BreweryScreen extends React.Component {
 							    </View>
                                 <Button
                                     title="Report"
-                                    onPress={this.reportReview.bind(rev)}
+                                    onPress={this.reportReview.bind(this, rev)}
                                 >
                                 </Button>
                             </View>
@@ -419,7 +419,8 @@ export class BreweryScreen extends React.Component {
         this.setState({});
 	}
 
-    reportReview(rev, e) {
+    reportReview(rev) {
+        // e.preventDefault();
         uid = firebaseApp.auth().currentUser.uid;
         firebaseApp.database().ref("Reviews/" + rev.revId + "/metadata/reports/" + uid).set(true);
     }
