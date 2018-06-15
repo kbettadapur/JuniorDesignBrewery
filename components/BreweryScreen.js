@@ -420,7 +420,6 @@ export class BreweryScreen extends React.Component {
 	}
 
     reportReview(rev) {
-        // e.preventDefault();
         uid = firebaseApp.auth().currentUser.uid;
         firebaseApp.database().ref("Reviews/" + rev.revId + "/metadata/reports/" + uid).set(true);
     }

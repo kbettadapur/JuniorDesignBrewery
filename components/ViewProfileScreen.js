@@ -20,7 +20,7 @@
 */
 
 import React from 'react';
-import { StyleSheet, View, Text, Image, TouchableHighlight, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, View, Text, Image, TouchableHighlight, TouchableOpacity, ScrollView, Button } from 'react-native';
 import { Footer, Container, List, ListItem } from 'native-base';
 import firebaseApp from '../firebase';
 import { ImagePicker, LinearGradient } from 'expo';
@@ -48,8 +48,9 @@ export class ViewProfileScreen extends React.Component {
         global.main = false;
         id = this.props.navigation.state.params.id;
         firebaseApp.database().ref("/Users/" + id + "/publicData").once('value').then((snapshot) => {
-            this.setState({user: snapshot.val()});
-            this.setState({});
+            user = snapshot.val();
+            user.id = id;
+            this.setState({user: user});
         });
     }
 
@@ -81,12 +82,22 @@ export class ViewProfileScreen extends React.Component {
                         <Text style={[styles.subtitle_style2]}>Bio</Text>
                         <Text style={styles.subtitle_style3}>{this.state.user.description}</Text>
                     </View>
+                    <Button
+                        title="Report"
+                        onPress={this.reportUser.bind(this)}
+                    >
+                    </Button>
                 </View> }
                 {this.state.user == null && <View style={{flex:1}}/>}
                 
             </Container>  
             </ScrollView>                     
         );
+    }
+
+    reportUser() {
+        uid = firebaseApp.auth().currentUser.uid;
+        firebaseApp.database().ref("Users/" + this.state.user.id + "/metadata/reports/" + uid).set(true);
     }
 }
 
