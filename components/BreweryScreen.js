@@ -394,6 +394,11 @@ export class BreweryScreen extends React.Component {
 							        	null
 							      	)}
 							    </View>
+                                <Button
+                                    title="Report"
+                                    onPress={this.reportReview.bind(rev)}
+                                >
+                                </Button>
                             </View>
                         </TouchableOpacity>
                     </ListItem>
@@ -413,6 +418,11 @@ export class BreweryScreen extends React.Component {
         this.state.reviews = this.state.reviews.filter((review) => review != rev);
         this.setState({});
 	}
+
+    reportReview(rev, e) {
+        uid = firebaseApp.auth().currentUser.uid;
+        firebaseApp.database().ref("Reviews/" + rev.revId + "/metadata/reports/" + uid).set(true);
+    }
 
 
 
