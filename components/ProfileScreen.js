@@ -35,17 +35,17 @@ export class ProfileScreen extends React.Component {
         this.state = {
             edit_mode: false,
             user: null,
-            old_vals: null,
             image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Default_profile_picture_%28male%29_on_Facebook.jpg/600px-Default_profile_picture_%28male%29_on_Facebook.jpg",
             imageBase64: null,            
         }
-        id = firebaseApp.auth().currentUser.uid;
-        getUserData(id).then((user) => {
-            console.log("did it");
-            console.log(user);
-            this.state.user = user;
-            this.state.old_vals = Object.assign({}, this.state.user);
-            this.setState({});
+        this.old_vals = null;
+    }
+
+    componentDidMount() {
+        uid = firebaseApp.auth().currentUser.uid;
+        getUserData(uid).then((user) => {
+            this.old_vals = Object.assign({}, user);
+            this.setState({user: user});
         })
     }
 
@@ -153,7 +153,7 @@ export class ProfileScreen extends React.Component {
                     direction="up"
                     position="bottomRight"
                     style={{ backgroundColor: 'red', bottom: 50}}
-                    onPress={() => this.setState({user: Object.assign({}, this.state.old_vals), edit_mode: false})}>
+                    onPress={() => this.setState({user: Object.assign({}, this.old_vals), edit_mode: false})}>
                     <Icon name="md-close" />
                 </Fab>
                 <Footer style={styles.footer_style}>
@@ -180,7 +180,7 @@ export class ProfileScreen extends React.Component {
             avatar.push(this.state.user.avatar);
         }
         this.state.user.avatar = avatar;
-        this.state.old_vals = Object.assign({}, this.state.user);
+        this.old_vals = Object.assign({}, this.state.user);
         setUserData(this.state.user).then(() => {
             this.setState({});
         })
