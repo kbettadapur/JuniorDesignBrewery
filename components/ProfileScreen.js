@@ -25,6 +25,7 @@ import { Footer, Container, Icon, Fab } from 'native-base';
 import firebaseApp from '../firebase';
 import { ImagePicker, LinearGradient } from 'expo';
 import Spinner from 'react-native-loading-spinner-overlay';
+import { getUserData, setUserData } from '../lib/FirebaseHelpers';
 
 console.disableYellowBox = true;
 
@@ -39,14 +40,13 @@ export class ProfileScreen extends React.Component {
             imageBase64: null,            
         }
         id = firebaseApp.auth().currentUser.uid;
-        firebaseApp.database().ref("/Users/" + id + "/publicData").on('value', (snapshot) => {
-            this.state.user = snapshot.val();
-            firebaseApp.database().ref("/Users/" + id + "/privateData").on('value', (snapshot) => {
-                this.state.user.email = snapshot.val().email
-                this.state.old_vals = Object.assign({}, this.state.user);
-                this.setState({});
-            });
-        });
+        getUserData(id).then((user) => {
+            console.log("did it");
+            console.log(user);
+            this.state.user = user;
+            this.state.old_vals = Object.assign({}, this.state.user);
+            this.setState({});
+        })
     }
 
     render() {
@@ -181,19 +181,9 @@ export class ProfileScreen extends React.Component {
         }
         this.state.user.avatar = avatar;
         this.state.old_vals = Object.assign({}, this.state.user);
-        firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid + "/publicData").set({
-            age: Number(this.state.user.age),
-            description: this.state.user.description,
-            num_children: Number(this.state.user.num_children),
-            username: this.state.user.username,
-            avatar: this.state.user.avatar
-        }).then(() => {
-            firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid + "/privateData").set({
-                email: this.state.user.email
-            }).then(() => {
-                this.setState({});
-            });
-        });
+        setUserData(this.state.user).then(() => {
+            this.setState({});
+        })
     }
 
     lengthInUtf8Bytes(str) {
