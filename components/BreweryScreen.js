@@ -29,7 +29,7 @@ import StarRating from 'react-native-star-rating';
 import Review from '../models/Review';
 import Spinner from 'react-native-loading-spinner-overlay';
 import admin from '../lib/admin';
-import { reportReview } from '../lib/FirebaseHelpers';
+import { reportReview, getBreweryReviews } from '../lib/FirebaseHelpers';
 
 export class BreweryScreen extends React.Component {
 
@@ -52,7 +52,7 @@ export class BreweryScreen extends React.Component {
         this.state = {
             brewery: this.props.navigation.state.params.brewery,
             reviews: null,
-            pictures: null,
+            pictures: {},
             revsAvg: new Review(),
             rev: null,
             favorited: false,
@@ -64,34 +64,34 @@ export class BreweryScreen extends React.Component {
             this.state.favorited = snapshot.exists();
             this.props.navigation.setParams({fave: snapshot.exists()});
         });
-        firebaseApp.database().ref("Breweries/" + this.state.brewery.placeId + "/reviews").once("value").then((snapshot) => {
-            this.state.reviews = [];
-            this.state.pictures = {};
-            if (snapshot.exists()) {
-                var reviewIds = Object.keys(snapshot.val());
-                reviewIds.forEach((reviewId) => {
-                    firebaseApp.database().ref("Reviews/" + reviewId + "/metadata").once("value").then((metadata) => {
-                        if (metadata.val().viewable) {
-                            firebaseApp.database().ref("Reviews/" + reviewId + "/data").once("value").then((reviewData) => {
-                                firebaseApp.database().ref("Users/" + metadata.val().userId + "/publicData/avatar").once("value").then((avatar) => {
-                                    var review = reviewData.val();
-                                    review.userId = metadata.val().userId;
-                                    this.state.reviews.push(review);
-                                    this.state.pictures[metadata.val().userId] = avatar.val()
-                                    if(this.state.isMounted) {
-                                        this.setState({});
-                                    }
-                                });
-                            });
+        // firebaseApp.database().ref("Breweries/" + this.state.brewery.placeId + "/reviews").once("value").then((snapshot) => {
+        //     this.state.reviews = [];
+        //     this.state.pictures = {};
+        //     if (snapshot.exists()) {
+        //         var reviewIds = Object.keys(snapshot.val());
+        //         reviewIds.forEach((reviewId) => {
+        //             firebaseApp.database().ref("Reviews/" + reviewId + "/metadata").once("value").then((metadata) => {
+        //                 if (metadata.val().viewable) {
+        //                     firebaseApp.database().ref("Reviews/" + reviewId + "/data").once("value").then((reviewData) => {
+        //                         firebaseApp.database().ref("Users/" + metadata.val().userId + "/publicData/avatar").once("value").then((avatar) => {
+        //                             var review = reviewData.val();
+        //                             review.userId = metadata.val().userId;
+        //                             this.state.reviews.push(review);
+        //                             this.state.pictures[metadata.val().userId] = avatar.val()
+        //                             if(this.state.isMounted) {
+        //                                 this.setState({});
+        //                             }
+        //                         });
+        //                     });
                             
-                        }
-                    });
-                });
-            }
-            if(this.state.isMounted) {
-                this.setState({});
-            }
-        });
+        //                 }
+        //             });
+        //         });
+        //     }
+        //     if(this.state.isMounted) {
+        //         this.setState({});
+        //     }
+        // });
 
         // Set admin status from firebase
         firebaseApp.database().ref("admins/").child(firebaseApp.auth().currentUser.uid).once('value', function(snapshot) {
@@ -105,6 +105,9 @@ export class BreweryScreen extends React.Component {
           fave: this.state.favorited,  
         });
         this.state.isMounted = true;
+        getBreweryReviews(this.state.brewery.placeId).then((reviews) => {
+            this.setState({reviews: reviews});
+        })
     }
     _setFavorite() {
         var bname = this.state.brewery.name.replace(".", "").replace("$", "");
@@ -367,9 +370,7 @@ export class BreweryScreen extends React.Component {
                 return (
                     <ListItem key={new Date().getTime()}>
                         <TouchableOpacity style={{display: 'flex', flexDirection: 'row'}} onPress={() => this.props.navigation.navigate("ReviewView", {navigation: this.props.navigation, review: rev})}>
-                            <View style={{flex: 1, paddingTop: 7, paddingRight: 10}}>
-                                <Image style={{height: 50, width: 50, borderRadius: 100}} source={{uri:'data:image/png;base64,' + this.state.pictures[rev.userId].join('')}}></Image>
-                            </View>
+
                             <View style={{flex: 5}}>
                                 <Text style={styles.list_item_title}>{rev.username}</Text>
                                 <Text style={{width: '100%'}}>"{rev.comments}"</Text>
