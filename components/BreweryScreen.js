@@ -29,6 +29,7 @@ import StarRating from 'react-native-star-rating';
 import Review from '../models/Review';
 import Spinner from 'react-native-loading-spinner-overlay';
 import admin from '../lib/admin';
+import { reportReview } from '../lib/FirebaseHelpers';
 
 export class BreweryScreen extends React.Component {
 
@@ -396,7 +397,7 @@ export class BreweryScreen extends React.Component {
 							    </View>
                                 <Button
                                     title="Report"
-                                    onPress={this.reportReview.bind(this, rev)}
+                                    onPress={() => reportReview(rev.revId)}
                                 >
                                 </Button>
                             </View>
@@ -418,12 +419,6 @@ export class BreweryScreen extends React.Component {
         this.state.reviews = this.state.reviews.filter((review) => review != rev);
         this.setState({});
 	}
-
-    reportReview(rev) {
-        uid = firebaseApp.auth().currentUser.uid;
-        firebaseApp.database().ref("Reviews/" + rev.revId + "/metadata/reports/" + uid).set(true);
-    }
-
 
 
     calcAvg(revs) {
