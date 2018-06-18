@@ -28,8 +28,7 @@ import FAB from 'react-native-fab';
 import StarRating from 'react-native-star-rating';
 import Review from '../models/Review';
 import Spinner from 'react-native-loading-spinner-overlay';
-import admin from '../lib/admin';
-import { reportReview, deleteReview, getBreweryReviews, getUsersObject, getFavoriteState, setFavoriteState } from '../lib/FirebaseHelpers';
+import { reportReview, deleteReview, getBreweryReviews, getUsersObject, getFavoriteState, setFavoriteState, isAdmin } from '../lib/FirebaseHelpers';
 
 export class BreweryScreen extends React.Component {
 
@@ -56,15 +55,11 @@ export class BreweryScreen extends React.Component {
             revsAvg: new Review(),
             rev: null,
             isMounted: false,
-            userData: null
+            userData: null,
+            isAdmin: false
             //count: 0,
         }
         global.main = false;
-
-        // Set admin status from firebase
-        firebaseApp.database().ref("admins/").child(firebaseApp.auth().currentUser.uid).once('value', function(snapshot) {
-	        global.isAdmin = snapshot.val();
-	    });
     }
     componentDidMount() {
         // set handler method with setParams
@@ -83,8 +78,10 @@ export class BreweryScreen extends React.Component {
             getUsersObject(Uids).then((userData) => {
                 this.setState({userData: userData});
             });
-        })
-
+        });
+        isAdmin().then((adminStatus) => {
+            this.setState({isAdmin: adminStatus});
+        });
     }
     _setFavorite() {
         setFavoriteState(this.state.brewery.placeId, !this.props.navigation.state.params.fave);
@@ -354,7 +351,7 @@ export class BreweryScreen extends React.Component {
                                     containerStyle={{width: '25%'}}
                                 />
                                 <View>
-							        {isAdmin ? (
+							        {this.state.isAdmin ? (
 							          	<Button
 								    	style={{fontSize: 20, color: 'green'}}
 									    styleDisabled={{color: 'red'}}
