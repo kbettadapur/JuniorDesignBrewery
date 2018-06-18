@@ -29,7 +29,7 @@ import StarRating from 'react-native-star-rating';
 import Review from '../models/Review';
 import Spinner from 'react-native-loading-spinner-overlay';
 import admin from '../lib/admin';
-import { reportReview, getBreweryReviews, getFavoriteState, setFavoriteState } from '../lib/FirebaseHelpers';
+import { reportReview, deleteReview, getBreweryReviews, getFavoriteState, setFavoriteState } from '../lib/FirebaseHelpers';
 
 export class BreweryScreen extends React.Component {
 
@@ -378,10 +378,9 @@ export class BreweryScreen extends React.Component {
 
     // Delete button listener
     deleteReview(rev, e) {
-	    e.preventDefault();
-	    firebaseApp.database().ref("Reviews/" + rev.revId + "/metadata/viewable").set(false);
-        this.state.reviews = this.state.reviews.filter((review) => review != rev);
-        this.setState({});
+        deleteReview(rev.revId)
+        this.setState({reviews: this.state.reviews.filter((review) => review != rev)});
+        // Remove the deleted review from the screen
 	}
 
 
