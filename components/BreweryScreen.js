@@ -29,7 +29,7 @@ import StarRating from 'react-native-star-rating';
 import Review from '../models/Review';
 import Spinner from 'react-native-loading-spinner-overlay';
 import admin from '../lib/admin';
-import { reportReview, getBreweryReviews } from '../lib/FirebaseHelpers';
+import { reportReview, getBreweryReviews, getFavoriteState, setFavoriteState } from '../lib/FirebaseHelpers';
 
 export class BreweryScreen extends React.Component {
 
@@ -55,43 +55,10 @@ export class BreweryScreen extends React.Component {
             pictures: {},
             revsAvg: new Review(),
             rev: null,
-            favorited: false,
             isMounted: false,
             //count: 0,
         }
         global.main = false;
-        firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid + "/privateData/favorites/" + this.state.brewery.placeId).once('value', (snapshot) => {
-            this.state.favorited = snapshot.exists();
-            this.props.navigation.setParams({fave: snapshot.exists()});
-        });
-        // firebaseApp.database().ref("Breweries/" + this.state.brewery.placeId + "/reviews").once("value").then((snapshot) => {
-        //     this.state.reviews = [];
-        //     this.state.pictures = {};
-        //     if (snapshot.exists()) {
-        //         var reviewIds = Object.keys(snapshot.val());
-        //         reviewIds.forEach((reviewId) => {
-        //             firebaseApp.database().ref("Reviews/" + reviewId + "/metadata").once("value").then((metadata) => {
-        //                 if (metadata.val().viewable) {
-        //                     firebaseApp.database().ref("Reviews/" + reviewId + "/data").once("value").then((reviewData) => {
-        //                         firebaseApp.database().ref("Users/" + metadata.val().userId + "/publicData/avatar").once("value").then((avatar) => {
-        //                             var review = reviewData.val();
-        //                             review.userId = metadata.val().userId;
-        //                             this.state.reviews.push(review);
-        //                             this.state.pictures[metadata.val().userId] = avatar.val()
-        //                             if(this.state.isMounted) {
-        //                                 this.setState({});
-        //                             }
-        //                         });
-        //                     });
-                            
-        //                 }
-        //             });
-        //         });
-        //     }
-        //     if(this.state.isMounted) {
-        //         this.setState({});
-        //     }
-        // });
 
         // Set admin status from firebase
         firebaseApp.database().ref("admins/").child(firebaseApp.auth().currentUser.uid).once('value', function(snapshot) {
@@ -102,24 +69,20 @@ export class BreweryScreen extends React.Component {
         // set handler method with setParams
         this.props.navigation.setParams({ 
           setFavorite: this._setFavorite.bind(this),
-          fave: this.state.favorited,  
+          fave: false
         });
-        this.state.isMounted = true;
+        getFavoriteState(this.state.brewery.placeId).then((favoriteState) => {
+            this.props.navigation.setParams({
+                fave: favoriteState
+            });
+        })
         getBreweryReviews(this.state.brewery.placeId).then((reviews) => {
             this.setState({reviews: reviews});
         })
     }
     _setFavorite() {
-        var bname = this.state.brewery.name.replace(".", "").replace("$", "");
-        if(this.state.isMounted) {
-            this.state.favorited = !this.state.favorited;
-            this.props.navigation.setParams({fave: this.state.favorited})
-        } 
-        if(this.state.favorited) {
-            firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid + "/privateData/favorites/" + this.state.brewery.placeId).set(true)
-        } else {
-            firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid + "/privateData/favorites/" + this.state.brewery.placeId).remove();        
-        }
+        setFavoriteState(this.state.brewery.placeId, !this.props.navigation.state.params.fave);
+        this.props.navigation.setParams({fave: !this.props.navigation.state.params.fave});
     }
     render() {
         if(this.state.reviews != null && this.state.reviews.length > 0) {
