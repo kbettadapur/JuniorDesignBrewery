@@ -29,7 +29,7 @@ import StarRating from 'react-native-star-rating';
 import Review from '../models/Review';
 import Spinner from 'react-native-loading-spinner-overlay';
 import admin from '../lib/admin';
-import { reportReview, deleteReview, getBreweryReviews, getFavoriteState, setFavoriteState } from '../lib/FirebaseHelpers';
+import { reportReview, deleteReview, getBreweryReviews, getUsersObject, getFavoriteState, setFavoriteState } from '../lib/FirebaseHelpers';
 
 export class BreweryScreen extends React.Component {
 
@@ -56,6 +56,7 @@ export class BreweryScreen extends React.Component {
             revsAvg: new Review(),
             rev: null,
             isMounted: false,
+            userData: null
             //count: 0,
         }
         global.main = false;
@@ -78,7 +79,12 @@ export class BreweryScreen extends React.Component {
         })
         getBreweryReviews(this.state.brewery.placeId).then((reviews) => {
             this.setState({reviews: reviews});
+            Uids = reviews.map((review) => review.userId);
+            getUsersObject(Uids).then((userData) => {
+                this.setState({userData: userData});
+            });
         })
+
     }
     _setFavorite() {
         setFavoriteState(this.state.brewery.placeId, !this.props.navigation.state.params.fave);
@@ -326,16 +332,18 @@ export class BreweryScreen extends React.Component {
     }
 
     renderReviewsList() {
-        if (this.state.reviews != null && this.state.reviews.length > 0 && this.state.pictures != null) {
+        if (this.state.reviews != null && this.state.reviews.length > 0 && this.state.userData != null) {
             return _.map(this.state.reviews, (rev) => {
 
             	// Check to see if review is set to visible
                 return (
                     <ListItem key={new Date().getTime()}>
                         <TouchableOpacity style={{display: 'flex', flexDirection: 'row'}} onPress={() => this.props.navigation.navigate("ReviewView", {navigation: this.props.navigation, review: rev})}>
-
+                            <View style={{flex: 1, paddingTop: 7, paddingRight: 10}}>
+                                <Image style={{height: 50, width: 50, borderRadius: 100}} source={{uri:'data:image/png;base64,' + this.state.userData[rev.userId].avatar.join('')}}></Image>
+                            </View>
                             <View style={{flex: 5}}>
-                                <Text style={styles.list_item_title}>{rev.username}</Text>
+                                <Text style={styles.list_item_title}>{this.state.userData[rev.userId].username}</Text>
                                 <Text style={{width: '100%'}}>"{rev.comments}"</Text>
                                 <StarRating
                                     disabled={true}
