@@ -27,6 +27,8 @@ import firebaseApp from '../firebase';
 import FAB from 'react-native-fab';
 import StarRating from 'react-native-star-rating';
 import Review from '../models/Review';
+import { getUserData } from '../lib/FirebaseHelpers';
+
 
 export class ReviewScreen extends React.Component {
 
@@ -45,16 +47,11 @@ export class ReviewScreen extends React.Component {
             didMount: false,
         }
         global.main = false;
-        firebaseApp.database().ref("Users/" + this.state.review.userId + "/avatar").on('value', (snapshot) => {
-            if(snapshot.val() != null) {
-                this.state.photo = snapshot.val();
-                if(this.state.didMount)
-                    this.setState({photo: this.state.photo});
-            }
-        });
     }
     componentDidMount() {
-        this.state.didMount = true;
+        getUserData(this.state.review.userId).then((userData) => {
+            this.setState({photo: userData.avatar});
+        })
     }
     render() {
         return (
