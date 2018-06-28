@@ -50,7 +50,7 @@ export class BreweryScreen extends React.Component {
 		                    'Login?',
 		                    [
 		                    {text: 'No', style: 'cancel'},
-		                    {text: 'Yes', onPress: () => {navigation.navigate("Login")}},
+		                    {text: 'Yes', onPress: () => {navigation.navigate("Login", {brewery: ""})}},
 		                    ],
 		                    { cancelable: false }); 
                 	}

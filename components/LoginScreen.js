@@ -20,7 +20,7 @@
 */
 
 import React from 'react';
-import { StyleSheet, Button, Text, TextInput, ViewText, View, KeyboardAvoidingView, TouchableOpacity } from 'react-native';
+import { Platform, BackHandler, StyleSheet, Button, Text, TextInput, ViewText, View, KeyboardAvoidingView, TouchableOpacity } from 'react-native';
 import firebaseApp from '../firebase';
 import { NavigationActions } from 'react-navigation';
 
@@ -43,6 +43,16 @@ export class LoginScreen extends React.Component {
       loginClicked: false,
     };
     global.main = false;
+  }
+
+  componentWillMount() {
+    t = this;
+    if(Platform.OS === 'android') {
+        BackHandler.addEventListener('hardwareBackPress', function() {          
+          this.props.navigation.dispatch(NavigationActions.back());
+          return true;
+        }.bind(this));
+    }
   }
 
   render() {
