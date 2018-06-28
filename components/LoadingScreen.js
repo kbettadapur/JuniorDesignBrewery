@@ -20,7 +20,7 @@
 */
 
 import React, { Component } from 'react';
-import { ScrollView, Text } from 'react-native';
+import { Text } from 'react-native';
 
 export class LoadingScreen extends React.Component {
 

@@ -125,6 +125,7 @@ export class MainScreen extends React.Component {
                     { cancelable: false }
                 );        
             } else {
+                // Need to exit the app instead
                 this.props.navigation.navigate("Login");
             } 
             return true;
@@ -144,7 +145,9 @@ export class MainScreen extends React.Component {
   signOutUser = async () => {
     try {
         await firebaseApp.auth().signOut();
-        this.props.navigation.navigate("Login");
+        if (this.state.selectedTab !== MAP_TAB) {
+            this.props.navigation.navigate("Main", {navigation: this.props.navigation});
+        }
     } catch (e) {
     }
 }
@@ -237,7 +240,13 @@ export class MainScreen extends React.Component {
 
                 {this.state.selectedTab != FAVORITES_TAB && <Button
                     active={this.state.selectedTab === FAVORITES_TAB}
-                    onPress={() => this.changeTab(FAVORITES_TAB)}
+                    onPress={() => {
+                        if (isLoggedIn()) {
+                            this.changeTab(FAVORITES_TAB);
+                        } else {
+                            this.props.navigation.navigate("Login");
+                        }
+                    }} 
                     style={{backgroundColor: '#2196f3'}}
                 >
                     <Icon name="star" style={{fontSize: 28, color: 'rgba(255, 255, 255, 0.5)'}}/>
@@ -253,7 +262,13 @@ export class MainScreen extends React.Component {
 
                 {this.state.selectedTab != YOUR_REVIEWS_TAB && <Button
                     active={this.state.selectedTab === YOUR_REVIEWS_TAB}
-                    onPress={() => this.changeTab(YOUR_REVIEWS_TAB)}
+                    onPress={() => {
+                        if (isLoggedIn()) {
+                            this.changeTab(YOUR_REVIEWS_TAB);
+                        } else {
+                            this.props.navigation.navigate("Login");
+                        }
+                    }} 
                     style={{backgroundColor: '#2196f3'}}
                 >
                     <Icon name="list" style={{color: 'rgba(255, 255, 255, 0.5)'}}/>
@@ -269,7 +284,13 @@ export class MainScreen extends React.Component {
 
                 {this.state.selectedTab != PROFILE_TAB && <Button
                     active={this.state.selectedTab === PROFILE_TAB}
-                    onPress={() => this.changeTab(PROFILE_TAB)}
+                    onPress={() => {
+                        if (isLoggedIn()) {
+                            this.changeTab(PROFILE_TAB);
+                        } else {
+                            this.props.navigation.navigate("Login");
+                        }
+                    }} 
                     style={{backgroundColor: '#2196f3'}}
                 >
                     <Icon name="md-person" style={{color: 'rgba(255, 255, 255, 0.5)'}}/>
