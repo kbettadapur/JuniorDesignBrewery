@@ -30,6 +30,7 @@ import { ProfileScreen } from './ProfileScreen';
 import ModalDropdown from 'react-native-modal-dropdown';
 import firebaseApp from '../firebase';
 import { NavigationActions } from 'react-navigation';
+import { isLoggedIn } from '../lib/FirebaseHelpers';
 
 const MAP_TAB = "Breweries";
 const FAVORITES_TAB = "Your Favorites";
@@ -39,21 +40,25 @@ const PROFILE_TAB = "Your Profile";
 export class MainScreen extends React.Component {
 
     static navigationOptions = ({ navigation }) => ({
-        title: navigation.state.params.tab,
+        title: MAP_TAB,
         headerStyle:  { backgroundColor: "#2196F3", },
         headerTitleStyle: { color: "#FFFFFF" },
         headerTintColor: "white",
         headerLeft: (
-            <TouchableOpacity onPress={() => {                
-                Alert.alert(
-                'Log Out',
-                'Are you sure you want to log out?',
-                [
-                {text: 'No', style: 'cancel'},
-                {text: 'Yes', onPress: () => {navigation.state.params.parent.signOutUser()}},
-                ],
-                { cancelable: false }
-            ); }}>
+            <TouchableOpacity onPress={() => {
+                if(isLoggedIn()) {                
+                    Alert.alert(
+                    'Log Out',
+                    'Are you sure you want to log out?',
+                    [
+                    {text: 'No', style: 'cancel'},
+                    {text: 'Yes', onPress: () => {navigation.state.params.parent.signOutUser()}},
+                    ],
+                    { cancelable: false }); 
+                } else {
+                    navigation.navigate("Login");
+                }
+            }}>
                 <View style={{marginLeft: 15}}>
                     <Icon name='md-arrow-back' style={{color:'white'}}/>
                 </View>
@@ -120,7 +125,7 @@ export class MainScreen extends React.Component {
                     { cancelable: false }
                 );        
             } else {
-                t.props.navigation.dispatch(NavigationActions.back());
+                this.props.navigation.navigate("Login");
             } 
             return true;
         }.bind(this));
@@ -139,7 +144,7 @@ export class MainScreen extends React.Component {
   signOutUser = async () => {
     try {
         await firebaseApp.auth().signOut();
-        this.props.navigation.dispatch(NavigationActions.back());
+        this.props.navigation.navigate("Login");
     } catch (e) {
     }
 }
