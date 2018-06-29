@@ -19,7 +19,7 @@
 * SOFTWARE IS DISCLAIMED.
 */
 import React from 'react';
-import { StyleSheet, View, Text, TextInput, Button, Image, ScrollView, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, TextInput, Button, Image, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { Footer, Container, Icon, List, ListItem } from 'native-base';
 import _ from 'lodash';
 import Brewery from '../models/Brewery';
@@ -28,6 +28,7 @@ import FAB from 'react-native-fab';
 import StarRating from 'react-native-star-rating';
 import Review from '../models/Review';
 import Spinner from 'react-native-loading-spinner-overlay';
+import { reportReview, deleteReview, getBreweryReviews, getUsersObject, getFavoriteState, setFavoriteState, isAdmin, isLoggedIn } from '../lib/FirebaseHelpers';
 
 export class BreweryScreen extends React.Component {
 
@@ -38,10 +39,22 @@ export class BreweryScreen extends React.Component {
         headerTintColor: "white",
         headerRight: 
             (<View style={{width:40}}>
-                    <Icon style={{paddingRight: 15, color:"#FFFFFF"}}
-                    name={(navigation.state.params.fave) ? "md-star" : "md-star-outline"}
-                    onPress={() => {navigation.state.params.setFavorite() }}/>
-                    
+                <Icon style={{paddingRight: 15, color:"#FFFFFF"}}
+                name={(navigation.state.params.fave) ? "md-star" : "md-star-outline"}
+                onPress={() => {
+                	if(isLoggedIn()) {
+                		navigation.state.params.setFavorite(); 
+                	} else {
+                		Alert.alert(
+		                    'You must be logged in to use this feature',
+		                    'Login?',
+		                    [
+		                    {text: 'No', style: 'cancel'},
+		                    {text: 'Yes', onPress: () => {navigation.navigate("Login", {brewery: ""})}},
+		                    ],
+		                    { cancelable: false }); 
+                	}
+                }} />
             </View>), 
     });
 
@@ -50,76 +63,44 @@ export class BreweryScreen extends React.Component {
         this.state = {
             brewery: this.props.navigation.state.params.brewery,
             reviews: null,
-            pictures: null,
+            pictures: {},
             revsAvg: new Review(),
             rev: null,
-            favorited: false,
             isMounted: false,
+            userData: null,
+            isAdmin: false
             //count: 0,
         }
         global.main = false;
-        firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid + "/Favorites/").on('value', (snapshot) => {
-            if(snapshot.val() != null) {
-                var keys = Object.keys(snapshot.val());
-                keys.forEach((key) => {
-                    if (snapshot.val()[key].id === this.state.brewery.placeId) {
-                        this.props.navigation.setParams({fave: true});
-                        this.state.favorited = true;
-                    }
-                });
-            }
-        });
-        firebaseApp.database().ref("Reviews").on('value', (snapshot) => {
-            this.state.reviews = [];
-            this.state.pictures = {};
-            if (snapshot.val() != null) {
-                var keys = Object.keys(snapshot.val());
-                    keys.forEach((key) => {
-                        if (snapshot.val()[key].breweryId == this.state.brewery.placeId) {
-                            this.state.reviews.push(snapshot.val()[key]);
-                            if(snapshot.val()[key].userId === firebaseApp.auth().currentUser.uid) {
-                                this.state.rev = snapshot.val()[key];
-                            }
-
-                            firebaseApp.database().ref("Users/" + snapshot.val()[key].userId).on('value', (data) => {
-                                this.state.pictures[snapshot.val()[key].userId] = data.val().avatar; 
-                                if (this.state.isMounted)
-                                    
-                                    this.setState({});
-                            });
-                        }
-                    });
-                }
-            if(this.state.isMounted)
-                this.setState({});
-        });
     }
     componentDidMount() {
         // set handler method with setParams
         this.props.navigation.setParams({ 
           setFavorite: this._setFavorite.bind(this),
-          fave: this.state.favorited,  
+          fave: false
         });
-        this.state.isMounted = true;
+
+        if(isLoggedIn()) {
+	        getFavoriteState(this.state.brewery.placeId).then((favoriteState) => {
+	            this.props.navigation.setParams({
+	                fave: favoriteState
+	            });
+	        })
+	        isAdmin().then((adminStatus) => {
+	            this.setState({isAdmin: adminStatus});
+	        });
+	    }
+        getBreweryReviews(this.state.brewery.placeId).then((reviews) => {
+            this.setState({reviews: reviews});
+            Uids = reviews.map((review) => review.userId);
+            getUsersObject(Uids).then((userData) => {
+                this.setState({userData: userData});
+            });
+        });
     }
     _setFavorite() {
-        var bname = this.state.brewery.name.replace(".", "").replace("$", "");
-        console.log(bname);
-        if(this.state.isMounted) {
-            this.state.favorited = !this.state.favorited;
-            this.props.navigation.setParams({fave: this.state.favorited})
-        } 
-        if(this.state.favorited) {
-            firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid + "/Favorites/" + bname).set({
-                name: this.state.brewery.name,
-                id: this.state.brewery.placeId,
-                latitude: this.state.brewery.latitude,
-                longitude: this.state.brewery.longitude,
-                photo: this.state.brewery.photo,
-            })
-        } else {
-            firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid + "/Favorites/" + bname).remove();        
-        }
+        setFavoriteState(this.state.brewery.placeId, !this.props.navigation.state.params.fave);
+        this.props.navigation.setParams({fave: !this.props.navigation.state.params.fave});
     }
     render() {
         if(this.state.reviews != null && this.state.reviews.length > 0) {
@@ -336,7 +317,7 @@ export class BreweryScreen extends React.Component {
             <FAB 
                 buttonColor="green"
                 iconTextColor="#FFFFFF"
-                onClickAction={() => this.props.navigation.navigate("AddReview", {navigation: this.props.navigation, brewery: this.state.brewery, review: this.state.rev})}
+                onClickAction={this.addReviewFABHandler.bind(this)}
                 visible={true}
                 iconTextComponent={<Icon name="md-add"/>} />
             </View>}
@@ -344,7 +325,7 @@ export class BreweryScreen extends React.Component {
             <FAB 
                 buttonColor="green"
                 iconTextColor="#FFFFFF"
-                onClickAction={() => this.props.navigation.navigate("AddReview", {navigation: this.props.navigation, brewery: this.state.brewery, review: this.state.rev})}
+                onClickAction={this.addReviewFABHandler.bind(this)}
                 visible={true}
                 iconTextComponent={<Icon name="md-create"/>} />
             </View>}
@@ -352,6 +333,22 @@ export class BreweryScreen extends React.Component {
             </View>  
         )
     }
+
+    addReviewFABHandler() {
+    	if(isLoggedIn()) {
+    		this.props.navigation.navigate("AddReview", {navigation: this.props.navigation, brewery: this.state.brewery, review: this.state.rev});
+    	} else {
+    		Alert.alert(
+                'You must be logged in to use this feature',
+                'Login?',
+                [
+                {text: 'No', style: 'cancel'},
+                {text: 'Yes', onPress: () => {this.props.navigation.navigate("Login", {brewery: this.state.brewery})}},
+                ],
+                { cancelable: false }); 
+    	}
+    }
+
     renderContent() {
         return (
             <List style={styles.listStyle}>
@@ -363,36 +360,64 @@ export class BreweryScreen extends React.Component {
     }
 
     renderReviewsList() {
-        if (this.state.reviews != null && this.state.reviews.length > 0 && this.state.pictures != null && Object.keys(this.state.pictures).length == this.state.reviews.length) {
+        if (this.state.reviews != null && this.state.reviews.length > 0 && this.state.userData != null) {
             return _.map(this.state.reviews, (rev) => {
-                    return (
-                        <ListItem key={new Date().getTime()}>
-                            <TouchableOpacity style={{display: 'flex', flexDirection: 'row'}} onPress={() => this.props.navigation.navigate("ReviewView", {navigation: this.props.navigation, review: rev})}>
-                                <View style={{flex: 1, paddingTop: 7, paddingRight: 10}}>
-                                    <Image style={{height: 50, width: 50, borderRadius: 100}} source={{uri:'data:image/png;base64,' + this.state.pictures[rev.userId].join('')}}></Image>
-                                </View>
-                                <View style={{flex: 5}}>
-                                    <Text style={styles.list_item_title}>{rev.username}</Text>
-                                    <Text style={{width: '100%'}}>"{rev.comments}"</Text>
-                                    <StarRating
-                                        disabled={true}
-                                        maxStars={5}
-                                        rating={rev.overallRating}
-                                        fullStarColor={'#eaaa00'}
-                                        starSize={20}
-                                        containerStyle={{width: '25%'}}
-                                    />
-                                </View>
-                            </TouchableOpacity>
-                        </ListItem>
-                    );
-                }); 
+
+            	// Check to see if review is set to visible
+                return (
+                    <ListItem key={new Date().getTime()}>
+                        <TouchableOpacity style={{display: 'flex', flexDirection: 'row'}} onPress={() => this.props.navigation.navigate("ReviewView", {navigation: this.props.navigation, review: rev})}>
+                            <View style={{flex: 1, paddingTop: 7, paddingRight: 10}}>
+                                <Image style={{height: 50, width: 50, borderRadius: 100}} source={{uri:'data:image/png;base64,' + this.state.userData[rev.userId].avatar.join('')}}></Image>
+                            </View>
+                            <View style={{flex: 5}}>
+                                <Text style={styles.list_item_title}>{this.state.userData[rev.userId].username}</Text>
+                                <Text style={{width: '100%'}}>"{rev.comments}"</Text>
+                                <StarRating
+                                    disabled={true}
+                                    maxStars={5}
+                                    rating={rev.overallRating}
+                                    fullStarColor={'#eaaa00'}
+                                    starSize={20}
+                                    containerStyle={{width: '25%'}}
+                                />
+                                <View>
+							        {this.state.isAdmin ? (
+							          	<Button
+								    	style={{fontSize: 20, color: 'green'}}
+									    styleDisabled={{color: 'red'}}
+									    title="Delete Review"
+									    onPress={this.deleteReview.bind(this, rev)}
+									    >
+										Delete
+										</Button>
+							      	) : (
+							        	null
+							      	)}
+							    </View>
+                                <Button
+                                    title="Report"
+                                    onPress={() => reportReview(rev.revId)}
+                                >
+                                </Button>
+                            </View>
+                        </TouchableOpacity>
+                    </ListItem>
+                );
+            }); 
         } else if(this.state.reviews != null && this.state.reviews.length == 0 && !this.state.spinnerVisible) {
             return (
                 <Text style={{textAlign: 'center'}}>No Reviews Yet!</Text>
             )
         }
     }
+
+    // Delete button listener
+    deleteReview(rev, e) {
+        deleteReview(rev.revId)
+        this.setState({reviews: this.state.reviews.filter((review) => review != rev)});
+        // Remove the deleted review from the screen
+	}
 
 
     calcAvg(revs) {

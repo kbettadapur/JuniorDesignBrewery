@@ -25,6 +25,7 @@ import { Footer, Container, Icon, Fab } from 'native-base';
 import firebaseApp from '../firebase';
 import { ImagePicker, LinearGradient } from 'expo';
 import Spinner from 'react-native-loading-spinner-overlay';
+import { getUserData, setUserData } from '../lib/FirebaseHelpers';
 
 console.disableYellowBox = true;
 
@@ -34,16 +35,18 @@ export class ProfileScreen extends React.Component {
         this.state = {
             edit_mode: false,
             user: null,
-            old_vals: null,
             image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Default_profile_picture_%28male%29_on_Facebook.jpg/600px-Default_profile_picture_%28male%29_on_Facebook.jpg",
             imageBase64: null,            
         }
-        id = firebaseApp.auth().currentUser.uid;
-        firebaseApp.database().ref("/Users/" + id).on('value', (snapshot) => {
-            this.state.user = snapshot.val();
-            this.state.old_vals = Object.assign({}, this.state.user);
-            this.setState({});
-        });
+        this.old_vals = null;
+    }
+
+    componentDidMount() {
+        uid = firebaseApp.auth().currentUser.uid;
+        getUserData(uid).then((user) => {
+            this.old_vals = Object.assign({}, user);
+            this.setState({user: user});
+        })
     }
 
     render() {
@@ -129,12 +132,12 @@ export class ProfileScreen extends React.Component {
                     </View>
                     <View style={{width: '100%', paddingLeft: 10, display: 'flex', flexDirection: 'row'}}>
                         <Text style={[styles.subtitle_style, {marginTop: 3, flex: 1}]}>Age: </Text>
-                        <TextInput style={{flex: 1, paddingBottom: 5, paddingLeft: 5}} keyboardType='numeric' value={this.state.user.age == -1 ? "": this.state.user.age + ""} onChangeText={(age) => {this.state.user.age = age; this.setState({user: this.state.user})}}></TextInput>
+                        <TextInput style={{flex: 1, paddingBottom: 5, paddingLeft: 5}} keyboardType='numeric' value={this.state.user.age == -1 ? "": this.state.user.age + ""} onChangeText={(age) => {this.state.user.age = age.replace(/[^0-9]/g, ''); this.setState({user: this.state.user})}}></TextInput>
                         <View style={{flex: 9}}></View>
                     </View>
                     <View style={{width: '100%', paddingLeft: 10, display: 'flex', flexDirection: 'row'}}>
                         <Text style={[styles.subtitle_style, {marginTop: 3, color:'black', flex: 5}]}>Number of kids: </Text>
-                        <TextInput style={{flex: 1, paddingBottom: 5, paddingLeft: 5}} keyboardType='numeric' value={this.state.user.num_children + ""} onChangeText={(num_children) => {this.state.user.num_children = num_children; this.setState({user: this.state.user})}}></TextInput>
+                        <TextInput style={{flex: 1, paddingBottom: 5, paddingLeft: 5}} keyboardType='numeric' value={this.state.user.num_children + ""} onChangeText={(num_children) => {this.state.user.num_children = num_children.replace(/[^0-9]/g, ''); this.setState({user: this.state.user})}}></TextInput>
                         <View style={{flex: 9}}></View>
                     </View>              
                 </View>
@@ -150,7 +153,7 @@ export class ProfileScreen extends React.Component {
                     direction="up"
                     position="bottomRight"
                     style={{ backgroundColor: 'red', bottom: 50}}
-                    onPress={() => this.setState({user: Object.assign({}, this.state.old_vals), edit_mode: false})}>
+                    onPress={() => this.setState({user: Object.assign({}, this.old_vals), edit_mode: false})}>
                     <Icon name="md-close" />
                 </Fab>
                 <Footer style={styles.footer_style}>
@@ -177,17 +180,10 @@ export class ProfileScreen extends React.Component {
             avatar.push(this.state.user.avatar);
         }
         this.state.user.avatar = avatar;
-        this.state.old_vals = Object.assign({}, this.state.user);
-        firebaseApp.database().ref("Users/" + firebaseApp.auth().currentUser.uid).set({
-            age: this.state.user.age,
-            description: this.state.user.description,
-            email: this.state.user.email,
-            num_children: this.state.user.num_children,
-            username: this.state.user.username,
-            avatar: this.state.user.avatar,
-        }).then(() => {
+        this.old_vals = Object.assign({}, this.state.user);
+        setUserData(this.state.user).then(() => {
             this.setState({});
-        });
+        })
     }
 
     lengthInUtf8Bytes(str) {

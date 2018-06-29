@@ -31,6 +31,7 @@ import { BreweryScreen } from './components/BreweryScreen';
 import { AddReviewScreen } from './components/AddReviewScreen';
 import { ReviewScreen } from './components/ReviewScreen';
 import { ViewProfileScreen } from './components/ViewProfileScreen';
+import { LoadingScreen } from './components/LoadingScreen';
 
 class App extends React.Component {
 
@@ -44,6 +45,7 @@ class App extends React.Component {
 }
 
 const AppNavigator = StackNavigator({
+    Load: { screen: LoadingScreen },
     Login: { screen: LoginScreen },
     Main: { screen: MainScreen },
     Register: { screen: RegisterScreen },

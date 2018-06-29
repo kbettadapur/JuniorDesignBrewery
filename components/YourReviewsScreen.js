@@ -26,6 +26,7 @@ import firebaseApp from '../firebase';
 import StarRating from 'react-native-star-rating';
 import {  Constants, Location, Permissions } from 'expo';
 import Spinner from 'react-native-loading-spinner-overlay';
+import { getUserReviews } from '../lib/FirebaseHelpers';
 
 export class YourReviewsScreen extends React.Component {
     constructor(props) {
@@ -39,24 +40,13 @@ export class YourReviewsScreen extends React.Component {
             didMount: false,
         }
         global.main = true;
-        firebaseApp.database().ref("Reviews").on('value', (snapshot) => {
-            this.state.reviews = [];
-            if(snapshot.val() != null) {
-                var keys = Object.keys(snapshot.val());
-                keys.forEach((key) => {
-                    if(snapshot.val()[key].userId === firebaseApp.auth().currentUser.uid) {
-                        this.state.reviews.push(snapshot.val()[key]);
-                    }
-                });
-            }
-            if(this.state.didMount)
-                this.setState({reviews: this.state.reviews});
-        });
     }
 
     componentDidMount() {
         this._getLocationAsync()
-        this.state.didMount = true;
+        getUserReviews().then((reviews) => {
+            this.setState({reviews: reviews});
+        });
     }
     
     _getLocationAsync = async () => {
