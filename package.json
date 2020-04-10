@@ -19,7 +19,7 @@
     "preset": "jest-expo"
   },
   "dependencies": {
-    "auth0-js": "^9.2.1",
+    "auth0-js": "^9.13.2",
     "expo": "^23.0.4",
     "firebase": "^4.9.1",
     "geolib": "^2.0.24",
