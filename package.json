@@ -4,7 +4,7 @@
   "private": true,
   "devDependencies": {
     "jest-expo": "23.0.0",
-    "react-native-scripts": "1.8.1",
+    "react-native-scripts": "2.0.1",
     "react-test-renderer": "16.0.0"
   },
   "main": "./node_modules/react-native-scripts/build/bin/crna-entry.js",
@@ -26,7 +26,7 @@
     "guid": "^0.0.12",
     "native-base": "^2.3.7",
     "react": "16.0.0",
-    "react-native": "0.50.3",
+    "react-native": "0.70.2",
     "react-native-customized-image-picker": "0.0.47",
     "react-native-fab": "^1.0.6",
     "react-native-fetch-blob": "^0.10.8",
