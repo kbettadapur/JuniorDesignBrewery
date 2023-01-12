@@ -5008,6 +5008,10 @@ react-native-button@^2.3.0:
   dependencies:
     prop-types "^15.5.10"
 
+react-native-customized-image-picker@0.0.47:
+  version "0.0.47"
+  resolved "https://registry.yarnpkg.com/react-native-customized-image-picker/-/react-native-customized-image-picker-0.0.47.tgz#d8496e8c73b816eb89ea3d2134f87266a23a90ef"
+
 react-native-dismiss-keyboard@1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/react-native-dismiss-keyboard/-/react-native-dismiss-keyboard-1.0.0.tgz#32886242b3f2317e121f3aeb9b0a585e2b879b49"
